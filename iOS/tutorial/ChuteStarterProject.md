@@ -15,9 +15,8 @@ Start by creating a new Xcode project.  A single view application will be easies
 
 Preparation
 -----------
-1.  Download the Chute SDK from https://github.com/chute/Chute-SDK/tree/master/iOS
-2.  Download the PhotoPickerPlus component from https://github.com/chute/photo-picker-plus/tree/master/iOS/PhotoPickerPlus
-3.  Create a Chute developer account and make a new app in Chute at http://apps.getchute.com/
+1.  Download the PhotoPickerPlus component and Chute SDK from https://github.com/chute/photo-picker-plus/tree/master/iOS/PhotoPickerPlus
+2.  Create a Chute developer account and make a new app in Chute at http://apps.getchute.com/
 	*  For the URL you can enter http://getchute.com/ if you don't have a site for your app
 	*  For the Callback URL you can use http://getchute.com/oauth/callback if you don't need callbacks for another purpose.
 
