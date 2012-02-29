@@ -5,6 +5,11 @@
 //  Created by Brandon Coston on 1/21/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+//  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+//  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+//  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import "PhotoPickerPlus.h"
 
@@ -17,11 +22,11 @@
 @synthesize delegate;
 @synthesize accountIndex;
 @synthesize sourceView, accountView, albumView, photoView;
-@synthesize photoAlbums, accounts, albums, photos;
+@synthesize photoAlbums, accounts, albums, photos, selectedAssets;
 @synthesize accountsTable, albumsTable, photosTable;
 @synthesize albumsBarTitle, photosBarTitle;
 @synthesize photoCountView, photoCountLabel;
-@synthesize appeared;
+@synthesize appeared, multipleImageSelectionEnabled;
 @synthesize AddServiceView, AddServiceWebView;
 @synthesize sourceType;
 
@@ -30,6 +35,7 @@
     [accounts release];
     [albums release];
     [photos release];
+    [selectedAssets release];
     [super dealloc];
 }
 
@@ -119,19 +125,103 @@
     if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
         [delegate PhotoPickerPlusControllerDidCancel:self];
 }
+-(IBAction)doneSelected:(id)sender{
+    NSMutableArray *returnArray = [NSMutableArray array];
+    [self showHUD];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void){
+        for(id object in [[self selectedAssets] allObjects]){
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+            if([object isKindOfClass:[GCAsset class]]){
+                ALAsset *asset = [object alAsset];
+                NSMutableDictionary* temp = [NSMutableDictionary dictionary];
+                [temp setObject:[[asset defaultRepresentation] UTI] forKey:UIImagePickerControllerMediaType];
+                [temp setObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage] scale:1 orientation:(UIImageOrientation)[[asset defaultRepresentation] orientation]] forKey:UIImagePickerControllerOriginalImage];
+                [temp setObject:[[asset defaultRepresentation] url] forKey:UIImagePickerControllerReferenceURL];
+                [returnArray addObject:temp];
+                sourceType = PhotoPickerPlusSourceTypePhotoLibrary;
+            }
+            else{
+                NSMutableDictionary *asset = [NSMutableDictionary dictionaryWithDictionary:object];
+                if([self accountIndex] >= 0){
+                    int count = 0;
+                    if([self photoAlbums])
+                        count += [[self photoAlbums] count];
+                    NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:[self accountIndex] - count];
+                    NSDictionary *account = NULL;
+                    if([self accounts]){
+                        for(NSDictionary *dict in [self accounts]){
+                            if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
+                                account = dict;
+                        }
+                    }
+                    if(account){
+                        [asset setObject:account forKey:@"source"];
+                    }
+                }
+                NSData *data = NULL;
+                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
+                    data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[asset objectForKey:@"url"]]];
+                else{
+                    data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[asset objectForKey:@"thumb"]]];
+                }
+                UIImage *image = [UIImage imageWithData:data];
+                NSMutableDictionary* temp = [NSMutableDictionary dictionary];
+                [temp setObject:@"public.image" forKey:UIImagePickerControllerMediaType];
+                if(image)
+                    [temp setObject:image forKey:UIImagePickerControllerOriginalImage];
+                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
+                    [temp setObject:[asset objectForKey:@"url"] forKey:UIImagePickerControllerReferenceURL];
+                else{
+                    [temp setObject:[asset objectForKey:@"thumb"] forKey:UIImagePickerControllerReferenceURL];
+                }
+                [temp setObject:asset forKey:UIImagePickerControllerMediaMetadata];
+                [returnArray addObject:temp];
+                sourceType = PhotoPickerPlusSourceTypeService;
+            }
+            [pool release];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMedaiWithInfo:)])
+                [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMedaiWithInfo:returnArray];
+            [self setAccounts:NULL];
+            [self setAlbums:NULL];
+            [self setPhotos:NULL];
+            [self setSelectedAssets:NULL];
+            [accountsTable reloadData];
+            [albumsTable reloadData];
+            [photosTable reloadData];
+            [self setAccountIndex:-1];
+            [photoView removeFromSuperview];
+            [albumView removeFromSuperview];
+            [accountView removeFromSuperview];
+            [self hideHUD];
+        });
+    });
+}
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     sourceType = PhotoPickerPlusSourceTypeCamera;
-    [self dismissViewControllerAnimated:YES completion:^(void){
-        if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
-            [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:info];
-    }];
+    if([self multipleImageSelectionEnabled]){
+        [self dismissViewControllerAnimated:YES completion:^(void){
+            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMedaiWithInfo:)])
+                [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMedaiWithInfo:[NSArray arrayWithObject:info]];
+            else if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
+                [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:info];
+        }];
+    }
+    else{
+        [self dismissViewControllerAnimated:YES completion:^(void){
+            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
+                [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:info];
+        }];
+    }
 }
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     sourceType = PhotoPickerPlusSourceTypeNone;
     [self dismissViewControllerAnimated:YES completion:^(void){
         if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
-            [delegate PhotoPickerPlusControllerDidCancel:self];
+            [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMedaiWithInfo:[[self selectedAssets] allObjects]];
+        
     }];
 }
 
@@ -204,6 +294,7 @@
     [albumView removeFromSuperview];
 }
 -(IBAction)photosBack:(id)sender{
+    [self setSelectedAssets:[NSMutableSet set]];
     [self setPhotos:NULL];
     [photosTable reloadData];
     [photoView removeFromSuperview];
@@ -232,96 +323,114 @@
 }
 
 -(void)objectTappedWithGesture:(UIGestureRecognizer*)gesture{
-    [self showHUD];
     UIImageView *view = (UIImageView*)[gesture view];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void){
-        id object = [[self photos] objectAtIndex:[view tag]];
-        if([object isKindOfClass:[GCAsset class]]){
-            ALAsset *asset = [object alAsset];
-            NSMutableDictionary* temp = [NSMutableDictionary dictionary];
-            [temp setObject:[[asset defaultRepresentation] UTI] forKey:UIImagePickerControllerMediaType];
-            [temp setObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage] scale:1 orientation:(UIImageOrientation)[[asset defaultRepresentation] orientation]] forKey:UIImagePickerControllerOriginalImage];
-            [temp setObject:[[asset defaultRepresentation] url] forKey:UIImagePickerControllerReferenceURL];
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                sourceType = PhotoPickerPlusSourceTypePhotoLibrary;
-                if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
-                    [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:temp];
-                [self setAccounts:NULL];
-                [self setAlbums:NULL];
-                [self setPhotos:NULL];
-                [accountsTable reloadData];
-                [albumsTable reloadData];
-                [photosTable reloadData];
-                [self setAccountIndex:-1];
-                [photoView removeFromSuperview];
-                [albumView removeFromSuperview];
-                [accountView removeFromSuperview];
-                [self hideHUD];
-            });
+    if([self multipleImageSelectionEnabled]){
+        id asset = [[self photos] objectAtIndex:view.tag];
+        if(![[self selectedAssets] containsObject:asset]){
+            UIImageView *v = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"selectionIndicator.png"]];
+            [v setBackgroundColor:[UIColor clearColor]];
+            [v setFrame:CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)];
+            [view addSubview:v];
+            [v release];
+            [[self selectedAssets] addObject:asset];
         }
         else{
-            NSMutableDictionary *asset = [NSMutableDictionary dictionaryWithDictionary:object];
-            if([self accountIndex] >= 0){
-                int count = 0;
-                if([self photoAlbums])
-                    count += [[self photoAlbums] count];
-                NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:[self accountIndex] - count];
-                NSDictionary *account = NULL;
-                if([self accounts]){
-                    for(NSDictionary *dict in [self accounts]){
-                        if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
-                            account = dict;
+            for(UIImageView *v in view.subviews){
+                [v removeFromSuperview];
+            }
+            [[self selectedAssets] removeObject:asset];
+        }
+    }
+    else{
+        [self showHUD];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void){
+            id object = [[self photos] objectAtIndex:[view tag]];
+            if([object isKindOfClass:[GCAsset class]]){
+                ALAsset *asset = [object alAsset];
+                NSMutableDictionary* temp = [NSMutableDictionary dictionary];
+                [temp setObject:[[asset defaultRepresentation] UTI] forKey:UIImagePickerControllerMediaType];
+                [temp setObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage] scale:1 orientation:(UIImageOrientation)[[asset defaultRepresentation] orientation]] forKey:UIImagePickerControllerOriginalImage];
+                [temp setObject:[[asset defaultRepresentation] url] forKey:UIImagePickerControllerReferenceURL];
+                dispatch_async(dispatch_get_main_queue(), ^(void) {
+                    sourceType = PhotoPickerPlusSourceTypePhotoLibrary;
+                    if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
+                        [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:temp];
+                    [self setAccounts:NULL];
+                    [self setAlbums:NULL];
+                    [self setPhotos:NULL];
+                    [accountsTable reloadData];
+                    [albumsTable reloadData];
+                    [photosTable reloadData];
+                    [self setAccountIndex:-1];
+                    [photoView removeFromSuperview];
+                    [albumView removeFromSuperview];
+                    [accountView removeFromSuperview];
+                    [self hideHUD];
+                });
+            }
+            else{
+                NSMutableDictionary *asset = [NSMutableDictionary dictionaryWithDictionary:object];
+                if([self accountIndex] >= 0){
+                    int count = 0;
+                    if([self photoAlbums])
+                        count += [[self photoAlbums] count];
+                    NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:[self accountIndex] - count];
+                    NSDictionary *account = NULL;
+                    if([self accounts]){
+                        for(NSDictionary *dict in [self accounts]){
+                            if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
+                                account = dict;
+                        }
+                    }
+                    if(account){
+                        [asset setObject:account forKey:@"source"];
                     }
                 }
-                if(account){
-                    [asset setObject:account forKey:@"source"];
+                NSData *data = NULL;
+                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
+                    data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[asset objectForKey:@"url"]]];
+                else{
+                    data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[asset objectForKey:@"thumb"]]];
                 }
+                UIImage *image = [UIImage imageWithData:data];
+                NSMutableDictionary* temp = [NSMutableDictionary dictionary];
+                [temp setObject:@"public.image" forKey:UIImagePickerControllerMediaType];
+                if(image)
+                    [temp setObject:image forKey:UIImagePickerControllerOriginalImage];
+                else if([view image])
+                    [temp setObject:[view image] forKey:UIImagePickerControllerOriginalImage];
+                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
+                    [temp setObject:[asset objectForKey:@"url"] forKey:UIImagePickerControllerReferenceURL];
+                else{
+                    [temp setObject:[asset objectForKey:@"thumb"] forKey:UIImagePickerControllerReferenceURL];
+                }
+                [temp setObject:asset forKey:UIImagePickerControllerMediaMetadata];
+                dispatch_async(dispatch_get_main_queue(), ^(void) {
+                    sourceType = PhotoPickerPlusSourceTypeService;
+                    if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
+                        [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:temp];
+                    [self setAccounts:NULL];
+                    [self setAlbums:NULL];
+                    [self setPhotos:NULL];
+                    [accountsTable reloadData];
+                    [albumsTable reloadData];
+                    [photosTable reloadData];
+                    [self setAccountIndex:-1];
+                    [photoView removeFromSuperview];
+                    [albumView removeFromSuperview];
+                    [accountView removeFromSuperview];
+                    [self hideHUD];
+                });
             }
-            NSLog(@"%@",asset);
-            NSData *data = NULL;
-            if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
-                data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[asset objectForKey:@"url"]]];
-            else{
-                data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[asset objectForKey:@"thumb"]]];
-            }
-            UIImage *image = [UIImage imageWithData:data];
-            NSMutableDictionary* temp = [NSMutableDictionary dictionary];
-            [temp setObject:@"public.image" forKey:UIImagePickerControllerMediaType];
-            if(image)
-                [temp setObject:image forKey:UIImagePickerControllerOriginalImage];
-            else if([view image])
-                [temp setObject:[view image] forKey:UIImagePickerControllerOriginalImage];
-            if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
-                [temp setObject:[asset objectForKey:@"url"] forKey:UIImagePickerControllerReferenceURL];
-            else{
-                [temp setObject:[asset objectForKey:@"thumb"] forKey:UIImagePickerControllerReferenceURL];
-            }
-            [temp setObject:asset forKey:UIImagePickerControllerMediaMetadata];
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                sourceType = PhotoPickerPlusSourceTypeService;
-                if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
-                    [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:temp];
-                [self setAccounts:NULL];
-                [self setAlbums:NULL];
-                [self setPhotos:NULL];
-                [accountsTable reloadData];
-                [albumsTable reloadData];
-                [photosTable reloadData];
-                [self setAccountIndex:-1];
-                [photoView removeFromSuperview];
-                [albumView removeFromSuperview];
-                [accountView removeFromSuperview];
-                [self hideHUD];
-            });
-        }
-    });
+        });
+    }
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        [self setMultipleImageSelectionEnabled:NO];
     }
     return self;
 }
@@ -339,6 +448,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setSelectedAssets:[NSMutableSet set]];
     
     NSMutableArray *array = [NSMutableArray array];
     
@@ -383,6 +493,13 @@
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accountLoginStatusChangedWithNotification:) name:GCAccountStatusChanged object:nil];
     appeared = NO;
+    UIBarButtonItem *rightPhotoButton;
+    if([self multipleImageSelectionEnabled])
+        rightPhotoButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelected:)];
+    else
+        rightPhotoButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelected:)];
+    [[self photosBarTitle] setRightBarButtonItem:rightPhotoButton];
+    [rightPhotoButton release];
     // Do any additional setup after loading the view from its nib.
 }
 -(void)viewDidAppear:(BOOL)animated{
@@ -470,7 +587,7 @@
                 [cell.contentView addSubview:v];
             }
             else{
-//                [cell.textLabel setFont:[UIFont boldSystemFontOfSize:22]];
+                //                [cell.textLabel setFont:[UIFont boldSystemFontOfSize:22]];
                 if(tableView == accountsTable){
                     [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
                     [cell setEditingAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
@@ -480,7 +597,6 @@
                     if(indexPath.row >= count){
                         NSString *imageName = [[NSString stringWithFormat:@"%@.png",[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]] lowercaseString];
                         UIImage *temp = [UIImage imageNamed:imageName];
-                        NSLog(@"%@ - %@",imageName,temp);
                         [cell.imageView setImage:temp];
                         [cell.textLabel setText:[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]];
                         NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:indexPath.row - count];
@@ -658,15 +774,15 @@
             [group enumerateAssetsUsingBlock:assetEnumerator];
         }
         /*
-        GCResponse *response = [[GCAccount sharedManager] albumsForAccount:[[accounts objectAtIndex:indexPath.row] objectForKey:@"accountID"]];
-        if([response isSuccessful]){
-            [self setAlbums:[response object]];
-            [self.view addSubview:albumView];
-            [albumsTable reloadData];
-        }
-        else{
-            [self setAccountIndex:-1];
-        }
+         GCResponse *response = [[GCAccount sharedManager] albumsForAccount:[[accounts objectAtIndex:indexPath.row] objectForKey:@"accountID"]];
+         if([response isSuccessful]){
+         [self setAlbums:[response object]];
+         [self.view addSubview:albumView];
+         [albumsTable reloadData];
+         }
+         else{
+         [self setAccountIndex:-1];
+         }
          */
     }
     if(tableView == albumsTable){
@@ -749,6 +865,13 @@
                 [image setUserInteractionEnabled:YES];
                 [image setImageWithURL:[NSURL URLWithString:[asset objectForKey:@"thumb"]]];
                 [view addSubview:image];
+                if([[self selectedAssets] containsObject:asset]){
+                    UIImageView *v = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"selectionIndicator.png"]];
+                    [v setBackgroundColor:[UIColor clearColor]];
+                    [v setFrame:CGRectMake(0, 0, image.frame.size.width, image.frame.size.height)];
+                    [image addSubview:v];
+                    [v release];
+                }
                 rect = CGRectMake((rect.origin.x+77+2), rect.origin.y, rect.size.width, rect.size.height);
             }
             return view;
@@ -773,6 +896,13 @@
                 [image setUserInteractionEnabled:YES];
                 [image setImage:[asset thumbnail]];
                 [view addSubview:image];
+                if([[self selectedAssets] containsObject:asset]){
+                    UIImageView *v = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"selectionIndicator.png"]];
+                    [v setBackgroundColor:[UIColor clearColor]];
+                    [v setFrame:CGRectMake(0, 0, image.frame.size.width, image.frame.size.height)];
+                    [image addSubview:v];
+                    [v release];
+                }
                 rect = CGRectMake((rect.origin.x+77+2), rect.origin.y, rect.size.width, rect.size.height);
             }
             return view;

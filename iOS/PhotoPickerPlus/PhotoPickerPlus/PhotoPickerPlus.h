@@ -5,6 +5,11 @@
 //  Created by Brandon Coston on 1/21/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+//  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+//  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+//  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
 #import "GetChute.h"
@@ -34,6 +39,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 @property (nonatomic, retain) NSArray *accounts;
 @property (nonatomic, retain) NSArray *albums;
 @property (nonatomic, retain) NSArray *photos;
+@property (nonatomic, retain) NSMutableSet *selectedAssets;
 
 @property (nonatomic, readonly) IBOutlet UITableView *accountsTable;
 @property (nonatomic, readonly) IBOutlet UITableView *albumsTable;
@@ -53,6 +59,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 
 
 @property (nonatomic) BOOL appeared;
+@property (nonatomic) BOOL multipleImageSelectionEnabled;
 
 
 -(UIView*)tableView:(UITableView *)tableView viewForIndexPath:(NSIndexPath*)indexPath;
@@ -63,6 +70,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 
 -(void)PhotoPickerPlusController:(PhotoPickerPlus *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info;
 -(void)PhotoPickerPlusControllerDidCancel:(PhotoPickerPlus *)picker;
+-(void)PhotoPickerPlusController:(PhotoPickerPlus *)picker didFinishPickingArrayOfMedaiWithInfo: (NSArray*)info;
 
 @end
 
