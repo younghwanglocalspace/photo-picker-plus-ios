@@ -70,7 +70,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 
 -(void)PhotoPickerPlusController:(PhotoPickerPlus *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info;
 -(void)PhotoPickerPlusControllerDidCancel:(PhotoPickerPlus *)picker;
--(void)PhotoPickerPlusController:(PhotoPickerPlus *)picker didFinishPickingArrayOfMedaiWithInfo: (NSArray*)info;
+-(void)PhotoPickerPlusController:(PhotoPickerPlus *)picker didFinishPickingArrayOfMediaWithInfo: (NSArray*)info;
 
 @end
 

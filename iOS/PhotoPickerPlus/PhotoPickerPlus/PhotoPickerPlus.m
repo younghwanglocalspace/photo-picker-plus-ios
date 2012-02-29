@@ -181,8 +181,8 @@
             [pool release];
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMedaiWithInfo:)])
-                [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMedaiWithInfo:returnArray];
+            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMediaWithInfo:)])
+                [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMediaWithInfo:returnArray];
             [self setAccounts:NULL];
             [self setAlbums:NULL];
             [self setPhotos:NULL];
@@ -203,8 +203,8 @@
     sourceType = PhotoPickerPlusSourceTypeCamera;
     if([self multipleImageSelectionEnabled]){
         [self dismissViewControllerAnimated:YES completion:^(void){
-            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMedaiWithInfo:)])
-                [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMedaiWithInfo:[NSArray arrayWithObject:info]];
+            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMediaWithInfo:)])
+                [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMediaWithInfo:[NSArray arrayWithObject:info]];
             else if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
                 [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:info];
         }];
@@ -220,7 +220,7 @@
     sourceType = PhotoPickerPlusSourceTypeNone;
     [self dismissViewControllerAnimated:YES completion:^(void){
         if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
-            [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMedaiWithInfo:[[self selectedAssets] allObjects]];
+            [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMediaWithInfo:[[self selectedAssets] allObjects]];
         
     }];
 }
