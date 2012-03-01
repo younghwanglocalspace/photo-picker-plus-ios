@@ -505,10 +505,18 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     if(!appeared){
-        UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
-        popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-        [popupQuery showInView:self.view];
-        [popupQuery release];
+        if([self multipleImageSelectionEnabled]){
+            UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photos", nil];
+            popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+            [popupQuery showInView:self.view];
+            [popupQuery release];
+        }
+        else{
+            UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
+            popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+            [popupQuery showInView:self.view];
+            [popupQuery release];
+        }
         appeared = YES;
     }
 }
