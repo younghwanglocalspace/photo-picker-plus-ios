@@ -1,7 +1,7 @@
 PhotoPickerPlus
 ==============
 
-no external dependancies beyond Chute SDK (version 1.0.4 or newer)
+no external dependancies beyond Chute SDK (version 1.0.5 or newer)
 
 Description
 -----------
@@ -20,7 +20,8 @@ While subclassing this component is possible, it is not really recommended.  If 
 Initialization
 --------------
 
- *   multipleImageSelectionEnabled (optional) - BOOL - if on picker does multi image selection if off picker does single image selection.  If not set then it defaults to off.
+ *   sourceType (optional) - `PhotoPickerPlusSourceType` - Sets whether to display the source selection screen or to only allow image selection from a specific source.  The different options are `PhotoPickerPlusSourceTypeAll`, `PhotoPickerPlusSourceTypeLibrary`, `PhotoPickerPlusSourceTypeCamera` and `PhotoPickerPlusSourceTypeNewestPhoto`.  If you don't set this then it defaults to `PhotoPickerPlusSourceTypeAll`.
+ *   multipleImageSelectionEnabled (optional) - `BOOL` - if on picker does multi image selection if off picker does single image selection.  If not set then it defaults to off.
  *   delegate - `NSObject <PhotoPickerPlusDelegate>` - The delegate for this component.  It should implement two methods.
     *  `-(void)PhotoPickerPlusController:(PhotoPickerPlus *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info;`
     *  `-(void)PhotoPickerPlusControllerDidCancel:(PhotoPickerPlus *)picker;`
@@ -33,9 +34,9 @@ Implementation
 
 ```objective-c
 
-	////////////////////
-	//  Single Photo  //
-	////////////////////
+	/////////////////////////
+	//     Single Photo    //
+	/////////////////////////
 	
     -(void)showPhotoPickerPlus{
 	    PhotoPickerPlus *temp = [[PhotoPickerPlus alloc] init];
@@ -53,9 +54,9 @@ Implementation
 	    //additional work such as removing the picker from the screen
 	}
 
-	///////////////////
-	//  Multi Photo  //
-	///////////////////
+	////////////////////////
+	//     Multi Photo    //
+	////////////////////////
 	
     -(void)showPhotoPickerPlus{
 	    PhotoPickerPlus *temp = [[PhotoPickerPlus alloc] init];
@@ -71,6 +72,27 @@ Implementation
 	}
 	-(void)PhotoPickerPlusController:(PhotoPickerPlus *)picker didFinishPickingArrayOfMediaWithInfo: (NSArray*)info{
 	    //place code for when the user picks photos here and do any
+	    //additional work such as removing the picker from the screen
+	}
+	
+	/////////////////////////
+	//  Only Choose Photo  //
+	/////////////////////////
+	
+    -(void)showPhotoPickerPlus{
+	    PhotoPickerPlus *temp = [[PhotoPickerPlus alloc] init];
+	    [temp setDelegate:self];
+    	[temp setSourceType:PhotoPickerPlusSourceTypeLibrary];
+	    self.modalPresentationStyle = UIModalPresentationCurrentContext;
+	    [self presentModalViewController:temp animated:NO];
+	    [temp release];
+	}
+	-(void)PhotoPickerPlusControllerDidCancel:(PhotoPickerPlus *)picker{
+	    //place code for when the user cancels here
+	    //such as removing the picker from the screen
+	}
+	-(void)PhotoPickerPlusController:(PhotoPickerPlus *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+	    //place code for when the user picks a photo here and do any
 	    //additional work such as removing the picker from the screen
 	}
 ```
