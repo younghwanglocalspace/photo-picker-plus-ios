@@ -15,10 +15,10 @@
 #import "GetChute.h"
 
 enum {
-    PhotoPickerPlusSourceTypeNone,
-    PhotoPickerPlusSourceTypePhotoLibrary,
+    PhotoPickerPlusSourceTypeAll,
+    PhotoPickerPlusSourceTypeLibrary,
     PhotoPickerPlusSourceTypeCamera,
-    PhotoPickerPlusSourceTypeService
+    PhotoPickerPlusSourceTypeNewestPhoto
 };
 typedef NSUInteger PhotoPickerPlusSourceType;
 
@@ -55,7 +55,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 @property (nonatomic, readonly) IBOutlet UIWebView *AddServiceWebView;
 
 //set to the source of the image selected
-@property (nonatomic, readonly) PhotoPickerPlusSourceType sourceType;
+@property (nonatomic) PhotoPickerPlusSourceType sourceType;
 
 
 @property (nonatomic) BOOL appeared;
