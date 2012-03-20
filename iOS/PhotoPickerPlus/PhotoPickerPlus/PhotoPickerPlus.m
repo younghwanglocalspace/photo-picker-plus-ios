@@ -17,6 +17,11 @@
 #define ADD_SERVICES_ARRAY_LINKS [NSArray arrayWithObjects:@"facebook", @"instagram", @"flickr", @"google", nil]
 #define messageTime 2
 
+#define THUMB_SIZE ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 147 : 77)
+
+#define THUMB_SPACING ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 4 : 2)
+
+#define THUMB_COUNT_PER_ROW (floor(((photosTable.frame.size.width-(THUMB_SPACING * 2)))/((THUMB_SIZE)+(THUMB_SPACING))))
 
 @implementation PhotoPickerPlus
 @synthesize delegate;
@@ -29,6 +34,7 @@
 @synthesize appeared, multipleImageSelectionEnabled;
 @synthesize AddServiceView, AddServiceWebView;
 @synthesize sourceType;
+
 
 -(void)dealloc{
     [photoAlbums release];
@@ -47,6 +53,7 @@
 
 -(void)showPhotoCountViewWithCount:(int)photoCount{
     [[self photoCountLabel] setText:[NSString stringWithFormat:@"Loaded %i photos in this album", photoCount]];
+    [photoCountView setFrame:self.view.bounds];
     [self.view addSubview:[self photoCountView]];
     [self performSelector:@selector(hidePhotoCountView) withObject:nil afterDelay:messageTime];
 }
@@ -96,6 +103,7 @@
 -(IBAction)deviceSelected:(id)sender{
     if(![[GCAccount sharedManager] accounts] || [[[GCAccount sharedManager] accounts] count] == 0){
         [self setAccounts:NULL];
+        [accountView setFrame:self.view.bounds];
         [self.view addSubview:accountView];
         [accountsTable reloadData];
         [self showHUD];
@@ -107,6 +115,7 @@
         return;
     }
     [self setAccounts:[[GCAccount sharedManager] accounts]];
+    [accountView setFrame:self.view.bounds];
     [self.view addSubview:accountView];
     [accountsTable reloadData];
 }
@@ -271,6 +280,7 @@
                         [self setPhotos:NULL];
                         [self setAlbums:NULL];
                         [[self photosBarTitle] setTitle:[account objectForKey:@"type"]];
+                        [photoView setFrame:self.view.bounds];
                         [self.view addSubview:photoView];
                         [[GCAccount sharedManager] albumsForAccount:[account objectForKey:@"accountID"] inBackgroundWithResponse:^(GCResponse *response){
                             if([response isSuccessful]){
@@ -291,6 +301,7 @@
                         return;
                     }
                     [self setAlbums:NULL];
+                    [albumView setFrame:self.view.bounds];
                     [self.view addSubview:albumView];
                     [self showHUD];
                     [albumsTable reloadData];
@@ -340,6 +351,7 @@
                                                                                service,
                                                                                [params stringWithFormEncodedComponents]]]];
     [AddServiceWebView sizeToFit];
+    [AddServiceView setFrame:self.view.bounds];
     [self.view addSubview:[self AddServiceView]];
     [AddServiceWebView loadRequest:request];
     [params release];
@@ -573,7 +585,8 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+//    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
 }
 
 #pragma mark UITableViewDataSource Delegate Methods
@@ -600,7 +613,7 @@
     if(tableView == photosTable){
         if(!photos)
             return 0;
-        return ceil([photos count]/4.);
+        return ceil([photos count]/((float)THUMB_COUNT_PER_ROW));
     }
     return 0;
 }
@@ -675,7 +688,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if(tableView == photosTable)
-        return 79;
+        return THUMB_SPACING + THUMB_SIZE;
 	return 45;
 }
 
@@ -720,6 +733,7 @@
                     }
                     [self setAlbums:NULL];
                     [[self photosBarTitle] setTitle:[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]];
+                    [photoView setFrame:self.view.bounds];
                     [self.view addSubview:photoView];
                     [photosTable reloadData];
                     if(![self photos])
@@ -764,6 +778,7 @@
                 else{
                     [self setAlbums:NULL];
                 }
+                [albumView setFrame:self.view.bounds];
                 [self.view addSubview:albumView];
                 [albumsTable reloadData];
                 if(![self albums])
@@ -789,6 +804,7 @@
             ALAssetsGroup *group = [self.photoAlbums objectAtIndex:indexPath.row];
             [self setPhotos:NULL];
             [[self photosBarTitle] setTitle:[group valueForProperty:ALAssetsGroupPropertyName]];
+            [photoView setFrame:self.view.bounds];
             [self.view addSubview:photoView];
             [photosTable reloadData];
             [self showHUD];
@@ -860,6 +876,7 @@
                     [self setPhotos:NULL];
                 }
                 [[self photosBarTitle] setTitle:[[[self albums] objectAtIndex:indexPath.row] objectForKey:@"name"]];
+                [photoView setFrame:self.view.bounds];
                 [self.view addSubview:photoView];
                 [photosTable reloadData];
                 if(![self photos])
@@ -882,15 +899,16 @@
 
 -(UIView*)tableView:(UITableView *)tableView viewForIndexPath:(NSIndexPath*)indexPath{
     if(tableView == photosTable){
+        int initialThumbOffset = ((int)photosTable.frame.size.width+THUMB_SPACING-(THUMB_COUNT_PER_ROW*(THUMB_SIZE+THUMB_SPACING)))/2;
         int count = 0;
         if([self photoAlbums])
             count += [[self photoAlbums] count];
         if([self accountIndex] >= count){
             UIView *view = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, photosTable.frame.size.width, [self tableView:photosTable heightForRowAtIndexPath:indexPath])] autorelease];
-            int index = indexPath.row * 4;
-            int maxIndex = index + 3;
-            CGRect rect = CGRectMake(2, 1, 77, 77);
-            int x = 4;
+            int index = indexPath.row * (THUMB_COUNT_PER_ROW);
+            int maxIndex = index + ((THUMB_COUNT_PER_ROW)-1);
+            CGRect rect = CGRectMake(initialThumbOffset, THUMB_SPACING/2, THUMB_SIZE, THUMB_SIZE);
+            int x = THUMB_COUNT_PER_ROW;
             if (maxIndex >= [[self photos] count]) {
                 x = x - (maxIndex - [[self photos] count]) - 1;
             }
@@ -912,16 +930,16 @@
                     [image addSubview:v];
                     [v release];
                 }
-                rect = CGRectMake((rect.origin.x+77+2), rect.origin.y, rect.size.width, rect.size.height);
+                rect = CGRectMake((rect.origin.x+THUMB_SIZE+THUMB_SPACING), rect.origin.y, rect.size.width, rect.size.height);
             }
             return view;
         }
         else{
             UIView *view = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, photosTable.frame.size.width, [self tableView:photosTable heightForRowAtIndexPath:indexPath])] autorelease];
-            int index = indexPath.row * 4;
-            int maxIndex = index + 3;
-            CGRect rect = CGRectMake(2, 1, 77, 77);
-            int x = 4;
+            int index = indexPath.row * (THUMB_COUNT_PER_ROW);
+            int maxIndex = index + ((THUMB_COUNT_PER_ROW)-1);
+            CGRect rect = CGRectMake(initialThumbOffset, THUMB_SPACING/2, THUMB_SIZE, THUMB_SIZE);
+            int x = THUMB_COUNT_PER_ROW;
             if (maxIndex >= [[self photos] count]) {
                 x = x - (maxIndex - [[self photos] count]) - 1;
             }
@@ -943,7 +961,7 @@
                     [image addSubview:v];
                     [v release];
                 }
-                rect = CGRectMake((rect.origin.x+77+2), rect.origin.y, rect.size.width, rect.size.height);
+                rect = CGRectMake((rect.origin.x+THUMB_SIZE+THUMB_SPACING), rect.origin.y, rect.size.width, rect.size.height);
             }
             return view;
         }
