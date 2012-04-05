@@ -104,7 +104,11 @@
     if(![[GCAccount sharedManager] accounts] || [[[GCAccount sharedManager] accounts] count] == 0){
         [self setAccounts:NULL];
         [accountView setFrame:self.view.bounds];
+        [accountView setTransform:CGAffineTransformTranslate(accountView.transform, 0, accountView.frame.size.height)];
         [self.view addSubview:accountView];
+        [UIView animateWithDuration:.35 animations:^(void){
+            [accountView setTransform:CGAffineTransformIdentity];
+        }];
         [accountsTable reloadData];
         [self showHUD];
         [[GCAccount sharedManager] loadAccountsInBackgroundWithCompletion:^(void){
@@ -116,7 +120,11 @@
     }
     [self setAccounts:[[GCAccount sharedManager] accounts]];
     [accountView setFrame:self.view.bounds];
+    [accountView setTransform:CGAffineTransformTranslate(accountView.transform, 0, accountView.frame.size.height)];
     [self.view addSubview:accountView];
+    [UIView animateWithDuration:.35 animations:^(void){
+        [accountView setTransform:CGAffineTransformIdentity];
+    }];
     [accountsTable reloadData];
 }
 
