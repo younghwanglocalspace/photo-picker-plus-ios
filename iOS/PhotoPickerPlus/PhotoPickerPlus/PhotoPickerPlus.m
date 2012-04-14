@@ -3,7 +3,7 @@
 //  ChuteSDKDevProject
 //
 //  Created by Brandon Coston on 1/21/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Chute Corporation. All rights reserved.
 //
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
 //  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -15,54 +15,47 @@
 
 #define ADD_SERVICES_ARRAY_NAMES [NSArray arrayWithObjects:@"Facebook", @"Instagram", @"Flickr", @"Picasa", nil]
 #define ADD_SERVICES_ARRAY_LINKS [NSArray arrayWithObjects:@"facebook", @"instagram", @"flickr", @"google", nil]
+
+#define CANCEL_BUTTON_TEXT  @"Cancel"
+#define DONE_BUTTON_TEXT  @"Done"
+#define BACK_BUTTON_TEXT  @"Back"
+
+#define CAMERA_OPTION_TEXT @"Take Photo"
+#define DEVICE_SINGLE_OPTION_TEXT @"Choose Photo"
+#define DEVICE_PLURAL_OPTION_TEXT @"Choose Photos"
+#define LATEST_OPTION_TEXT @"Last Photo Taken"
+#define CANCEL_OPTION_TEXT @"Cancel"
+
+#define PHOTO_COUNT_FORMAT @"Loaded %i photos in this album"
+
 #define messageTime 2
 
-#define THUMB_SIZE ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 147 : 77)
+#define THUMB_COUNT_PER_ROW ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 6 : 4)
 
-#define THUMB_SPACING ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 4 : 2)
+#define MIN_THUMB_SPACING ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 4 : 1)
 
-#define THUMB_COUNT_PER_ROW (floor(((photosTable.frame.size.width-(THUMB_SPACING * 2)))/((THUMB_SIZE)+(THUMB_SPACING))))
+#define MAX_THUMB_SIZE 100
+//thumb size greater than 100 will cause blurriness adjust greater at own risk.
 
-@implementation PhotoPickerPlus
-@synthesize delegate;
-@synthesize accountIndex;
-@synthesize sourceView, accountView, albumView, photoView;
-@synthesize photoAlbums, accounts, albums, photos, selectedAssets;
-@synthesize accountsTable, albumsTable, photosTable;
-@synthesize albumsBarTitle, photosBarTitle;
-@synthesize photoCountView, photoCountLabel;
-@synthesize appeared, multipleImageSelectionEnabled;
-@synthesize AddServiceView, AddServiceWebView;
-@synthesize sourceType;
+#define THUMB_SIZE (MIN(floor((photosTable.frame.size.width-(MIN_THUMB_SPACING*(THUMB_COUNT_PER_ROW+1)))/THUMB_COUNT_PER_ROW),MAX_THUMB_SIZE))
+
+#define THUMB_SPACING (MAX(floor((photosTable.frame.size.width-(THUMB_COUNT_PER_ROW*THUMB_SIZE))/(THUMB_COUNT_PER_ROW+1)),MIN_THUMB_SPACING))
 
 
--(void)dealloc{
+/************************************************************************
+ *                                                                      *
+ *                       Account View Controller                        *
+ *                                                                      *
+ ************************************************************************/
+
+@implementation AccountViewController
+@synthesize delegate, photoAlbums, accounts, accountsTable, accountIndex, multipleImageSelectionEnabled, P3;
+
+-(void) dealloc{
     [photoAlbums release];
     [accounts release];
-    [albums release];
-    [photos release];
-    [selectedAssets release];
+    [accountsTable release];
     [super dealloc];
-}
-
--(IBAction)hidePhotoCountView{
-    [[self photoCountLabel] setText:@""];
-    [[self photoCountView] removeFromSuperview];
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hidePhotoCountView) object:nil];
-}
-
--(void)showPhotoCountViewWithCount:(int)photoCount{
-    [[self photoCountLabel] setText:[NSString stringWithFormat:@"Loaded %i photos in this album", photoCount]];
-    [photoCountView setFrame:self.view.bounds];
-    [self.view addSubview:[self photoCountView]];
-    [self performSelector:@selector(hidePhotoCountView) withObject:nil afterDelay:messageTime];
-}
-
-- (NSString *) pathForCachedUrl:(NSString *)urlString
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    
-    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [[urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
 }
 
 -(void)setAccounts:(NSArray *)_accounts{
@@ -85,184 +78,16 @@
     accounts = [temp retain];
 }
 
--(IBAction)cameraSelected:(id)sender{
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){ 
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
-        [picker setDelegate:self];
-        [self presentViewController:picker animated:YES completion:^(void){
-            [picker release];
-        }];
-    }
-    else{
-        [self quickAlertWithTitle:@"Camera Not Available" message:@"Please select a different source type" button:@"OK"];
-    }
+- (NSString *) pathForCachedUrl:(NSString *)urlString
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    
+    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [[urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
 }
 
-
--(IBAction)deviceSelected:(id)sender{
-    if(![[GCAccount sharedManager] accounts] || [[[GCAccount sharedManager] accounts] count] == 0){
-        [self setAccounts:NULL];
-        [accountView setFrame:self.view.bounds];
-        [accountView setTransform:CGAffineTransformTranslate(accountView.transform, 0, accountView.frame.size.height)];
-        [self.view addSubview:accountView];
-        [UIView animateWithDuration:.35 animations:^(void){
-            [accountView setTransform:CGAffineTransformIdentity];
-        }];
-        [accountsTable reloadData];
-        [self showHUD];
-        [[GCAccount sharedManager] loadAccountsInBackgroundWithCompletion:^(void){
-            [self setAccounts:[[GCAccount sharedManager] accounts]];
-            [accountsTable reloadData];
-            [self hideHUD];
-        }];
-        return;
-    }
-    [self setAccounts:[[GCAccount sharedManager] accounts]];
-    [accountView setFrame:self.view.bounds];
-    [accountView setTransform:CGAffineTransformTranslate(accountView.transform, 0, accountView.frame.size.height)];
-    [self.view addSubview:accountView];
-    [UIView animateWithDuration:.35 animations:^(void){
-        [accountView setTransform:CGAffineTransformIdentity];
-    }];
-    [accountsTable reloadData];
-}
-
--(IBAction)latestSelected:(id)sender{
-    [self showHUD];
-    [[GCAccount sharedManager] loadAssetsCompletionBlock:^(void){
-        if([[GCAccount sharedManager] assetsArray].count > 0){
-            GCAsset *object = [[[GCAccount sharedManager] assetsArray] objectAtIndex:0];
-            ALAsset *asset = [object alAsset];
-            NSMutableDictionary* temp = [NSMutableDictionary dictionary];
-            [temp setObject:[[asset defaultRepresentation] UTI] forKey:UIImagePickerControllerMediaType];
-            [temp setObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage] scale:1 orientation:(UIImageOrientation)[[asset defaultRepresentation] orientation]] forKey:UIImagePickerControllerOriginalImage];
-            [temp setObject:[[asset defaultRepresentation] url] forKey:UIImagePickerControllerReferenceURL];
-            if([self multipleImageSelectionEnabled]){
-                if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMediaWithInfo:)])
-                    [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMediaWithInfo:[NSArray arrayWithObject:temp]];
-            }
-            else{
-                if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
-                    [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:temp];
-            }
-        }
-        else{
-            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
-                [delegate PhotoPickerPlusControllerDidCancel:self];
-        }
-        [self hideHUD];
-    }];
-}
-
--(IBAction)closeSelected:(id)sender{
-    [self setAccounts:NULL];
-    [self setAlbums:NULL];
-    [self setPhotos:NULL];
-    [accountsTable reloadData];
-    [albumsTable reloadData];
-    [photosTable reloadData];
-    [self setAccountIndex:-1];
-    [photoView removeFromSuperview];
-    [albumView removeFromSuperview];
-    [accountView removeFromSuperview];
+-(void) closeSelected{
     if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
-        [delegate PhotoPickerPlusControllerDidCancel:self];
-}
--(IBAction)doneSelected:(id)sender{
-    NSMutableArray *returnArray = [NSMutableArray array];
-    [self showHUD];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void){
-        for(id object in [[self selectedAssets] allObjects]){
-            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-            if([object isKindOfClass:[GCAsset class]]){
-                ALAsset *asset = [object alAsset];
-                NSMutableDictionary* temp = [NSMutableDictionary dictionary];
-                [temp setObject:[[asset defaultRepresentation] UTI] forKey:UIImagePickerControllerMediaType];
-                [temp setObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage] scale:1 orientation:(UIImageOrientation)[[asset defaultRepresentation] orientation]] forKey:UIImagePickerControllerOriginalImage];
-                [temp setObject:[[asset defaultRepresentation] url] forKey:UIImagePickerControllerReferenceURL];
-                [returnArray addObject:temp];
-            }
-            else{
-                NSMutableDictionary *asset = [NSMutableDictionary dictionaryWithDictionary:object];
-                if([self accountIndex] >= 0){
-                    int count = 0;
-                    if([self photoAlbums])
-                        count += [[self photoAlbums] count];
-                    NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:[self accountIndex] - count];
-                    NSDictionary *account = NULL;
-                    if([self accounts]){
-                        for(NSDictionary *dict in [self accounts]){
-                            if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
-                                account = dict;
-                        }
-                    }
-                    if(account){
-                        [asset setObject:account forKey:@"source"];
-                    }
-                }
-                NSData *data = NULL;
-                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
-                    data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[asset objectForKey:@"url"]]];
-                else{
-                    data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[asset objectForKey:@"thumb"]]];
-                }
-                UIImage *image = [UIImage imageWithData:data];
-                NSMutableDictionary* temp = [NSMutableDictionary dictionary];
-                [temp setObject:@"public.image" forKey:UIImagePickerControllerMediaType];
-                if(image)
-                    [temp setObject:image forKey:UIImagePickerControllerOriginalImage];
-                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
-                    [temp setObject:[asset objectForKey:@"url"] forKey:UIImagePickerControllerReferenceURL];
-                else{
-                    [temp setObject:[asset objectForKey:@"thumb"] forKey:UIImagePickerControllerReferenceURL];
-                }
-                [temp setObject:asset forKey:UIImagePickerControllerMediaMetadata];
-                [returnArray addObject:temp];
-            }
-            [pool release];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMediaWithInfo:)])
-                [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMediaWithInfo:returnArray];
-            [self setAccounts:NULL];
-            [self setAlbums:NULL];
-            [self setPhotos:NULL];
-            [self setSelectedAssets:NULL];
-            [accountsTable reloadData];
-            [albumsTable reloadData];
-            [photosTable reloadData];
-            [self setAccountIndex:-1];
-            [photoView removeFromSuperview];
-            [albumView removeFromSuperview];
-            [accountView removeFromSuperview];
-            [self hideHUD];
-        });
-    });
-}
-
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
-    if([self multipleImageSelectionEnabled]){
-        [self dismissViewControllerAnimated:YES completion:^(void){
-            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMediaWithInfo:)])
-                [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMediaWithInfo:[NSArray arrayWithObject:info]];
-            else if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
-                [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:info];
-        }];
-    }
-    else{
-        [self dismissViewControllerAnimated:YES completion:^(void){
-            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
-                [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:info];
-        }];
-    }
-}
--(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
-    [self dismissViewControllerAnimated:YES completion:^(void){
-        if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
-            [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMediaWithInfo:[[self selectedAssets] allObjects]];
-        
-    }];
+        [delegate PhotoPickerPlusControllerDidCancel:[self P3]];
 }
 
 -(void)accountLoginStatusChangedWithNotification:(NSNotification*)notification{
@@ -285,84 +110,493 @@
                 }
                 if(account){
                     if([[account objectForKey:@"type"] caseInsensitiveCompare:@"instagram"] == NSOrderedSame){
-                        [self setPhotos:NULL];
-                        [self setAlbums:NULL];
-                        [[self photosBarTitle] setTitle:[account objectForKey:@"type"]];
-                        [photoView setFrame:self.view.bounds];
-                        [self.view addSubview:photoView];
-                        [[GCAccount sharedManager] albumsForAccount:[account objectForKey:@"accountID"] inBackgroundWithResponse:^(GCResponse *response){
-                            if([response isSuccessful]){
-                                [[GCAccount sharedManager] photosForAccount:[account objectForKey:@"accountID"] andAlbum:[[[response object] objectAtIndex:0] objectForKey:@"id"] inBackgroundWithResponse:^(GCResponse *response){
-                                    if([response isSuccessful]){
-                                        [self setPhotos:[response object]];
-                                        [photosTable reloadData];
-                                        [self showPhotoCountViewWithCount:[[self photos] count]];
-                                    }
-                                    [self hideHUD];
-                                }];
-                            }
-                            else{
-                                [self setAccountIndex:-1];
-                                [self hideHUD];
-                            }
-                        }];
+                        PhotoViewController *temp = [[PhotoViewController alloc] init];
+                        [temp setTitle:@"Instagram"];
+                        [temp setDelegate:[self delegate]];
+                        [temp setP3:[self P3]];
+                        [temp setAccount:account];
+                        [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+                        [self.navigationController pushViewController:temp animated:YES];
                         return;
                     }
-                    [self setAlbums:NULL];
-                    [albumView setFrame:self.view.bounds];
-                    [self.view addSubview:albumView];
-                    [self showHUD];
-                    [albumsTable reloadData];
-                    [[GCAccount sharedManager] albumsForAccount:[account objectForKey:@"accountID"] inBackgroundWithResponse:^(GCResponse *response){
-                        if([response isSuccessful]){
-                            [self setAlbums:[response object]];
-                            [albumsTable reloadData];
-                        }
-                        else{
-                            [self setAccountIndex:-1];
-                        }
-                        [self hideHUD];
-                    }];
+                    AlbumViewController *temp = [[AlbumViewController alloc] init];
+                    [temp setDelegate:[self delegate]];
+                    [temp setTitle:[account objectForKey:@"type"]];
+                    [temp setP3:[self P3]];
+                    [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+                    [temp setAccount:account];
+                    [self.navigationController pushViewController:temp animated:YES];
+                    [temp release];
                 }
             }
             [self hideHUD];
         }];
     }
 }
--(IBAction)albumsBack:(id)sender{
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    NSMutableArray *array = [NSMutableArray array];
     [self setAccountIndex:-1];
-    [self setAlbums:NULL];
-    [albumsTable reloadData];
-    [albumView removeFromSuperview];
-}
--(IBAction)photosBack:(id)sender{
-    [self setSelectedAssets:[NSMutableSet set]];
-    [self setPhotos:NULL];
-    [photosTable reloadData];
-    [photoView removeFromSuperview];
-}
--(IBAction)addServiceBack:(id)sender{
-    [AddServiceWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@""]]];
-    [AddServiceView removeFromSuperview];
+    
+    void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop)
+    {
+        if (group == nil) {
+            [self setPhotoAlbums:array];
+            [self.accountsTable reloadData];
+        }
+        else{
+            [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+            if([group numberOfAssets]> 0)
+                [array insertObject:group atIndex:0];
+        }
+    };
+    
+    void (^assetFailureBlock)(NSError *) = ^(NSError *error)
+    {
+        [self setPhotoAlbums:NULL];
+    };
+    
+    if(![[GCAccount sharedManager] assetsLibrary]){
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        [[GCAccount sharedManager] setAssetsLibrary:library];
+        [library release];
+    }
+    [[[GCAccount sharedManager] assetsLibrary] enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:assetGroupEnumerator failureBlock:assetFailureBlock];
+    self.accounts = [[GCAccount sharedManager] accounts];
+    self.accountsTable = [[[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain] autorelease];
+    if([self.navigationController.navigationBar isTranslucent]){
+        [self.accountsTable setContentInset:UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height, 0, 0, 0)];
+    }
+    [accountsTable setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    [accountsTable setDelegate:self];
+    [accountsTable setDataSource:self];
+    [self.view addSubview:accountsTable];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accountLoginStatusChangedWithNotification:) name:GCAccountStatusChanged object:nil];
+    UIBarButtonItem *rightPhotoButton;
+    rightPhotoButton = [[UIBarButtonItem alloc] initWithTitle:CANCEL_BUTTON_TEXT style:UIBarButtonItemStylePlain target:self action:@selector(closeSelected)];
+    [self.navigationItem setRightBarButtonItem:rightPhotoButton];
+    [rightPhotoButton release];
+    [self.navigationItem setBackBarButtonItem:[[[UIBarButtonItem alloc] initWithTitle:BACK_BUTTON_TEXT style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease]];
 }
 
--(void) loginWithService:(NSString*)service{
-    NSDictionary *params = [NSMutableDictionary new];
-    [params setValue:@"profile" forKey:@"scope"];
-    [params setValue:@"web_server" forKey:@"type"];
-    [params setValue:@"code" forKey:@"response_type"];
-    [params setValue:kOAuthAppID forKey:@"client_id"];
-    [params setValue:kOAuthCallbackURL forKey:@"redirect_uri"];
+-(void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+}
+
+-(void) viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+}
+
+-(UIView*)tableView:(UITableView *)tableView viewForIndexPath:(NSIndexPath*)indexPath{
+    return nil;
+}
+
+
+#pragma mark UITableViewDataSource Delegate Methods
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    // Return the number of sections.
+    return 1;
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    int count = 0;
+    if([self photoAlbums])
+        count += [[self photoAlbums] count];
+    count += [ADD_SERVICES_ARRAY_NAMES count];
+    return count;
+}
+
+
+// Customize the appearance of table view cells.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/oauth/%@?%@", 
-                                                                               SERVER_URL,
-                                                                               service,
-                                                                               [params stringWithFormEncodedComponents]]]];
-    [AddServiceWebView sizeToFit];
-    [AddServiceView setFrame:self.view.bounds];
-    [self.view addSubview:[self AddServiceView]];
-    [AddServiceWebView loadRequest:request];
-    [params release];
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+		
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    }
+    [cell.textLabel setText:@" "];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
+        UIView *v = [self tableView:tableView viewForIndexPath:indexPath];
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if(v){
+                for(UIView *view in cell.contentView.subviews){
+                    [view removeFromSuperview];
+                }
+                [cell.contentView addSubview:v];
+            }
+            else{
+                [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+                [cell setEditingAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+                int count = 0;
+                if([self photoAlbums])
+                    count += [[self photoAlbums] count];
+                if(indexPath.row >= count){
+                    NSString *imageName = [[NSString stringWithFormat:@"%@.png",[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]] lowercaseString];
+                    UIImage *temp = [UIImage imageNamed:imageName];
+                    [cell.imageView setImage:temp];
+                    [cell.textLabel setText:[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]];
+                    NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:indexPath.row - count];
+                    NSDictionary *account = NULL;
+                    if([self accounts]){
+                        for(NSDictionary *dict in [self accounts]){
+                            if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
+                                account = dict;
+                        }
+                    }
+                    if(account){
+                        if([[NSString stringWithFormat:@"%@",[account objectForKey:@"name"]] caseInsensitiveCompare:@"(null)"] != NSOrderedSame)
+                            [cell.textLabel setText:[account objectForKey:@"name"]];
+                    }
+                }
+                else{
+                    ALAssetsGroup *group = [self.photoAlbums objectAtIndex:indexPath.row];
+                    [cell.textLabel setText:[group valueForProperty:ALAssetsGroupPropertyName]];
+                    [cell.imageView setImage:[UIImage imageWithCGImage:[group posterImage]]];
+                }
+            }
+        });
+    });
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	return 45;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if(tableView == accountsTable){
+        [self setAccountIndex:indexPath.row];
+        int count = 0;
+        if([self photoAlbums])
+            count += [[self photoAlbums] count];
+        if(indexPath.row >= count){
+            NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:indexPath.row - count];
+            NSString *albumTitle = [ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count];
+            NSDictionary *account = NULL;
+            if([self accounts]){
+                for(NSDictionary *dict in [self accounts]){
+                    if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
+                        account = dict;
+                }
+            }
+            if(account){
+                if([[account objectForKey:@"type"] caseInsensitiveCompare:@"instagram"] == NSOrderedSame){
+                    PhotoViewController *temp = [[PhotoViewController alloc] init];
+                    [temp setTitle:albumTitle];
+                    [temp setDelegate:[self delegate]];
+                    [temp setTitle:@"Instagram"];
+                    [temp setP3:[self P3]];
+                    [temp setAccount:account];
+                    [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+                    [self.navigationController pushViewController:temp animated:YES];
+                    return;
+                }
+                AlbumViewController *temp = [[AlbumViewController alloc] init];
+                [temp setDelegate:[self delegate]];
+                [temp setTitle:[account objectForKey:@"type"]];
+                [temp setP3:[self P3]];
+                [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+                [temp setAccount:account];
+                [self.navigationController pushViewController:temp animated:YES];
+                [temp release];
+            }
+            else{
+                AccountLoginViewController *temp = [[AccountLoginViewController alloc] init];
+                [temp setService:type];
+                [self.navigationController pushViewController:temp animated:YES];
+                [temp release];
+            }
+        }
+        else{
+            ALAssetsGroup *group = [self.photoAlbums objectAtIndex:indexPath.row];
+            PhotoViewController *temp = [[PhotoViewController alloc] init];
+            [temp setTitle:[group valueForProperty:ALAssetsGroupPropertyName]];
+            [temp setDelegate:[self delegate]];
+            [temp setP3:[self P3]];
+            [temp setAccount:NULL];
+            [temp setGroup:group];
+            [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+            [self.navigationController pushViewController:temp animated:YES];
+        }
+    }
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+    //    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
+}
+
+@end
+
+
+/************************************************************************
+ *                                                                      *
+ *                    Account Login View Controller                     *
+ *                                                                      *
+ ************************************************************************/
+
+@implementation AccountLoginViewController
+@synthesize AddServiceWebView, service;
+
+-(void)dealloc{
+    [AddServiceWebView release];
+    [service release];
+    [super dealloc];
+}
+
+#pragma mark WebView Delegate Methods
+
+-(void)viewDidLoad{
+    self.AddServiceWebView = [[[UIWebView alloc] initWithFrame:self.view.bounds] autorelease];
+    [AddServiceWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
+    [AddServiceWebView setDelegate:self];
+    [self.view addSubview:AddServiceWebView];
+    
+    if([self service]){
+        NSDictionary *params = [NSMutableDictionary new];
+        [params setValue:@"profile" forKey:@"scope"];
+        [params setValue:@"web_server" forKey:@"type"];
+        [params setValue:@"code" forKey:@"response_type"];
+        [params setValue:kOAuthAppID forKey:@"client_id"];
+        [params setValue:kOAuthCallbackURL forKey:@"redirect_uri"];
+        
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/oauth/%@?%@", 
+                                                                                   SERVER_URL,
+                                                                                   self.service,
+                                                                                   [params stringWithFormEncodedComponents]]]];
+        [AddServiceWebView sizeToFit];
+        [AddServiceWebView loadRequest:request];
+        [params release];
+    }
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    if ([[[request URL] path] isEqualToString:kOAuthCallbackRelativeURL]) {
+        NSString *_code = [[NSDictionary dictionaryWithFormEncodedString:[[request URL] query]] objectForKey:@"code"];
+        
+        [[GCAccount sharedManager] verifyAuthorizationWithAccessCode:_code success:^(void) {
+            [self.navigationController popViewControllerAnimated:YES];
+        } andError:^(NSError *error) {
+            DLog(@"%@", [error localizedDescription]);
+        }];
+        
+        return NO;
+    }
+    return YES;
+}
+
+- (void)webViewDidStartLoad:(UIWebView *)webView {
+    [self showHUDWithTitle:nil andOpacity:0.3f];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    [self hideHUD];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+    [self hideHUD];
+    
+    if (error.code == NSURLErrorCancelled) return; 
+    
+    if (![[error localizedDescription] isEqualToString:@"Frame load interrupted"]) {
+        [self quickAlertViewWithTitle:@"Error" message:[error localizedDescription] button:@"Reload" completionBlock:^(void) {
+            [AddServiceWebView reload]; 
+        } cancelBlock:^(void) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+    }
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+    //    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
+}
+
+@end
+
+
+/************************************************************************
+ *                                                                      *
+ *                        Album View Controller                         *
+ *                                                                      *
+ ************************************************************************/
+
+@implementation AlbumViewController
+@synthesize delegate, albums, albumsTable, multipleImageSelectionEnabled, account, P3;
+
+-(void)dealloc{
+    [albums release];
+    [albumsTable release];
+    [super dealloc];
+}
+
+-(void) closeSelected{
+    if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
+        [delegate PhotoPickerPlusControllerDidCancel:[self P3]];
+}
+
+- (NSString *) pathForCachedUrl:(NSString *)urlString
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    
+    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [[urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
+}
+
+-(void)viewDidLoad{
+    
+    self.albumsTable = [[[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain] autorelease];
+    if([self.navigationController.navigationBar isTranslucent]){
+        [self.albumsTable setContentInset:UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height, 0, 0, 0)];
+    }
+    [albumsTable setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    [albumsTable setDelegate:self];
+    [albumsTable setDataSource:self];
+    [self.view addSubview:albumsTable];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *filePath = [self pathForCachedUrl:[NSString stringWithFormat:@"%@/albums",[account objectForKey:@"accountID"]]];
+    if ([fileManager fileExistsAtPath:filePath])
+    {
+        NSLog(@"Using cached file!");
+        NSError *error = NULL;
+        NSString *data = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+        if(!error){
+            id result = [data JSONValue];
+            if([result isKindOfClass:[NSDictionary class]] && [result objectForKey:@"data"])
+                result = [result objectForKey:@"data"];
+            [self setAlbums:result];
+        }
+    }
+    
+    [self showHUD];
+    [[GCAccount sharedManager] albumsForAccount:[account objectForKey:@"accountID"] inBackgroundWithResponse:^(GCResponse *response){
+        if([response isSuccessful]){
+            [self setAlbums:[response object]];
+            [albumsTable reloadData];
+        }
+        [self hideHUD];
+    }];
+    UIBarButtonItem *rightPhotoButton;
+    rightPhotoButton = [[UIBarButtonItem alloc] initWithTitle:CANCEL_BUTTON_TEXT style:UIBarButtonItemStylePlain target:self action:@selector(closeSelected)];
+    [self.navigationItem setRightBarButtonItem:rightPhotoButton];
+    [rightPhotoButton release];
+    [self.navigationItem setBackBarButtonItem:[[[UIBarButtonItem alloc] initWithTitle:BACK_BUTTON_TEXT style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease]];
+}
+
+#pragma mark UITableViewDataSource Delegate Methods
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    // Return the number of sections.
+    return 1;
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if(!albums)
+        return 0;
+    return [albums count];
+}
+
+
+// Customize the appearance of table view cells.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+		
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    }
+    [cell.textLabel setText:@" "];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
+        UIView *v = [self tableView:tableView viewForIndexPath:indexPath];
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if(v){
+                for(UIView *view in cell.contentView.subviews){
+                    [view removeFromSuperview];
+                }
+                [cell.contentView addSubview:v];
+            }
+            else{
+                [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+                [cell setEditingAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+                [cell.textLabel setText:[[[self albums] objectAtIndex:indexPath.row] objectForKey:@"name"]];
+            }
+        });
+    });
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	return 45;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if(account){
+        PhotoViewController *temp = [[PhotoViewController alloc] init];
+        [temp setTitle:[[[self albums] objectAtIndex:indexPath.row] objectForKey:@"name"]];
+        [temp setDelegate:[self delegate]];
+        [temp setP3:[self P3]];
+        [temp setAccount:account];
+        [temp setAlbum:[albums objectAtIndex:indexPath.row]];
+        [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+        [self.navigationController pushViewController:temp animated:YES];
+    }
+}
+
+-(UIView*)tableView:(UITableView *)tableView viewForIndexPath:(NSIndexPath*)indexPath{
+    return nil;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+    //    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
+}
+
+@end
+
+
+/************************************************************************
+ *                                                                      *
+ *                        Photo View Controller                         *
+ *                                                                      *
+ ************************************************************************/
+
+@implementation PhotoViewController
+@synthesize  delegate, photos, photosTable, photoCountView, photoCountLabel, selectedAssets, multipleImageSelectionEnabled, account, P3, album, group;
+
+-(void)dealloc{
+    [photos release];
+    [photosTable release];
+    [selectedAssets release];
+    [photoCountView release];
+    [photoCountLabel release];
+    [super dealloc];
+}
+
+- (NSString *) pathForCachedUrl:(NSString *)urlString
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    
+    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [[urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
 }
 
 -(void)objectTappedWithGesture:(UIGestureRecognizer*)gesture{
@@ -396,38 +630,13 @@
                 [temp setObject:[[asset defaultRepresentation] url] forKey:UIImagePickerControllerReferenceURL];
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
                     if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
-                        [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:temp];
-                    [self setAccounts:NULL];
-                    [self setAlbums:NULL];
-                    [self setPhotos:NULL];
-                    [accountsTable reloadData];
-                    [albumsTable reloadData];
-                    [photosTable reloadData];
-                    [self setAccountIndex:-1];
-                    [photoView removeFromSuperview];
-                    [albumView removeFromSuperview];
-                    [accountView removeFromSuperview];
+                        [delegate PhotoPickerPlusController:[self P3] didFinishPickingMediaWithInfo:temp];
                     [self hideHUD];
                 });
             }
             else{
                 NSMutableDictionary *asset = [NSMutableDictionary dictionaryWithDictionary:object];
-                if([self accountIndex] >= 0){
-                    int count = 0;
-                    if([self photoAlbums])
-                        count += [[self photoAlbums] count];
-                    NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:[self accountIndex] - count];
-                    NSDictionary *account = NULL;
-                    if([self accounts]){
-                        for(NSDictionary *dict in [self accounts]){
-                            if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
-                                account = dict;
-                        }
-                    }
-                    if(account){
-                        [asset setObject:account forKey:@"source"];
-                    }
-                }
+                [asset setObject:account forKey:@"source"];
                 NSData *data = NULL;
                 if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
                     data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[asset objectForKey:@"url"]]];
@@ -449,17 +658,7 @@
                 [temp setObject:asset forKey:UIImagePickerControllerMediaMetadata];
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
                     if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
-                        [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:temp];
-                    [self setAccounts:NULL];
-                    [self setAlbums:NULL];
-                    [self setPhotos:NULL];
-                    [accountsTable reloadData];
-                    [albumsTable reloadData];
-                    [photosTable reloadData];
-                    [self setAccountIndex:-1];
-                    [photoView removeFromSuperview];
-                    [albumView removeFromSuperview];
-                    [accountView removeFromSuperview];
+                        [delegate PhotoPickerPlusController:[self P3] didFinishPickingMediaWithInfo:temp];
                     [self hideHUD];
                 });
             }
@@ -467,354 +666,103 @@
     }
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        [self setMultipleImageSelectionEnabled:NO];
-        [self setSourceType:PhotoPickerPlusSourceTypeAll];
-    }
-    return self;
+-(void) closeSelected{
+    if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
+        [delegate PhotoPickerPlusControllerDidCancel:[self P3]];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
-
-#pragma mark - View lifecycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    [self setSelectedAssets:[NSMutableSet set]];
-    
-    NSMutableArray *array = [NSMutableArray array];
-    
-    void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop)
-    {
-        if (group == nil) {
-            [self setPhotoAlbums:array];
-            [self.accountsTable reloadData];
-        }
-        else{
-            [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-            if([group numberOfAssets]> 0)
-                [array insertObject:group atIndex:0];
-        }
-    };
-    
-    void (^assetFailureBlock)(NSError *) = ^(NSError *error)
-    {
-        [self setPhotoAlbums:NULL];
-    };
-    
-    if(![[GCAccount sharedManager] assetsLibrary]){
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-        [[GCAccount sharedManager] setAssetsLibrary:library];
-        [library release];
-    }
-    [[[GCAccount sharedManager] assetsLibrary] enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:assetGroupEnumerator failureBlock:assetFailureBlock];
-    
-    if(accountsTable){
-        [accountsTable setDelegate:self];
-        [accountsTable setDataSource:self];
-    }
-    if(albumsTable){
-        [albumsTable setDelegate:self];
-        [albumsTable setDataSource:self];
-    }
-    if(photosTable){
-        [photosTable setDelegate:self];
-        [photosTable setDataSource:self];
-        [photosTable setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-        [photosTable setAllowsSelection:NO];
-    }
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accountLoginStatusChangedWithNotification:) name:GCAccountStatusChanged object:nil];
-    appeared = NO;
-    UIBarButtonItem *rightPhotoButton;
-    if([self multipleImageSelectionEnabled])
-        rightPhotoButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelected:)];
-    else
-        rightPhotoButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelected:)];
-    [[self photosBarTitle] setRightBarButtonItem:rightPhotoButton];
-    [rightPhotoButton release];
-    // Do any additional setup after loading the view from its nib.
-}
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    if(!appeared){
-        if(sourceType == PhotoPickerPlusSourceTypeAll){
-            if([self multipleImageSelectionEnabled]){
-                UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photos", @"Last Photo Taken", nil];
-                popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-                [popupQuery showInView:self.view];
-                [popupQuery release];
+-(void)doneSelected{
+    NSMutableArray *returnArray = [NSMutableArray array];
+    [self showHUD];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void){
+        for(id object in [[self selectedAssets] allObjects]){
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+            if([object isKindOfClass:[GCAsset class]]){
+                ALAsset *asset = [object alAsset];
+                NSMutableDictionary* temp = [NSMutableDictionary dictionary];
+                [temp setObject:[[asset defaultRepresentation] UTI] forKey:UIImagePickerControllerMediaType];
+                [temp setObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage] scale:1 orientation:(UIImageOrientation)[[asset defaultRepresentation] orientation]] forKey:UIImagePickerControllerOriginalImage];
+                [temp setObject:[[asset defaultRepresentation] url] forKey:UIImagePickerControllerReferenceURL];
+                [returnArray addObject:temp];
             }
             else{
-                UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", @"Last Photo Taken", nil];
-                popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-                [popupQuery showInView:self.view];
-                [popupQuery release];
+                NSMutableDictionary *asset = [NSMutableDictionary dictionaryWithDictionary:object];
+                [asset setObject:account forKey:@"source"];
+                NSData *data = NULL;
+                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
+                    data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[asset objectForKey:@"url"]]];
+                else{
+                    data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[asset objectForKey:@"thumb"]]];
+                }
+                UIImage *image = [UIImage imageWithData:data];
+                NSMutableDictionary* temp = [NSMutableDictionary dictionary];
+                [temp setObject:@"public.image" forKey:UIImagePickerControllerMediaType];
+                if(image)
+                    [temp setObject:image forKey:UIImagePickerControllerOriginalImage];
+                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
+                    [temp setObject:[asset objectForKey:@"url"] forKey:UIImagePickerControllerReferenceURL];
+                else{
+                    [temp setObject:[asset objectForKey:@"thumb"] forKey:UIImagePickerControllerReferenceURL];
+                }
+                [temp setObject:asset forKey:UIImagePickerControllerMediaMetadata];
+                [returnArray addObject:temp];
             }
-        }else if(sourceType == PhotoPickerPlusSourceTypeCamera){
-            [self cameraSelected:nil];
-        }else if(sourceType == PhotoPickerPlusSourceTypeLibrary){
-            [self deviceSelected:nil];
-        }else if(sourceType == PhotoPickerPlusSourceTypeNewestPhoto){
-            [self latestSelected:nil];
+            [pool release];
         }
-        appeared = YES;
-    }
-}
-
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-	if (buttonIndex == 0) {
-        [self cameraSelected:nil];
-	} else if (buttonIndex == 1) {
-        [self deviceSelected:nil];
-	} else if (buttonIndex == 2) {
-        [self latestSelected:nil];
-	} else if (buttonIndex == 3) {
-        [self closeSelected:nil];
-	}
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-//    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-    return YES;
-}
-
-#pragma mark UITableViewDataSource Delegate Methods
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
-    return 1;
-}
-
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if(tableView == accountsTable){
-        int count = 0;
-        if([self photoAlbums])
-            count += [[self photoAlbums] count];
-        count += [ADD_SERVICES_ARRAY_NAMES count];
-        return count;
-    }
-    if(tableView == albumsTable){
-        if(!albums)
-            return 0;
-        return [albums count];
-    }
-    if(tableView == photosTable){
-        if(!photos)
-            return 0;
-        return ceil([photos count]/((float)THUMB_COUNT_PER_ROW));
-    }
-    return 0;
-}
-
-
-// Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-		
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    [cell.textLabel setText:@" "];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
-        UIView *v = [self tableView:tableView viewForIndexPath:indexPath];
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            if(v){
-                for(UIView *view in cell.contentView.subviews){
-                    [view removeFromSuperview];
-                }
-                [cell.contentView addSubview:v];
-            }
-            else{
-                //                [cell.textLabel setFont:[UIFont boldSystemFontOfSize:22]];
-                if(tableView == accountsTable){
-                    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-                    [cell setEditingAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-                    int count = 0;
-                    if([self photoAlbums])
-                        count += [[self photoAlbums] count];
-                    if(indexPath.row >= count){
-                        NSString *imageName = [[NSString stringWithFormat:@"%@.png",[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]] lowercaseString];
-                        UIImage *temp = [UIImage imageNamed:imageName];
-                        [cell.imageView setImage:temp];
-                        [cell.textLabel setText:[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]];
-                        NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:indexPath.row - count];
-                        NSDictionary *account = NULL;
-                        if([self accounts]){
-                            for(NSDictionary *dict in [self accounts]){
-                                if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
-                                    account = dict;
-                            }
-                        }
-                        if(account){
-                            if([[NSString stringWithFormat:@"%@",[account objectForKey:@"name"]] caseInsensitiveCompare:@"(null)"] != NSOrderedSame)
-                                [cell.textLabel setText:[account objectForKey:@"name"]];
-                        }
-                    }
-                    else{
-                        ALAssetsGroup *group = [self.photoAlbums objectAtIndex:indexPath.row];
-                        [cell.textLabel setText:[group valueForProperty:ALAssetsGroupPropertyName]];
-                        [cell.imageView setImage:[UIImage imageWithCGImage:[group posterImage]]];
-                    }
-                }
-                if(tableView == albumsTable){
-                    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-                    [cell setEditingAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-                    [cell.textLabel setText:[[[self albums] objectAtIndex:indexPath.row] objectForKey:@"name"]];
-                }
-                if(tableView == photosTable){
-                    [cell setAccessoryType:UITableViewCellAccessoryNone];
-                    [cell setEditingAccessoryType:UITableViewCellAccessoryNone];
-                }
-            }
+            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMediaWithInfo:)])
+                [delegate PhotoPickerPlusController:[self P3] didFinishPickingArrayOfMediaWithInfo:returnArray];
+            [self hideHUD];
         });
     });
-    return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if(tableView == photosTable)
-        return THUMB_SPACING + THUMB_SIZE;
-	return 45;
+-(IBAction)hidePhotoCountView{
+    [[self photoCountLabel] setText:@""];
+    [[self photoCountView] removeFromSuperview];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hidePhotoCountView) object:nil];
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    if(tableView == accountsTable){
-        [self setAccountIndex:indexPath.row];
-        int count = 0;
-        if([self photoAlbums])
-            count += [[self photoAlbums] count];
-        if(indexPath.row >= count){
-            NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:indexPath.row - count];
-            [albumsBarTitle setTitle:[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]];
-            NSDictionary *account = NULL;
-            if([self accounts]){
-                for(NSDictionary *dict in [self accounts]){
-                    if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
-                        account = dict;
-                }
-            }
-            if(account){
-                if([[account objectForKey:@"type"] caseInsensitiveCompare:@"instagram"] == NSOrderedSame){
-                    NSFileManager *fileManager = [NSFileManager defaultManager];
-                    NSString *filePath = [self pathForCachedUrl:[NSString stringWithFormat:@"%@/%@/photos",[account objectForKey:@"accountID"],@""]];
-                    if ([fileManager fileExistsAtPath:filePath])
-                    {
-                        NSLog(@"Using cached file!");
-                        NSError *error = NULL;
-                        NSString *data = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
-                        if(!error){
-                            id result = [data JSONValue];
-                            if([result isKindOfClass:[NSDictionary class]] && [result objectForKey:@"data"])
-                                result = [result objectForKey:@"data"];
-                            [self setPhotos:result];
-                        }
-                        else{
-                            [self setPhotos:NULL];
-                        }
-                    }
-                    else{
-                        [self setPhotos:NULL];
-                    }
-                    [self setAlbums:NULL];
-                    [[self photosBarTitle] setTitle:[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]];
-                    [photoView setFrame:self.view.bounds];
-                    [self.view addSubview:photoView];
-                    [photosTable reloadData];
-                    if(![self photos])
-                        [self showHUD];
-                    [[GCAccount sharedManager] albumsForAccount:[account objectForKey:@"accountID"] inBackgroundWithResponse:^(GCResponse *response){
-                        if([response isSuccessful]){
-                            [[GCAccount sharedManager] photosForAccount:[account objectForKey:@"accountID"] andAlbum:[[[response object] objectAtIndex:0] objectForKey:@"id"] inBackgroundWithResponse:^(GCResponse *response){
-                                if([response isSuccessful]){
-                                    [self setPhotos:[response object]];
-                                    [photosTable reloadData];
-                                    [self showPhotoCountViewWithCount:[[self photos] count]];
-                                    [[response rawResponse] writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
-                                }
-                                [self hideHUD];
-                            }];
-                        }
-                        else{
-                            if(![self photos])
-                                [self setAccountIndex:-1];
-                            [self hideHUD];
-                        }
-                    }];
-                    return;
-                }
-                NSFileManager *fileManager = [NSFileManager defaultManager];
-                NSString *filePath = [self pathForCachedUrl:[NSString stringWithFormat:@"%@/albums",[account objectForKey:@"accountID"]]];
-                if ([fileManager fileExistsAtPath:filePath])
-                {
-                    NSLog(@"Using cached file!");
-                    NSError *error = NULL;
-                    NSString *data = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
-                    if(!error){
-                        id result = [data JSONValue];
-                        if([result isKindOfClass:[NSDictionary class]] && [result objectForKey:@"data"])
-                            result = [result objectForKey:@"data"];
-                        [self setAlbums:result];
-                    }
-                    else{
-                        [self setAlbums:NULL];
-                    }
-                }
-                else{
-                    [self setAlbums:NULL];
-                }
-                [albumView setFrame:self.view.bounds];
-                [self.view addSubview:albumView];
-                [albumsTable reloadData];
-                if(![self albums])
-                    [self showHUD];
-                [[GCAccount sharedManager] albumsForAccount:[account objectForKey:@"accountID"] inBackgroundWithResponse:^(GCResponse *response){
-                    if([response isSuccessful]){
-                        [self setAlbums:[response object]];
-                        [albumsTable reloadData];
-                        [[response rawResponse] writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
-                    }
-                    else{
-                        if(![self albums])
-                            [self setAccountIndex:-1];
-                    }
-                    [self hideHUD];
-                }];
-            }
-            else{
-                [self loginWithService:type];
-            }
-        }
-        else{
-            ALAssetsGroup *group = [self.photoAlbums objectAtIndex:indexPath.row];
-            [self setPhotos:NULL];
-            [[self photosBarTitle] setTitle:[group valueForProperty:ALAssetsGroupPropertyName]];
-            [photoView setFrame:self.view.bounds];
-            [self.view addSubview:photoView];
-            [photosTable reloadData];
+-(void)showPhotoCountViewWithCount:(int)photoCount{
+    [[self photoCountLabel] setText:[NSString stringWithFormat:PHOTO_COUNT_FORMAT, photoCount]];
+    [photoCountView setFrame:self.view.bounds];
+    [self.view addSubview:[self photoCountView]];
+    [self performSelector:@selector(hidePhotoCountView) withObject:nil afterDelay:messageTime];
+}
+
+-(void)viewDidLoad{
+    
+    self.selectedAssets = [NSMutableSet set];
+    
+    self.photosTable = [[[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain] autorelease];
+    if([self.navigationController.navigationBar isTranslucent]){
+        [self.photosTable setContentInset:UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height, 0, 0, 0)];
+    }
+    [photosTable setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    [photosTable setDelegate:self];
+    [photosTable setDataSource:self];
+    [photosTable setSeparatorColor:[UIColor clearColor]];
+    [photosTable setAllowsSelection:NO];
+    [self.view addSubview:photosTable];
+    
+    self.photoCountView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
+    [photoCountView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    [photoCountView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:.4]];
+    
+    UIButton *closeCountButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [closeCountButton setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    [closeCountButton setFrame:photoCountView.frame];
+    [closeCountButton addTarget:self action:@selector(hidePhotoCountView) forControlEvents:UIControlEventTouchDown];
+    [photoCountView addSubview:closeCountButton];
+    
+    self.photoCountLabel = [[[UILabel alloc] initWithFrame:self.view.bounds] autorelease];
+    [photoCountLabel setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    [photoCountLabel setBackgroundColor:[UIColor clearColor]];
+    [photoCountLabel setTextColor:[UIColor whiteColor]];
+    [photoCountLabel setTextAlignment:UITextAlignmentCenter];
+    [photoCountView addSubview:photoCountLabel];
+    if(!account){
+        if(group){
             [self showHUD];
             
             NSMutableArray *assetsArray = [[NSMutableArray alloc] init];
@@ -837,81 +785,131 @@
             [group setAssetsFilter:[ALAssetsFilter allPhotos]];
             [group enumerateAssetsUsingBlock:assetEnumerator];
         }
-        /*
-         GCResponse *response = [[GCAccount sharedManager] albumsForAccount:[[accounts objectAtIndex:indexPath.row] objectForKey:@"accountID"]];
-         if([response isSuccessful]){
-         [self setAlbums:[response object]];
-         [self.view addSubview:albumView];
-         [albumsTable reloadData];
-         }
-         else{
-         [self setAccountIndex:-1];
-         }
-         */
     }
-    if(tableView == albumsTable){
-        if([self accountIndex] >= 0){
-            int count = 0;
-            if([self photoAlbums])
-                count += [[self photoAlbums] count];
-            NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:[self accountIndex] - count];
-            NSDictionary *account = NULL;
-            if([self accounts]){
-                for(NSDictionary *dict in [self accounts]){
-                    if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
-                        account = dict;
-                }
+    else if([[account objectForKey:@"type"] caseInsensitiveCompare:@"instagram"] == NSOrderedSame){
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString *filePath = [self pathForCachedUrl:[NSString stringWithFormat:@"%@/%@/photos",[account objectForKey:@"accountID"],@""]];
+        if ([fileManager fileExistsAtPath:filePath])
+        {
+            NSLog(@"Using cached file!");
+            NSError *error = NULL;
+            NSString *data = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+            if(!error){
+                id result = [data JSONValue];
+                if([result isKindOfClass:[NSDictionary class]] && [result objectForKey:@"data"])
+                    result = [result objectForKey:@"data"];
+                [self setPhotos:result];
             }
-            if(account){
-                NSFileManager *fileManager = [NSFileManager defaultManager];
-                NSString *filePath = [self pathForCachedUrl:[NSString stringWithFormat:@"%@/%@/photos",[account objectForKey:@"accountID"],[[albums objectAtIndex:indexPath.row] objectForKey:@"id"]]];
-                if ([fileManager fileExistsAtPath:filePath])
-                {
-                    NSLog(@"Using cached file!");
-                    NSError *error = NULL;
-                    NSString *data = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
-                    if(!error){
-                        id result = [data JSONValue];
-                        if([result isKindOfClass:[NSDictionary class]] && [result objectForKey:@"data"])
-                            result = [result objectForKey:@"data"];
-                        [self setPhotos:result];
-                    }
-                    else{
-                        [self setPhotos:NULL];
-                    }
-                }
-                else{
-                    [self setPhotos:NULL];
-                }
-                [[self photosBarTitle] setTitle:[[[self albums] objectAtIndex:indexPath.row] objectForKey:@"name"]];
-                [photoView setFrame:self.view.bounds];
-                [self.view addSubview:photoView];
-                [photosTable reloadData];
-                if(![self photos])
-                    [self showHUD];
-                [[GCAccount sharedManager] photosForAccount:[account objectForKey:@"accountID"] andAlbum:[[albums objectAtIndex:indexPath.row] objectForKey:@"id"] inBackgroundWithResponse:^(GCResponse *response){
+        }
+        [[GCAccount sharedManager] albumsForAccount:[account objectForKey:@"accountID"] inBackgroundWithResponse:^(GCResponse *response){
+            if([response isSuccessful]){
+                [[GCAccount sharedManager] photosForAccount:[account objectForKey:@"accountID"] andAlbum:[[[response object] objectAtIndex:0] objectForKey:@"id"] inBackgroundWithResponse:^(GCResponse *response){
                     if([response isSuccessful]){
                         [self setPhotos:[response object]];
                         [photosTable reloadData];
                         [self showPhotoCountViewWithCount:[[self photos] count]];
                         [[response rawResponse] writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
                     }
-                    [self hideHUD];
                 }];
             }
+        }];
+    }
+    else {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString *filePath = [self pathForCachedUrl:[NSString stringWithFormat:@"%@/%@/photos",[account objectForKey:@"accountID"],[album objectForKey:@"id"]]];
+        if ([fileManager fileExistsAtPath:filePath])
+        {
+            NSLog(@"Using cached file!");
+            NSError *error = NULL;
+            NSString *data = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+            if(!error){
+                id result = [data JSONValue];
+                if([result isKindOfClass:[NSDictionary class]] && [result objectForKey:@"data"])
+                    result = [result objectForKey:@"data"];
+                [self setPhotos:result];
+            }
         }
+        [[GCAccount sharedManager] photosForAccount:[account objectForKey:@"accountID"] andAlbum:[album objectForKey:@"id"] inBackgroundWithResponse:^(GCResponse *response){
+            if([response isSuccessful]){
+                [self setPhotos:[response object]];
+                [photosTable reloadData];
+                [self showPhotoCountViewWithCount:[[self photos] count]];
+                [[response rawResponse] writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+            }
+        }];
     }
-    if(tableView == photosTable){
+    
+    UIBarButtonItem *rightPhotoButton;
+    if([self multipleImageSelectionEnabled])
+        rightPhotoButton = [[UIBarButtonItem alloc] initWithTitle:DONE_BUTTON_TEXT style:UIBarButtonItemStylePlain target:self action:@selector(doneSelected)];
+    else
+        rightPhotoButton = [[UIBarButtonItem alloc] initWithTitle:CANCEL_BUTTON_TEXT style:UIBarButtonItemStylePlain target:self action:@selector(closeSelected)];
+    [self.navigationItem setRightBarButtonItem:rightPhotoButton];
+    [rightPhotoButton release];
+    [self.navigationItem setBackBarButtonItem:[[[UIBarButtonItem alloc] initWithTitle:BACK_BUTTON_TEXT style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease]];
+}
+
+-(void) viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    return;
+}
+
+#pragma mark UITableViewDataSource Delegate Methods
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    // Return the number of sections.
+    return 1;
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if(!photos)
+        return 0;
+    return ceil([photos count]/((float)THUMB_COUNT_PER_ROW));
+}
+
+
+// Customize the appearance of table view cells.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
+    [cell.textLabel setText:@" "];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
+        UIView *v = [self tableView:tableView viewForIndexPath:indexPath];
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if(v){
+                for(UIView *view in cell.contentView.subviews){
+                    [view removeFromSuperview];
+                }
+                [cell.contentView addSubview:v];
+            }
+            else{
+                [cell setAccessoryType:UITableViewCellAccessoryNone];
+                [cell setEditingAccessoryType:UITableViewCellAccessoryNone];
+            }
+        });
+    });
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return THUMB_SPACING + THUMB_SIZE;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForIndexPath:(NSIndexPath*)indexPath{
     if(tableView == photosTable){
         int initialThumbOffset = ((int)photosTable.frame.size.width+THUMB_SPACING-(THUMB_COUNT_PER_ROW*(THUMB_SIZE+THUMB_SPACING)))/2;
-        int count = 0;
-        if([self photoAlbums])
-            count += [[self photoAlbums] count];
-        if([self accountIndex] >= count){
+        if([self account]){
             UIView *view = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, photosTable.frame.size.width, [self tableView:photosTable heightForRowAtIndexPath:indexPath])] autorelease];
             int index = indexPath.row * (THUMB_COUNT_PER_ROW);
             int maxIndex = index + ((THUMB_COUNT_PER_ROW)-1);
@@ -977,43 +975,200 @@
     return nil;
 }
 
-#pragma mark WebView Delegate Methods
-
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-    if ([[[request URL] path] isEqualToString:kOAuthCallbackRelativeURL]) {
-        NSString *_code = [[NSDictionary dictionaryWithFormEncodedString:[[request URL] query]] objectForKey:@"code"];
-        
-        [[GCAccount sharedManager] verifyAuthorizationWithAccessCode:_code success:^(void) {
-            [self addServiceBack:nil];
-        } andError:^(NSError *error) {
-            DLog(@"%@", [error localizedDescription]);
-        }];
-        
-        return NO;
-    }
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+    //    return (interfaceOrientation == UIInterfaceOrientationPortrait);
     return YES;
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView {
-    [self showHUDWithTitle:nil andOpacity:0.3f];
+@end
+
+
+/************************************************************************
+ *                                                                      *
+ *                          Photo Picker Plus                           *
+ *                                                                      *
+ ************************************************************************/
+
+@implementation PhotoPickerPlus
+@synthesize delegate;
+@synthesize appeared, multipleImageSelectionEnabled;
+@synthesize sourceType;
+
+
+-(void)dealloc{
+    [super dealloc];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    [self hideHUD];
-}
-
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-    [self hideHUD];
-    
-    if (error.code == NSURLErrorCancelled) return; 
-    
-    if (![[error localizedDescription] isEqualToString:@"Frame load interrupted"]) {
-        [self quickAlertViewWithTitle:@"Error" message:[error localizedDescription] button:@"Reload" completionBlock:^(void) {
-            [AddServiceWebView reload]; 
-        } cancelBlock:^(void) {
-            [self addServiceBack:nil];
+-(IBAction)cameraSelected:(id)sender{
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){ 
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
+        [picker setDelegate:self];
+        [self presentViewController:picker animated:YES completion:^(void){
+            [picker release];
         }];
+    }
+    else{
+        [self quickAlertWithTitle:@"Camera Not Available" message:@"Please select a different source type" button:@"OK"];
     }
 }
 
+-(IBAction)deviceSelected:(id)sender{
+    AccountViewController *temp = [[AccountViewController alloc] init];
+    [temp setDelegate:self.delegate];
+    [temp setTitle:@"Photos"];
+    [temp setP3:self];
+    [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+    UINavigationController *navController = [[[UINavigationController alloc] initWithRootViewController:temp] autorelease];
+    [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+    [navController setModalPresentationStyle:[self modalPresentationStyle]];
+    [[GCAccount sharedManager] loadAccountsInBackgroundWithCompletion:^(void){
+        [self presentModalViewController:navController animated:YES];
+    }];
+    [temp release];
+}
+
+-(IBAction)latestSelected:(id)sender{
+    [self showHUD];
+    [[GCAccount sharedManager] loadAssetsCompletionBlock:^(void){
+        if([[GCAccount sharedManager] assetsArray].count > 0){
+            GCAsset *object = [[[GCAccount sharedManager] assetsArray] objectAtIndex:0];
+            ALAsset *asset = [object alAsset];
+            NSMutableDictionary* temp = [NSMutableDictionary dictionary];
+            [temp setObject:[[asset defaultRepresentation] UTI] forKey:UIImagePickerControllerMediaType];
+            [temp setObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullResolutionImage] scale:1 orientation:(UIImageOrientation)[[asset defaultRepresentation] orientation]] forKey:UIImagePickerControllerOriginalImage];
+            [temp setObject:[[asset defaultRepresentation] url] forKey:UIImagePickerControllerReferenceURL];
+            if([self multipleImageSelectionEnabled]){
+                if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMediaWithInfo:)])
+                    [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMediaWithInfo:[NSArray arrayWithObject:temp]];
+            }
+            else{
+                if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
+                    [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:temp];
+            }
+        }
+        else{
+            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
+                [delegate PhotoPickerPlusControllerDidCancel:self];
+        }
+        [self hideHUD];
+    }];
+}
+
+-(IBAction)closeSelected:(id)sender{
+    [self dismissModalViewControllerAnimated:YES];
+    if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
+        [delegate PhotoPickerPlusControllerDidCancel:self];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    if([self multipleImageSelectionEnabled]){
+        [self dismissViewControllerAnimated:YES completion:^(void){
+            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMediaWithInfo:)])
+                [delegate PhotoPickerPlusController:self didFinishPickingArrayOfMediaWithInfo:[NSArray arrayWithObject:info]];
+            else if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
+                [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:info];
+        }];
+    }
+    else{
+        [self dismissViewControllerAnimated:YES completion:^(void){
+            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
+                [delegate PhotoPickerPlusController:self didFinishPickingMediaWithInfo:info];
+        }];
+    }
+}
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    [self dismissViewControllerAnimated:YES completion:^(void){
+        if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
+            [delegate PhotoPickerPlusControllerDidCancel:self];
+        
+    }];
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        [self setMultipleImageSelectionEnabled:NO];
+        [self setSourceType:PhotoPickerPlusSourceTypeAll];
+    }
+    return self;
+}
+
+- (void)didReceiveMemoryWarning
+{
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Release any cached data, images, etc that aren't in use.
+}
+
+#pragma mark - View lifecycle
+
+- (void)viewDidLoad
+{
+    [self.view setBackgroundColor:[UIColor clearColor]];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    UIButton *close = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [close setAlpha:.01];
+    [close setFrame:self.view.bounds];
+    [close addTarget:self action:@selector(closeSelected:) forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:close];
+    if(!appeared){
+        if(sourceType == PhotoPickerPlusSourceTypeAll){
+            if([self multipleImageSelectionEnabled]){
+                UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:CANCEL_BUTTON_TEXT destructiveButtonTitle:nil otherButtonTitles:CAMERA_OPTION_TEXT, DEVICE_PLURAL_OPTION_TEXT, LATEST_OPTION_TEXT, nil];
+                popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+                popupQuery.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
+                [popupQuery showInView:self.view];
+                [popupQuery release];
+            }
+            else{
+                UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:CANCEL_BUTTON_TEXT destructiveButtonTitle:nil otherButtonTitles:CAMERA_OPTION_TEXT, DEVICE_SINGLE_OPTION_TEXT, LATEST_OPTION_TEXT, nil];
+                popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+                popupQuery.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
+                [popupQuery showInView:self.view];
+                [popupQuery release];
+            }
+        }else if(sourceType == PhotoPickerPlusSourceTypeCamera){
+            [self cameraSelected:nil];
+        }else if(sourceType == PhotoPickerPlusSourceTypeLibrary){
+            [self deviceSelected:nil];
+        }else if(sourceType == PhotoPickerPlusSourceTypeNewestPhoto){
+            [self latestSelected:nil];
+        }
+        appeared = YES;
+    }
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == 0) {
+        [self cameraSelected:nil];
+	} else if (buttonIndex == 1) {
+        [self deviceSelected:nil];
+	} else if (buttonIndex == 2) {
+        [self latestSelected:nil];
+	} else if (buttonIndex == 3) {
+        [self closeSelected:nil];
+	}
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+    //    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
+}
 @end

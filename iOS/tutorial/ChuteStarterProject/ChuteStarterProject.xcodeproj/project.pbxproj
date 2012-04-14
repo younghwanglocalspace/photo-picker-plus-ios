@@ -64,8 +64,6 @@
 		151528A2150EA05F00218507 /* UIButton+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1515285D150EA05F00218507 /* UIButton+WebCache.m */; };
 		151528A3150EA05F00218507 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1515285F150EA05F00218507 /* UIImageView+WebCache.m */; };
 		151528A4150EA05F00218507 /* PhotoPickerPlus.m in Sources */ = {isa = PBXBuildFile; fileRef = 15152862150EA05F00218507 /* PhotoPickerPlus.m */; };
-		151528A5150EA05F00218507 /* PhotoPickerPlus.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15152863150EA05F00218507 /* PhotoPickerPlus.xib */; };
-		151528A6150EA05F00218507 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 15152865150EA05F00218507 /* backButton.png */; };
 		151528A7150EA05F00218507 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 15152866150EA05F00218507 /* facebook.png */; };
 		151528A8150EA05F00218507 /* flickr.png in Resources */ = {isa = PBXBuildFile; fileRef = 15152867150EA05F00218507 /* flickr.png */; };
 		151528A9150EA05F00218507 /* instagram.png in Resources */ = {isa = PBXBuildFile; fileRef = 15152868150EA05F00218507 /* instagram.png */; };
@@ -214,8 +212,6 @@
 		1515285F150EA05F00218507 /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		15152861150EA05F00218507 /* PhotoPickerPlus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoPickerPlus.h; sourceTree = "<group>"; };
 		15152862150EA05F00218507 /* PhotoPickerPlus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoPickerPlus.m; sourceTree = "<group>"; };
-		15152863150EA05F00218507 /* PhotoPickerPlus.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoPickerPlus.xib; sourceTree = "<group>"; };
-		15152865150EA05F00218507 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backButton.png; sourceTree = "<group>"; };
 		15152866150EA05F00218507 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		15152867150EA05F00218507 /* flickr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flickr.png; sourceTree = "<group>"; };
 		15152868150EA05F00218507 /* instagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instagram.png; sourceTree = "<group>"; };
@@ -537,7 +533,6 @@
 			children = (
 				15152861150EA05F00218507 /* PhotoPickerPlus.h */,
 				15152862150EA05F00218507 /* PhotoPickerPlus.m */,
-				15152863150EA05F00218507 /* PhotoPickerPlus.xib */,
 				15152864150EA05F00218507 /* assets */,
 			);
 			name = PhotoPickerPlus;
@@ -547,7 +542,6 @@
 		15152864150EA05F00218507 /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				15152865150EA05F00218507 /* backButton.png */,
 				15152866150EA05F00218507 /* facebook.png */,
 				15152867150EA05F00218507 /* flickr.png */,
 				15152868150EA05F00218507 /* instagram.png */,
@@ -675,8 +669,6 @@
 				1515287F150EA05F00218507 /* GCLoginViewController.xib in Resources */,
 				1515289B150EA05F00218507 /* LICENSE in Resources */,
 				1515289C150EA05F00218507 /* README.md in Resources */,
-				151528A5150EA05F00218507 /* PhotoPickerPlus.xib in Resources */,
-				151528A6150EA05F00218507 /* backButton.png in Resources */,
 				151528A7150EA05F00218507 /* facebook.png in Resources */,
 				151528A8150EA05F00218507 /* flickr.png in Resources */,
 				151528A9150EA05F00218507 /* instagram.png in Resources */,
