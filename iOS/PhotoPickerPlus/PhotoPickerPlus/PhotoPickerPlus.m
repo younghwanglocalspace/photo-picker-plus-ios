@@ -13,34 +13,6 @@
 
 #import "PhotoPickerPlus.h"
 
-#define ADD_SERVICES_ARRAY_NAMES [NSArray arrayWithObjects:@"Facebook", @"Instagram", @"Flickr", @"Picasa", nil]
-#define ADD_SERVICES_ARRAY_LINKS [NSArray arrayWithObjects:@"facebook", @"instagram", @"flickr", @"google", nil]
-
-#define CANCEL_BUTTON_TEXT  @"Cancel"
-#define DONE_BUTTON_TEXT  @"Done"
-#define BACK_BUTTON_TEXT  @"Back"
-
-#define CAMERA_OPTION_TEXT @"Take Photo"
-#define DEVICE_SINGLE_OPTION_TEXT @"Choose Photo"
-#define DEVICE_PLURAL_OPTION_TEXT @"Choose Photos"
-#define LATEST_OPTION_TEXT @"Last Photo Taken"
-#define CANCEL_OPTION_TEXT @"Cancel"
-
-#define PHOTO_COUNT_FORMAT @"Loaded %i photos in this album"
-
-#define messageTime 2
-
-#define THUMB_COUNT_PER_ROW ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 6 : 4)
-
-#define MIN_THUMB_SPACING ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 4 : 1)
-
-#define MAX_THUMB_SIZE 100
-//thumb size greater than 100 will cause blurriness adjust greater at own risk.
-
-#define THUMB_SIZE (MIN(floor((photosTable.frame.size.width-(MIN_THUMB_SPACING*(THUMB_COUNT_PER_ROW+1)))/THUMB_COUNT_PER_ROW),MAX_THUMB_SIZE))
-
-#define THUMB_SPACING (MAX(floor((photosTable.frame.size.width-(THUMB_COUNT_PER_ROW*THUMB_SIZE))/(THUMB_COUNT_PER_ROW+1)),MIN_THUMB_SPACING))
-
 
 /************************************************************************
  *                                                                      *
@@ -49,7 +21,7 @@
  ************************************************************************/
 
 @implementation AccountViewController
-@synthesize delegate, photoAlbums, accounts, accountsTable, accountIndex, multipleImageSelectionEnabled, P3;
+@synthesize delegate, photoAlbums, accounts, accountsTable, accountIndex, multipleImageSelectionEnabled, useStandardDevicePicker, P3;
 
 -(void) dealloc{
     [photoAlbums release];
@@ -116,6 +88,7 @@
                         [temp setP3:[self P3]];
                         [temp setAccount:account];
                         [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+                        [temp setUseStandardDevicePicker:[self useStandardDevicePicker]];
                         [self.navigationController pushViewController:temp animated:YES];
                         return;
                     }
@@ -124,6 +97,7 @@
                     [temp setTitle:[account objectForKey:@"type"]];
                     [temp setP3:[self P3]];
                     [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+                    [temp setUseStandardDevicePicker:[self useStandardDevicePicker]];
                     [temp setAccount:account];
                     [self.navigationController pushViewController:temp animated:YES];
                     [temp release];
@@ -134,37 +108,26 @@
     }
 }
 
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    if([self multipleImageSelectionEnabled]){
+        if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingArrayOfMediaWithInfo:)])
+            [delegate PhotoPickerPlusController:[self P3] didFinishPickingArrayOfMediaWithInfo:[NSArray arrayWithObject:info]];
+        else if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
+            [delegate PhotoPickerPlusController:[self P3] didFinishPickingMediaWithInfo:info];
+    }
+    else{
+        if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusController:didFinishPickingMediaWithInfo:)])
+            [delegate PhotoPickerPlusController:[self P3] didFinishPickingMediaWithInfo:info];
+    }
+}
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
+        [delegate PhotoPickerPlusControllerDidCancel:[self P3]];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    NSMutableArray *array = [NSMutableArray array];
-    [self setAccountIndex:-1];
-    
-    void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop)
-    {
-        if (group == nil) {
-            [self setPhotoAlbums:array];
-            [self.accountsTable reloadData];
-        }
-        else{
-            [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-            if([group numberOfAssets]> 0)
-                [array insertObject:group atIndex:0];
-        }
-    };
-    
-    void (^assetFailureBlock)(NSError *) = ^(NSError *error)
-    {
-        [self setPhotoAlbums:NULL];
-    };
-    
-    if(![[GCAccount sharedManager] assetsLibrary]){
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-        [[GCAccount sharedManager] setAssetsLibrary:library];
-        [library release];
-    }
-    [[[GCAccount sharedManager] assetsLibrary] enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:assetGroupEnumerator failureBlock:assetFailureBlock];
     self.accounts = [[GCAccount sharedManager] accounts];
     self.accountsTable = [[[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain] autorelease];
     if([self.navigationController.navigationBar isTranslucent]){
@@ -185,6 +148,35 @@
 
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    if(![self useStandardDevicePicker]){
+        NSMutableArray *array = [NSMutableArray array];
+        [self setAccountIndex:-1];
+        
+        void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop)
+        {
+            if (group == nil) {
+                [self setPhotoAlbums:array];
+                [self.accountsTable reloadData];
+            }
+            else{
+                [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+                if([group numberOfAssets]> 0)
+                    [array insertObject:group atIndex:0];
+            }
+        };
+        
+        void (^assetFailureBlock)(NSError *) = ^(NSError *error)
+        {
+            [self setPhotoAlbums:NULL];
+        };
+        
+        if(![[GCAccount sharedManager] assetsLibrary]){
+            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+            [[GCAccount sharedManager] setAssetsLibrary:library];
+            [library release];
+        }
+        [[[GCAccount sharedManager] assetsLibrary] enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:assetGroupEnumerator failureBlock:assetFailureBlock];
+    }
 }
 
 -(void) viewDidAppear:(BOOL)animated{
@@ -205,6 +197,8 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if([self useStandardDevicePicker])
+        return [ADD_SERVICES_ARRAY_NAMES count]+1;
     int count = 0;
     if([self photoAlbums])
         count += [[self photoAlbums] count];
@@ -236,31 +230,57 @@
             else{
                 [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
                 [cell setEditingAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-                int count = 0;
-                if([self photoAlbums])
-                    count += [[self photoAlbums] count];
-                if(indexPath.row >= count){
-                    NSString *imageName = [[NSString stringWithFormat:@"%@.png",[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]] lowercaseString];
-                    UIImage *temp = [UIImage imageNamed:imageName];
-                    [cell.imageView setImage:temp];
-                    [cell.textLabel setText:[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]];
-                    NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:indexPath.row - count];
-                    NSDictionary *account = NULL;
-                    if([self accounts]){
-                        for(NSDictionary *dict in [self accounts]){
-                            if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
-                                account = dict;
-                        }
+                if([self useStandardDevicePicker]){
+                    if(indexPath.row == 0){
+                        [cell.imageView setImage:[UIImage imageNamed:@"GCNAIblank.png"]];
+                        [cell.textLabel setText:USE_DEVICE_TITLE];
                     }
-                    if(account){
-                        if([[NSString stringWithFormat:@"%@",[account objectForKey:@"name"]] caseInsensitiveCompare:@"(null)"] != NSOrderedSame)
-                            [cell.textLabel setText:[account objectForKey:@"name"]];
+                    else{
+                        NSString *imageName = [[NSString stringWithFormat:@"%@.png",[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - 1]] lowercaseString];
+                        UIImage *temp = [UIImage imageNamed:imageName];
+                        [cell.imageView setImage:temp];
+                        [cell.textLabel setText:[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - 1]];
+                        NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:indexPath.row - 1];
+                        NSDictionary *account = NULL;
+                        if([self accounts]){
+                            for(NSDictionary *dict in [self accounts]){
+                                if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
+                                    account = dict;
+                            }
+                        }
+                        if(account){
+                            if([[NSString stringWithFormat:@"%@",[account objectForKey:@"name"]] caseInsensitiveCompare:@"(null)"] != NSOrderedSame)
+                                [cell.textLabel setText:[account objectForKey:@"name"]];
+                        }
                     }
                 }
                 else{
-                    ALAssetsGroup *group = [self.photoAlbums objectAtIndex:indexPath.row];
-                    [cell.textLabel setText:[group valueForProperty:ALAssetsGroupPropertyName]];
-                    [cell.imageView setImage:[UIImage imageWithCGImage:[group posterImage]]];
+                    int count = 0;
+                    if([self photoAlbums])
+                        count += [[self photoAlbums] count];
+                    if(indexPath.row >= count){
+                        NSString *imageName = [[NSString stringWithFormat:@"%@.png",[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]] lowercaseString];
+                        UIImage *temp = [UIImage imageNamed:imageName];
+                        [cell.imageView setImage:temp];
+                        [cell.textLabel setText:[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count]];
+                        NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:indexPath.row - count];
+                        NSDictionary *account = NULL;
+                        if([self accounts]){
+                            for(NSDictionary *dict in [self accounts]){
+                                if([[dict objectForKey:@"type"] caseInsensitiveCompare:type] == NSOrderedSame)
+                                    account = dict;
+                            }
+                        }
+                        if(account){
+                            if([[NSString stringWithFormat:@"%@",[account objectForKey:@"name"]] caseInsensitiveCompare:@"(null)"] != NSOrderedSame)
+                                [cell.textLabel setText:[account objectForKey:@"name"]];
+                        }
+                    }
+                    else{
+                        ALAssetsGroup *group = [self.photoAlbums objectAtIndex:indexPath.row];
+                        [cell.textLabel setText:[group valueForProperty:ALAssetsGroupPropertyName]];
+                        [cell.imageView setImage:[UIImage imageWithCGImage:[group posterImage]]];
+                    }
                 }
             }
         });
@@ -275,10 +295,21 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if(tableView == accountsTable){
+        if([self useStandardDevicePicker] && indexPath.row == 0){ 
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            [picker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+            [picker setDelegate:self];
+            [self presentViewController:picker animated:YES completion:^(void){
+                [picker release];
+            }];
+            return;
+        }
         [self setAccountIndex:indexPath.row];
         int count = 0;
         if([self photoAlbums])
             count += [[self photoAlbums] count];
+        if([self useStandardDevicePicker])
+            count = 1;
         if(indexPath.row >= count){
             NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:indexPath.row - count];
             NSString *albumTitle = [ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row - count];
@@ -298,6 +329,7 @@
                     [temp setP3:[self P3]];
                     [temp setAccount:account];
                     [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+                    [temp setUseStandardDevicePicker:[self useStandardDevicePicker]];
                     [self.navigationController pushViewController:temp animated:YES];
                     return;
                 }
@@ -306,6 +338,7 @@
                 [temp setTitle:[account objectForKey:@"type"]];
                 [temp setP3:[self P3]];
                 [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+                [temp setUseStandardDevicePicker:[self useStandardDevicePicker]];
                 [temp setAccount:account];
                 [self.navigationController pushViewController:temp animated:YES];
                 [temp release];
@@ -326,6 +359,7 @@
             [temp setAccount:NULL];
             [temp setGroup:group];
             [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+            [temp setUseStandardDevicePicker:[self useStandardDevicePicker]];
             [self.navigationController pushViewController:temp animated:YES];
         }
     }
@@ -436,7 +470,7 @@
  ************************************************************************/
 
 @implementation AlbumViewController
-@synthesize delegate, albums, albumsTable, multipleImageSelectionEnabled, account, P3;
+@synthesize delegate, albums, albumsTable, multipleImageSelectionEnabled, useStandardDevicePicker, account, P3;
 
 -(void)dealloc{
     [albums release];
@@ -556,6 +590,7 @@
         [temp setAccount:account];
         [temp setAlbum:[albums objectAtIndex:indexPath.row]];
         [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+        [temp setUseStandardDevicePicker:[self useStandardDevicePicker]];
         [self.navigationController pushViewController:temp animated:YES];
     }
 }
@@ -581,7 +616,7 @@
  ************************************************************************/
 
 @implementation PhotoViewController
-@synthesize  delegate, photos, photosTable, photoCountView, photoCountLabel, selectedAssets, multipleImageSelectionEnabled, account, P3, album, group;
+@synthesize  delegate, photos, photosTable, photoCountView, photoCountLabel, selectedAssets, multipleImageSelectionEnabled, useStandardDevicePicker, account, P3, album, group;
 
 -(void)dealloc{
     [photos release];
@@ -993,7 +1028,7 @@
 
 @implementation PhotoPickerPlus
 @synthesize delegate;
-@synthesize appeared, multipleImageSelectionEnabled;
+@synthesize appeared, multipleImageSelectionEnabled, useStandardDevicePicker, offerLatestPhoto;
 @synthesize sourceType;
 
 
@@ -1021,6 +1056,7 @@
     [temp setTitle:@"Photos"];
     [temp setP3:self];
     [temp setMultipleImageSelectionEnabled:[self multipleImageSelectionEnabled]];
+    [temp setUseStandardDevicePicker:[self useStandardDevicePicker]];
     UINavigationController *navController = [[[UINavigationController alloc] initWithRootViewController:temp] autorelease];
     [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     [navController setModalPresentationStyle:[self modalPresentationStyle]];
@@ -1054,6 +1090,9 @@
                 [delegate PhotoPickerPlusControllerDidCancel:self];
         }
         [self hideHUD];
+    } andFailure:^(void){
+        if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
+            [delegate PhotoPickerPlusControllerDidCancel:self];
     }];
 }
 
@@ -1093,6 +1132,8 @@
     if (self) {
         [self setMultipleImageSelectionEnabled:NO];
         [self setSourceType:PhotoPickerPlusSourceTypeAll];
+        [self setUseStandardDevicePicker:NO];
+        [self setOfferLatestPhoto:YES];
     }
     return self;
 }
@@ -1122,14 +1163,22 @@
     if(!appeared){
         if(sourceType == PhotoPickerPlusSourceTypeAll){
             if([self multipleImageSelectionEnabled]){
-                UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:CANCEL_BUTTON_TEXT destructiveButtonTitle:nil otherButtonTitles:CAMERA_OPTION_TEXT, DEVICE_PLURAL_OPTION_TEXT, LATEST_OPTION_TEXT, nil];
+                UIActionSheet *popupQuery = nil;
+                if([self offerLatestPhoto])
+                popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:CANCEL_BUTTON_TEXT destructiveButtonTitle:nil otherButtonTitles:CAMERA_OPTION_TEXT, DEVICE_PLURAL_OPTION_TEXT, LATEST_OPTION_TEXT, nil];
+                else
+                    popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:CANCEL_BUTTON_TEXT destructiveButtonTitle:nil otherButtonTitles:CAMERA_OPTION_TEXT, DEVICE_PLURAL_OPTION_TEXT, nil];
                 popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
                 popupQuery.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
                 [popupQuery showInView:self.view];
                 [popupQuery release];
             }
             else{
-                UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:CANCEL_BUTTON_TEXT destructiveButtonTitle:nil otherButtonTitles:CAMERA_OPTION_TEXT, DEVICE_SINGLE_OPTION_TEXT, LATEST_OPTION_TEXT, nil];
+                UIActionSheet *popupQuery = nil;
+                if([self offerLatestPhoto])
+                    popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:CANCEL_BUTTON_TEXT destructiveButtonTitle:nil otherButtonTitles:CAMERA_OPTION_TEXT, DEVICE_SINGLE_OPTION_TEXT, LATEST_OPTION_TEXT, nil];
+                else
+                    popupQuery = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:CANCEL_BUTTON_TEXT destructiveButtonTitle:nil otherButtonTitles:CAMERA_OPTION_TEXT, DEVICE_SINGLE_OPTION_TEXT, nil];
                 popupQuery.actionSheetStyle = UIActionSheetStyleBlackOpaque;
                 popupQuery.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
                 [popupQuery showInView:self.view];
@@ -1152,7 +1201,10 @@
 	} else if (buttonIndex == 1) {
         [self deviceSelected:nil];
 	} else if (buttonIndex == 2) {
-        [self latestSelected:nil];
+        if([self offerLatestPhoto])
+            [self latestSelected:nil];
+        else
+            [self closeSelected:nil];
 	} else if (buttonIndex == 3) {
         [self closeSelected:nil];
 	}

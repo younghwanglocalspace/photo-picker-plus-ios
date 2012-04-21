@@ -14,6 +14,35 @@
 #import <UIKit/UIKit.h>
 #import "GetChute.h"
 
+#define ADD_SERVICES_ARRAY_NAMES [NSArray arrayWithObjects:@"Facebook", @"Instagram", @"Flickr", @"Picasa", nil]
+#define ADD_SERVICES_ARRAY_LINKS [NSArray arrayWithObjects:@"facebook", @"instagram", @"flickr", @"google", nil]
+#define USE_DEVICE_TITLE @"Device"
+
+#define CANCEL_BUTTON_TEXT  @"Cancel"
+#define DONE_BUTTON_TEXT  @"Done"
+#define BACK_BUTTON_TEXT  @"Back"
+
+#define CAMERA_OPTION_TEXT @"Take Photo"
+#define DEVICE_SINGLE_OPTION_TEXT @"Choose Photo"
+#define DEVICE_PLURAL_OPTION_TEXT @"Choose Photos"
+#define LATEST_OPTION_TEXT @"Last Photo Taken"
+#define CANCEL_OPTION_TEXT @"Cancel"
+
+#define PHOTO_COUNT_FORMAT @"Loaded %i photos in this album"
+
+#define messageTime 2
+
+#define THUMB_COUNT_PER_ROW ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 6 : 4)
+
+#define MIN_THUMB_SPACING ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 4 : 1)
+
+#define MAX_THUMB_SIZE 100
+//thumb size greater than 100 will cause blurriness adjust greater at own risk.
+
+#define THUMB_SIZE (MIN(floor((photosTable.frame.size.width-(MIN_THUMB_SPACING*(THUMB_COUNT_PER_ROW+1)))/THUMB_COUNT_PER_ROW),MAX_THUMB_SIZE))
+
+#define THUMB_SPACING (MAX(floor((photosTable.frame.size.width-(THUMB_COUNT_PER_ROW*THUMB_SIZE))/(THUMB_COUNT_PER_ROW+1)),MIN_THUMB_SPACING))
+
 enum {
     PhotoPickerPlusSourceTypeAll,
     PhotoPickerPlusSourceTypeLibrary,
@@ -26,17 +55,21 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 
 @interface PhotoPickerPlus : GCUIBaseViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate>
 
+//The delegate used for returning image info
 @property (nonatomic, assign) NSObject <PhotoPickerPlusDelegate> *delegate;
+
+@property (nonatomic) BOOL appeared;
 
 //set to the source of the image selected
 @property (nonatomic) PhotoPickerPlusSourceType sourceType;
 
-@property (nonatomic) BOOL appeared;
-@property (nonatomic) BOOL multipleImageSelectionEnabled;
+@property (nonatomic) BOOL multipleImageSelectionEnabled;  //Allows users to select multiple images.  Requires location services for device photos.
+@property (nonatomic) BOOL useStandardDevicePicker;  //Use standard UIImagePicker for device photos only allows single image selection from device but doesn't require location services.
+@property (nonatomic) BOOL offerLatestPhoto;    //Offer option to use latest photo.  Note that this will require location serivices to work.
 
 @end
 
-@interface AccountViewController : GCUIBaseViewController <UITableViewDataSource, UITableViewDelegate>
+@interface AccountViewController : GCUIBaseViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, assign) NSObject <PhotoPickerPlusDelegate> *delegate;
 @property (nonatomic, assign) PhotoPickerPlus *P3;
@@ -49,6 +82,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 @property (nonatomic) int accountIndex;
 
 @property (nonatomic) BOOL multipleImageSelectionEnabled;
+@property (nonatomic) BOOL useStandardDevicePicker;
 
 -(UIView*)tableView:(UITableView *)tableView viewForIndexPath:(NSIndexPath*)indexPath;
 
@@ -71,6 +105,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 @property (nonatomic, retain) UITableView *albumsTable;
 
 @property (nonatomic) BOOL multipleImageSelectionEnabled;
+@property (nonatomic) BOOL useStandardDevicePicker;
 
 @property (nonatomic, assign) NSDictionary *account;
 
@@ -92,6 +127,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 @property (nonatomic, retain) UILabel *photoCountLabel;
 
 @property (nonatomic) BOOL multipleImageSelectionEnabled;
+@property (nonatomic) BOOL useStandardDevicePicker;
 @property (nonatomic, assign) NSDictionary *account;
 @property (nonatomic, assign) NSDictionary *album;
 @property (nonatomic, assign) ALAssetsGroup *group;
