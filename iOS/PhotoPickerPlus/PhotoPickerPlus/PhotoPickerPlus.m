@@ -1046,7 +1046,10 @@
         }];
     }
     else{
-        [self quickAlertWithTitle:@"Camera Not Available" message:@"Please select a different source type" button:@"OK"];
+        [self quickAlertViewWithTitle:@"Camera Not Available" message:@"Please select a different source type" button:@"OK" completionBlock:^(void){
+            if(delegate && [delegate respondsToSelector:@selector(PhotoPickerPlusControllerDidCancel:)])
+                [delegate PhotoPickerPlusControllerDidCancel:self];
+        } cancelBlock:nil];
     }
 }
 
