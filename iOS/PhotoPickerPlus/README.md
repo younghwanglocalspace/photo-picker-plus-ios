@@ -20,8 +20,10 @@ While subclassing this component is possible, it is not really recommended.  If 
 Initialization
 --------------
 
- *   sourceType (optional) - `PhotoPickerPlusSourceType` - Sets whether to display the source selection screen or to only allow image selection from a specific source.  The different options are `PhotoPickerPlusSourceTypeAll`, `PhotoPickerPlusSourceTypeLibrary`, `PhotoPickerPlusSourceTypeCamera` and `PhotoPickerPlusSourceTypeNewestPhoto`.  If you don't set this then it defaults to `PhotoPickerPlusSourceTypeAll`.
- *   multipleImageSelectionEnabled (optional) - `BOOL` - if on picker does multi image selection if off picker does single image selection.  If not set then it defaults to off.
+ *   sourceType (optional) - `PhotoPickerPlusSourceType` - Sets whether to display the source selection screen or to only allow image selection from a specific source.  The different options are `PhotoPickerPlusSourceTypeAll`, `PhotoPickerPlusSourceTypeLibrary`, `PhotoPickerPlusSourceTypeCamera` and `PhotoPickerPlusSourceTypeNewestPhoto`.  If not set it defaults to `PhotoPickerPlusSourceTypeAll`.
+ *   multipleImageSelectionEnabled (optional) - `BOOL` - If YES picker does multi image selection if NO picker does single image selection.  If not set then it defaults to NO.
+ *   useStandardDevicePicker (optional) - `BOOL` - If YES then the picker will use the `UIImagePickerController` to select images from the device rather than the custom picker.  This is for apps that don't want to ask users for location services.  This will however limit the device photo selection to one image at a time.  If not set it defaults to NO.
+ *   offerLatestPhoto (optional) - `BOOL` - If YES the source selection offers a Latest Photo option.  If NO then it doesn't.  This is to offer a non location services option for the picker as latest photo requires location services to be enabled by the user.  If not set it defaults to YES.
  *   delegate - `NSObject <PhotoPickerPlusDelegate>` - The delegate for this component.  It should implement two methods.
     *  `-(void)PhotoPickerPlusController:(PhotoPickerPlus *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info;`
     *  `-(void)PhotoPickerPlusControllerDidCancel:(PhotoPickerPlus *)picker;`
@@ -62,7 +64,7 @@ Implementation
 	    PhotoPickerPlus *temp = [[PhotoPickerPlus alloc] init];
 	    [temp setDelegate:self];
     	[temp setMultipleImageSelectionEnabled:YES];
-	    self.modalPresentationStyle = UIModalPresentationCurrentContext;
+	    temp.modalPresentationStyle = UIModalPresentationCurrentContext;
 	    [self presentModalViewController:temp animated:NO];
 	    [temp release];
 	}
@@ -83,7 +85,7 @@ Implementation
 	    PhotoPickerPlus *temp = [[PhotoPickerPlus alloc] init];
 	    [temp setDelegate:self];
     	[temp setSourceType:PhotoPickerPlusSourceTypeLibrary];
-	    self.modalPresentationStyle = UIModalPresentationCurrentContext;
+	    temp.modalPresentationStyle = UIModalPresentationCurrentContext;
 	    [self presentModalViewController:temp animated:NO];
 	    [temp release];
 	}

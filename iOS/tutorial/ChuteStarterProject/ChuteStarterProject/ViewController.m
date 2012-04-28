@@ -14,7 +14,7 @@
 -(IBAction)pickPhotoSelected:(id)sender{
     PhotoPickerPlus *temp = [[PhotoPickerPlus alloc] init];
     [temp setDelegate:self];
-    [self setModalPresentationStyle:UIModalPresentationCurrentContext];
+    [temp setModalPresentationStyle:UIModalPresentationCurrentContext];
     [self presentViewController:temp animated:YES completion:^(void){
         [temp release];
     }];

@@ -68,7 +68,7 @@ viewController.h
 
 Synthesize ImageView And Write The Display Method
 -------------------------------------------------
-In viewController.m you now need to synthesize your imageView object and write the method to display the photo picker plus component.  The method will initialize the controller, set itself as the delegate, present it and release it.  We also want to have out current view visible behind the first screen of the picker so we will add a line for that as well.  The code for all this is
+In viewController.m you now need to synthesize your imageView object and write the method to display the photo picker plus component.  The method will initialize the controller, set itself as the delegate, present it and release it.  We also want to have our current view visible behind the first screen of the picker so we will add a line for that as well.  The code for all this is
 
 viewController.m
 
@@ -78,7 +78,7 @@ viewController.m
 	-(IBAction)pickPhotoSelected:(id)sender{
 	    PhotoPickerPlus *temp = [[PhotoPickerPlus alloc] init];
 	    [temp setDelegate:self];
-	    [self setModalPresentationStyle:UIModalPresentationCurrentContext];
+	    [temp setModalPresentationStyle:UIModalPresentationCurrentContext];
 	    [self presentViewController:temp animated:YES completion:^(void){
 	        [temp release];
 	    }];

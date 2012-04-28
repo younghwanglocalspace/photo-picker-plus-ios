@@ -71,12 +71,12 @@ In your class change `imagePickerControllerDidCancel:` to `PhotoPickerPlusContro
 
 Displaying The Image Picker
 ---------------------------
-Finally replace the code to display the image picker.  Photo Picker Plus lets the user select a source for the image so you don't need to set it ahead of time.  The only other difference is that you should set your viewController's `ModalPresentationStyle` to `UIModalPresentationCurrentContext` for a non-navigation based project or set your navigationViewController's `ModalPresentationStyle` to `UIModalPresentationCurrentContext` for a navigation based project.
+Finally replace the code to display the image picker.  Photo Picker Plus lets the user select a source for the image so you don't need to set it ahead of time.  You should also set the picker's `ModalPresentationStyle` to Whatever display format you would like.  I'm setting it to `UIModalPresentationCurrentContext` in this example, however you may want to present it different depending on your needs (especially in an iPad app).
 
 ```objective-c
 	PhotoPickerPlus *temp = [[PhotoPickerPlus alloc] init];
 	[temp setDelegate:self];
-	[self setModalPresentationStyle:UIModalPresentationCurrentContext];
+	[temp setModalPresentationStyle:UIModalPresentationCurrentContext];
 	[self presentViewController:temp animated:YES completion:^(void){
 	    [temp release];
 	}];
