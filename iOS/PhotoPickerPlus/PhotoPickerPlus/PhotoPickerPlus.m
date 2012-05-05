@@ -393,6 +393,7 @@
 #pragma mark WebView Delegate Methods
 
 -(void)viewDidLoad{
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackOpaque];
     self.AddServiceWebView = [[[UIWebView alloc] initWithFrame:self.view.bounds] autorelease];
     [AddServiceWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [AddServiceWebView setDelegate:self];
@@ -414,6 +415,10 @@
         [AddServiceWebView loadRequest:request];
         [params release];
     }
+}
+
+-(void)viewWillUnload{
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
@@ -1029,7 +1034,7 @@
 @implementation PhotoPickerPlus
 @synthesize delegate;
 @synthesize appeared, multipleImageSelectionEnabled, useStandardDevicePicker, offerLatestPhoto;
-@synthesize sourceType;
+@synthesize sourceType, presentationStyle;
 
 
 -(void)dealloc{
@@ -1062,7 +1067,7 @@
     [temp setUseStandardDevicePicker:[self useStandardDevicePicker]];
     UINavigationController *navController = [[[UINavigationController alloc] initWithRootViewController:temp] autorelease];
     [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
-    [navController setModalPresentationStyle:[self modalPresentationStyle]];
+    [navController setModalPresentationStyle:[self presentationStyle]];
     [[GCAccount sharedManager] loadAccountsInBackgroundWithCompletion:^(void){
         [self presentModalViewController:navController animated:YES];
     }];
