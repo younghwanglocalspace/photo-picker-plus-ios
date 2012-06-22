@@ -53,8 +53,10 @@
 - (NSString *) pathForCachedUrl:(NSString *)urlString
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"https://" withString:@""];
     
-    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [[urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
+    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [urlString stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
 }
 
 -(void) closeSelected{
@@ -491,8 +493,10 @@
 - (NSString *) pathForCachedUrl:(NSString *)urlString
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"https://" withString:@""];
     
-    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [[urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
+    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [urlString stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
 }
 
 -(void)viewDidLoad{
@@ -635,8 +639,10 @@
 - (NSString *) pathForCachedUrl:(NSString *)urlString
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"https://" withString:@""];
     
-    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [[urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
+    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [urlString stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
 }
 
 -(void)objectTappedWithGesture:(UIGestureRecognizer*)gesture{
@@ -687,9 +693,10 @@
                 NSMutableDictionary* temp = [NSMutableDictionary dictionary];
                 [temp setObject:@"public.image" forKey:UIImagePickerControllerMediaType];
                 if(image)
-                    [temp setObject:image forKey:UIImagePickerControllerOriginalImage];
-                else if([view image])
-                    [temp setObject:[view image] forKey:UIImagePickerControllerOriginalImage];
+                    [temp setObject:[NSURL URLWithString:[asset objectForKey:@"url"]] forKey:UIImagePickerControllerReferenceURL];
+                else{
+                    [temp setObject:[NSURL URLWithString:[asset objectForKey:@"thumb"]] forKey:UIImagePickerControllerReferenceURL];
+                }
                 if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
                     [temp setObject:[asset objectForKey:@"url"] forKey:UIImagePickerControllerReferenceURL];
                 else{
@@ -740,9 +747,9 @@
                 if(image)
                     [temp setObject:image forKey:UIImagePickerControllerOriginalImage];
                 if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
-                    [temp setObject:[asset objectForKey:@"url"] forKey:UIImagePickerControllerReferenceURL];
+                    [temp setObject:[NSURL URLWithString:[asset objectForKey:@"url"]] forKey:UIImagePickerControllerReferenceURL];
                 else{
-                    [temp setObject:[asset objectForKey:@"thumb"] forKey:UIImagePickerControllerReferenceURL];
+                    [temp setObject:[NSURL URLWithString:[asset objectForKey:@"thumb"]] forKey:UIImagePickerControllerReferenceURL];
                 }
                 [temp setObject:asset forKey:UIImagePickerControllerMediaMetadata];
                 [returnArray addObject:temp];
