@@ -22,8 +22,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define API_URL @"http://api.getchute.com/v1/"
-#define SERVER_URL @"http://getchute.com"
+#define API_URL @"https://api.getchute.com/v1/"
+#define SERVER_URL @"https://getchute.com"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -40,4 +40,4 @@
 
 #define kOAuthPermissions               @"all_resources manage_resources profile resources"
 
-#define kOAuthTokenURL                  @"http://getchute.com/oauth/access_token"
+#define kOAuthTokenURL                  @"https://getchute.com/oauth/access_token"
