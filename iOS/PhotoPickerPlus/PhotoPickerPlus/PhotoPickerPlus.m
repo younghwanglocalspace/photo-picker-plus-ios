@@ -53,8 +53,10 @@
 - (NSString *) pathForCachedUrl:(NSString *)urlString
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"https://" withString:@""];
     
-    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [[urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
+    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [urlString stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
 }
 
 -(void) closeSelected{
@@ -148,6 +150,7 @@
 
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     if(![self useStandardDevicePicker]){
         NSMutableArray *array = [NSMutableArray array];
         [self setAccountIndex:-1];
@@ -415,6 +418,14 @@
         [params release];
     }
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackOpaque];
+}
+
+-(void)viewWillUnload{
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+}
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     if ([[[request URL] path] isEqualToString:kOAuthCallbackRelativeURL]) {
@@ -486,8 +497,10 @@
 - (NSString *) pathForCachedUrl:(NSString *)urlString
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"https://" withString:@""];
     
-    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [[urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
+    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [urlString stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
 }
 
 -(void)viewDidLoad{
@@ -630,8 +643,10 @@
 - (NSString *) pathForCachedUrl:(NSString *)urlString
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"https://" withString:@""];
     
-    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [[urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""] stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
+    return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [urlString stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
 }
 
 -(void)objectTappedWithGesture:(UIGestureRecognizer*)gesture{
@@ -683,12 +698,13 @@
                 [temp setObject:@"public.image" forKey:UIImagePickerControllerMediaType];
                 if(image)
                     [temp setObject:image forKey:UIImagePickerControllerOriginalImage];
-                else if([view image])
-                    [temp setObject:[view image] forKey:UIImagePickerControllerOriginalImage];
-                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
-                    [temp setObject:[asset objectForKey:@"url"] forKey:UIImagePickerControllerReferenceURL];
                 else{
-                    [temp setObject:[asset objectForKey:@"thumb"] forKey:UIImagePickerControllerReferenceURL];
+                    [temp setObject:view.image forKey:UIImagePickerControllerOriginalImage];
+                }
+                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
+                    [temp setObject:[NSURL URLWithString:[asset objectForKey:@"url"]] forKey:UIImagePickerControllerReferenceURL];
+                else{
+                    [temp setObject:[NSURL URLWithString:[asset objectForKey:@"thumb"]] forKey:UIImagePickerControllerReferenceURL];
                 }
                 [temp setObject:asset forKey:UIImagePickerControllerMediaMetadata];
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -735,9 +751,9 @@
                 if(image)
                     [temp setObject:image forKey:UIImagePickerControllerOriginalImage];
                 if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
-                    [temp setObject:[asset objectForKey:@"url"] forKey:UIImagePickerControllerReferenceURL];
+                    [temp setObject:[NSURL URLWithString:[asset objectForKey:@"url"]] forKey:UIImagePickerControllerReferenceURL];
                 else{
-                    [temp setObject:[asset objectForKey:@"thumb"] forKey:UIImagePickerControllerReferenceURL];
+                    [temp setObject:[NSURL URLWithString:[asset objectForKey:@"thumb"]] forKey:UIImagePickerControllerReferenceURL];
                 }
                 [temp setObject:asset forKey:UIImagePickerControllerMediaMetadata];
                 [returnArray addObject:temp];
@@ -1029,7 +1045,7 @@
 @implementation PhotoPickerPlus
 @synthesize delegate;
 @synthesize appeared, multipleImageSelectionEnabled, useStandardDevicePicker, offerLatestPhoto;
-@synthesize sourceType;
+@synthesize sourceType, presentationStyle;
 
 
 -(void)dealloc{
@@ -1062,7 +1078,7 @@
     [temp setUseStandardDevicePicker:[self useStandardDevicePicker]];
     UINavigationController *navController = [[[UINavigationController alloc] initWithRootViewController:temp] autorelease];
     [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
-    [navController setModalPresentationStyle:[self modalPresentationStyle]];
+    [navController setModalPresentationStyle:[self presentationStyle]];
     [[GCAccount sharedManager] loadAccountsInBackgroundWithCompletion:^(void){
         [self presentModalViewController:navController animated:YES];
     }];

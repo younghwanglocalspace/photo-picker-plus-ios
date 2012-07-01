@@ -62,6 +62,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 
 //set to the source of the image selected
 @property (nonatomic) PhotoPickerPlusSourceType sourceType;
+@property (nonatomic) UIModalPresentationStyle presentationStyle;
 
 @property (nonatomic) BOOL multipleImageSelectionEnabled;  //Allows users to select multiple images.  Requires location services for device photos.
 @property (nonatomic) BOOL useStandardDevicePicker;  //Use standard UIImagePicker for device photos only allows single image selection from device but doesn't require location services.

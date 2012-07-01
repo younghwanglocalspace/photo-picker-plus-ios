@@ -27,26 +27,25 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "SBJsonStreamWriterAccumulator.h"
+#import "GCJsonStreamParserAccumulator.h"
 
+@implementation GCJsonStreamParserAccumulator
 
-@implementation SBJsonStreamWriterAccumulator
+@synthesize value;
 
-@synthesize data;
-
-- (id)init {
-    self = [super init];
-    if (self) {
-        data = [[NSMutableData alloc] initWithCapacity:8096u];
-    }
-    return self;
+- (void)dealloc {
+    [value release];
+    [super dealloc];
 }
 
+#pragma mark GCJsonStreamParserAdapterDelegate
 
-#pragma mark SBJsonStreamWriterDelegate
+- (void)parser:(GCJsonStreamParser*)parser foundArray:(NSArray *)array {
+	value = [array retain];
+}
 
-- (void)writer:(SBJsonStreamWriter *)writer appendBytes:(const void *)bytes length:(NSUInteger)length {
-    [data appendBytes:bytes length:length];
+- (void)parser:(GCJsonStreamParser*)parser foundObject:(NSDictionary *)dict {
+	value = [dict retain];
 }
 
 @end

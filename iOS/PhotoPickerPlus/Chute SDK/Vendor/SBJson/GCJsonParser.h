@@ -32,13 +32,19 @@
 /**
  @brief Parse JSON Strings and NSData objects
 
- This uses SBJsonStreamParser internally.
+ This uses GCJsonStreamParser internally.
 
  @see @ref objc2json
 
  */
 
-@interface SBJsonParser : NSObject
+@interface GCJsonParser : NSObject {
+
+@private
+	NSString *error;
+    NSUInteger depth, maxDepth;
+
+}
 
 /**
  @brief The maximum recursing depth.
