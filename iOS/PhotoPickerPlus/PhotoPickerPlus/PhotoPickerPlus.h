@@ -120,7 +120,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 @property (nonatomic, assign) PhotoPickerPlus *P3;
 
 @property (nonatomic, retain) NSArray *photos;
-@property (nonatomic, retain) NSMutableSet *selectedAssets;
+@property (nonatomic, retain) NSMutableOrderedSet *selectedAssets;
 
 @property (nonatomic, retain) UITableView *photosTable;
 

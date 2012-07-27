@@ -783,7 +783,7 @@
 
 -(void)viewDidLoad{
     
-    self.selectedAssets = [NSMutableSet set];
+    self.selectedAssets = [NSMutableOrderedSet orderedSet];
     
     self.photosTable = [[[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain] autorelease];
     if([self.navigationController.navigationBar isTranslucent]){
