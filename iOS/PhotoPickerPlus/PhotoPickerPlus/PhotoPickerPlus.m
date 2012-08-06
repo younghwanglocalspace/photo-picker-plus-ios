@@ -301,6 +301,7 @@
         if([self useStandardDevicePicker] && indexPath.row == 0){ 
             UIImagePickerController *picker = [[UIImagePickerController alloc] init];
             [picker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+//            [picker setMediaTypes:[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera]];
             [picker setDelegate:self];
             [self presentViewController:picker animated:YES completion:^(void){
                 [picker release];
@@ -726,7 +727,7 @@
     NSMutableArray *returnArray = [NSMutableArray array];
     [self showHUD];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void){
-        for(id object in [[self selectedAssets] allObjects]){
+        for(id object in [self selectedAssets]){
             NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
             if([object isKindOfClass:[GCAsset class]]){
                 ALAsset *asset = [object alAsset];
