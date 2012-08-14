@@ -58,15 +58,15 @@
 
 @end
 
-@class SBJsonStreamWriter;
+@class GCJsonStreamWriter;
 
-@protocol SBJsonStreamWriterDelegate
+@protocol GCJsonStreamWriterDelegate
 
-- (void)writer:(SBJsonStreamWriter*)writer appendBytes:(const void *)bytes length:(NSUInteger)length;
+- (void)writer:(GCJsonStreamWriter*)writer appendBytes:(const void *)bytes length:(NSUInteger)length;
 
 @end
 
-@class SBJsonStreamWriterState;
+@class GCJsonStreamWriterState;
 
 /**
  @brief The Stream Writer class.
@@ -82,18 +82,24 @@
 
  */
 
-@interface SBJsonStreamWriter : NSObject {
-    NSMutableDictionary *cache;
+@interface GCJsonStreamWriter : NSObject {
+@private
+	NSString *error;
+    NSMutableArray *stateStack;
+    __weak GCJsonStreamWriterState *state;
+    id<GCJsonStreamWriterDelegate> delegate;
+	NSUInteger maxDepth;
+    BOOL sortKeys, humanReadable;
 }
 
-@property (nonatomic, unsafe_unretained) SBJsonStreamWriterState *state; // Internal
-@property (nonatomic, readonly, strong) NSMutableArray *stateStack; // Internal 
+@property (nonatomic, assign) __weak GCJsonStreamWriterState *state; // Internal
+@property (nonatomic, readonly, retain) NSMutableArray *stateStack; // Internal 
 
 /**
  @brief delegate to receive JSON output
  Delegate that will receive messages with output.
  */
-@property (unsafe_unretained) id<SBJsonStreamWriterDelegate> delegate;
+@property (assign) id<GCJsonStreamWriterDelegate> delegate;
 
 /**
  @brief The maximum recursing depth.
@@ -121,13 +127,6 @@
  (This is useful if you need to compare two structures, for example.) The default is NO.
  */
 @property BOOL sortKeys;
-
-/**
- @brief An optional comparator to be used if sortKeys is YES.
- 
- If this is nil, sorting will be done via @selector(compare:).
- */
-@property (copy) NSComparator sortKeysComparator;
 
 /// Contains the error description after an error has occured.
 @property (copy) NSString *error;
@@ -188,7 +187,7 @@
 
 @end
 
-@interface SBJsonStreamWriter (Private)
+@interface GCJsonStreamWriter (Private)
 - (BOOL)writeValue:(id)v;
 - (void)appendBytes:(const void *)bytes length:(NSUInteger)length;
 @end

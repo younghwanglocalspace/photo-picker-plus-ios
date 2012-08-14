@@ -150,6 +150,7 @@
 
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     if(![self useStandardDevicePicker]){
         NSMutableArray *array = [NSMutableArray array];
         [self setAccountIndex:-1];
@@ -300,6 +301,7 @@
         if([self useStandardDevicePicker] && indexPath.row == 0){ 
             UIImagePickerController *picker = [[UIImagePickerController alloc] init];
             [picker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+//            [picker setMediaTypes:[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera]];
             [picker setDelegate:self];
             [self presentViewController:picker animated:YES completion:^(void){
                 [picker release];
@@ -395,7 +397,6 @@
 #pragma mark WebView Delegate Methods
 
 -(void)viewDidLoad{
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackOpaque];
     self.AddServiceWebView = [[[UIWebView alloc] initWithFrame:self.view.bounds] autorelease];
     [AddServiceWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [AddServiceWebView setDelegate:self];
@@ -417,6 +418,10 @@
         [AddServiceWebView loadRequest:request];
         [params release];
     }
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackOpaque];
 }
 
 -(void)viewWillUnload{
@@ -693,14 +698,14 @@
                 NSMutableDictionary* temp = [NSMutableDictionary dictionary];
                 [temp setObject:@"public.image" forKey:UIImagePickerControllerMediaType];
                 if(image)
+                    [temp setObject:image forKey:UIImagePickerControllerOriginalImage];
+                else{
+                    [temp setObject:view.image forKey:UIImagePickerControllerOriginalImage];
+                }
+                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
                     [temp setObject:[NSURL URLWithString:[asset objectForKey:@"url"]] forKey:UIImagePickerControllerReferenceURL];
                 else{
                     [temp setObject:[NSURL URLWithString:[asset objectForKey:@"thumb"]] forKey:UIImagePickerControllerReferenceURL];
-                }
-                if([[NSString stringWithFormat:@"%@",[asset objectForKey:@"url"]] caseInsensitiveCompare:@"<null>"] != NSOrderedSame)
-                    [temp setObject:[asset objectForKey:@"url"] forKey:UIImagePickerControllerReferenceURL];
-                else{
-                    [temp setObject:[asset objectForKey:@"thumb"] forKey:UIImagePickerControllerReferenceURL];
                 }
                 [temp setObject:asset forKey:UIImagePickerControllerMediaMetadata];
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -722,7 +727,7 @@
     NSMutableArray *returnArray = [NSMutableArray array];
     [self showHUD];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void){
-        for(id object in [[self selectedAssets] allObjects]){
+        for(id object in [self selectedAssets]){
             NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
             if([object isKindOfClass:[GCAsset class]]){
                 ALAsset *asset = [object alAsset];
@@ -779,7 +784,7 @@
 
 -(void)viewDidLoad{
     
-    self.selectedAssets = [NSMutableSet set];
+    self.selectedAssets = [NSMutableOrderedSet orderedSet];
     
     self.photosTable = [[[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain] autorelease];
     if([self.navigationController.navigationBar isTranslucent]){
