@@ -76,7 +76,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 @property (nonatomic, assign) PhotoPickerPlus *P3;
 
 @property (nonatomic, retain) NSArray *photoAlbums;
-@property (nonatomic, retain) NSArray *accounts;
+@property (nonatomic, retain) NSMutableArray *accounts;
 
 @property (nonatomic, retain) UITableView *accountsTable;
 
@@ -86,6 +86,7 @@ typedef NSUInteger PhotoPickerPlusSourceType;
 @property (nonatomic) BOOL useStandardDevicePicker;
 
 -(UIView*)tableView:(UITableView *)tableView viewForIndexPath:(NSIndexPath*)indexPath;
+- (void)rejectAccount:(NSObject *)account;
 
 @end
 
