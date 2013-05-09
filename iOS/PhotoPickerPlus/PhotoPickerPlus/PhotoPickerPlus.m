@@ -50,6 +50,11 @@
     accounts = [temp retain];
 }
 
+- (void)accountRejected:(NSNotification *)notification {
+    [accounts removeObject:[notification object]];
+    [accountsTable reloadData];
+}
+
 - (NSString *) pathForCachedUrl:(NSString *)urlString
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
@@ -141,6 +146,7 @@
     [self.view addSubview:accountsTable];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accountLoginStatusChangedWithNotification:) name:GCAccountStatusChanged object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accountRejected:) name:@"accountRejected" object:nil];
     UIBarButtonItem *rightPhotoButton;
     rightPhotoButton = [[UIBarButtonItem alloc] initWithTitle:CANCEL_BUTTON_TEXT style:UIBarButtonItemStylePlain target:self action:@selector(closeSelected)];
     [self.navigationItem setRightBarButtonItem:rightPhotoButton];
@@ -504,8 +510,18 @@
     return [NSString stringWithFormat:@"%@/%@", [paths objectAtIndex:0], [urlString stringByReplacingOccurrencesOfString:@"/" withString:@"_"]];
 }
 
+- (void)showLoadError:(NSNumber *)code{
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Connection Error"
+                                                      message:[NSString stringWithFormat:@"We were not able to connect to this service, please try again. Error Code: %@", code]
+                                                     delegate:nil
+                                            cancelButtonTitle:@"OK"
+                                            otherButtonTitles:nil];
+    [message show];
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"accountRejected" object: account];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 -(void)viewDidLoad{
-    
     self.albumsTable = [[[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain] autorelease];
     if([self.navigationController.navigationBar isTranslucent]){
         [self.albumsTable setContentInset:UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height, 0, 0, 0)];
@@ -531,13 +547,16 @@
     }
     
     [self showHUD];
-    [[GCAccount sharedManager] albumsForAccount:[account objectForKey:@"accountID"] inBackgroundWithResponse:^(GCResponse *response){
-        if([response isSuccessful]){
+    [[GCAccount sharedManager] albumsForAccount:[account objectForKey:@"accountShortcut"] inBackgroundWithResponse:^(GCResponse *response){
+        if([response isSuccessful] && [response statusCode] == 200){
             [self setAlbums:[response object]];
             [albumsTable reloadData];
+        } else {
+            [self performSelector:@selector(showLoadError:) withObject:[NSNumber numberWithInt:[response statusCode]] afterDelay:0.5f];
         }
         [self hideHUD];
     }];
+
     UIBarButtonItem *rightPhotoButton;
     rightPhotoButton = [[UIBarButtonItem alloc] initWithTitle:CANCEL_BUTTON_TEXT style:UIBarButtonItemStylePlain target:self action:@selector(closeSelected)];
     [self.navigationItem setRightBarButtonItem:rightPhotoButton];
@@ -853,9 +872,9 @@
                 [self setPhotos:result];
             }
         }
-        [[GCAccount sharedManager] albumsForAccount:[account objectForKey:@"accountID"] inBackgroundWithResponse:^(GCResponse *response){
+        [[GCAccount sharedManager] albumsForAccount:[account objectForKey:@"accountShortcut"] inBackgroundWithResponse:^(GCResponse *response){
             if([response isSuccessful]){
-                [[GCAccount sharedManager] photosForAccount:[account objectForKey:@"accountID"] andAlbum:[[[response object] objectAtIndex:0] objectForKey:@"id"] inBackgroundWithResponse:^(GCResponse *response){
+                [[GCAccount sharedManager] photosForAccount:[account objectForKey:@"accountShortcut"] andAlbum:[[[response object] objectAtIndex:0] objectForKey:@"id"] inBackgroundWithResponse:^(GCResponse *response){
                     if([response isSuccessful]){
                         [self setPhotos:[response object]];
                         [photosTable reloadData];
@@ -881,7 +900,7 @@
                 [self setPhotos:result];
             }
         }
-        [[GCAccount sharedManager] photosForAccount:[account objectForKey:@"accountID"] andAlbum:[album objectForKey:@"id"] inBackgroundWithResponse:^(GCResponse *response){
+        [[GCAccount sharedManager] photosForAccount:[account objectForKey:@"accountShortcut"] andAlbum:[album objectForKey:@"id"] inBackgroundWithResponse:^(GCResponse *response){
             if([response isSuccessful]){
                 [self setPhotos:[response object]];
                 [photosTable reloadData];
