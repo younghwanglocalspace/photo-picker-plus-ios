@@ -10,6 +10,9 @@
 
 #import "AssetsCollectionViewControllerDelegate.h"
 
+#define ADD_SERVICES_ARRAY_NAMES [NSArray arrayWithObjects:@"Facebook", @"Instagram", @"Flickr", @"Picasa", nil]
+#define ADD_SERVICES_ARRAY_LINKS [NSArray arrayWithObjects:@"facebook", @"instagram", @"flickr", @"google", nil]
+
 
 @class PhotoPickerViewController;
 
@@ -21,9 +24,10 @@
 
 @end
 
-@interface PhotoPickerViewController : UITableViewController <AssetsCollectionViewControllerDelegate>
+@interface PhotoPickerViewController : UITableViewController <UIImagePickerControllerDelegate>
 
-@property (weak , nonatomic) id<PhotoPickerViewControllerDelegate>delegate;
+@property (nonatomic, weak) id<PhotoPickerViewControllerDelegate>delegate;
+
 
 
 @end

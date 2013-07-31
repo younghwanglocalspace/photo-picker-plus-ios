@@ -10,7 +10,7 @@
 
 @protocol AssetsCollectionViewControllerDelegate <NSObject>
 
-@required
+@optional
 - (void)assetCollectionViewController:(AssetsCollectionViewController *)assetCollectionViewController didFinishPickingAsset:(ALAsset *)asset;
 - (void)assetCollectionViewController:(AssetsCollectionViewController *)assetCollectionViewController didFinishPickingAssets:(NSArray *)assets;
 - (void)assetCollectionViewControllerDidCancel:(AssetsCollectionViewController *)assetCollectionViewController;

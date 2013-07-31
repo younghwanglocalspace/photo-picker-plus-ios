@@ -18,21 +18,14 @@
 @end
 
 @implementation PhotoPickerViewController
+@synthesize delegate;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
-        /* Check sources */
-        [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
-        [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
-        [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
-        
-        ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
-        self.assetsLibrary = assetsLibrary;
-        
-        self.assetsGroups = [NSMutableArray array];
-    }
+        [self.tableView setScrollEnabled:NO];
+          }
     return self;
 }
 
@@ -41,32 +34,7 @@
     [super viewDidLoad];
     
     [self setCancelButton];
-    
-    ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
-    self.assetsLibrary = assetsLibrary;
-    
-    self.assetsGroups = [NSMutableArray array];
-    
-    void (^assetsGroupsEnumerationBlock)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *assetsGroup, BOOL *stop) {
-                [assetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
-                if (assetsGroup.numberOfAssets > 0) {
-                    [self.assetsGroups addObject:assetsGroup];
-                    [self.tableView reloadData];
-                }
-    };
-    
-    void (^assetsGroupsFailureBlock)(NSError *) = ^(NSError *error) {
-        NSLog(@"Error: %@", [error localizedDescription]);
-    };
-    
-
-    [self.assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:assetsGroupsEnumerationBlock failureBlock:assetsGroupsFailureBlock];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self.tableView registerClass:[PhotoPickerCell class] forCellReuseIdentifier:@"GroupCell"];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -82,26 +50,62 @@
 }
 
 #pragma mark - Table view data source
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return @"Local";
+    else
+        return @"Services";
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    return [self.assetsGroups count];
+    if(section == 0)
+        return 3;
+    else
+        return [ADD_SERVICES_ARRAY_NAMES count];
 }
 
 - (PhotoPickerCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"GroupCell";
-    PhotoPickerCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil)
-        cell = [[PhotoPickerCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    ALAssetsGroup *assetsGroup = [self.assetsGroups objectAtIndex:indexPath.row];
+
+//    PhotoPickerCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    cell.imageView.image = [UIImage imageWithCGImage:assetsGroup.posterImage];
-//    cell.textLabel.text = [NSString stringWithFormat:@"%@",[assetsGroup valueForProperty:ALAssetsGroupPropertyName]];
-    cell.titleLabel.text = [NSString stringWithFormat:@"%@", [assetsGroup valueForProperty:ALAssetsGroupPropertyName]];
-    cell.countLabel.text = [NSString stringWithFormat:@"(%d)", assetsGroup.numberOfAssets];
-    // Configure the cell...
+    PhotoPickerCell *cell = [[PhotoPickerCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+//    if (cell == nil)
+//        cell = [[PhotoPickerCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    
+    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+    
+    if(indexPath.section == 0){
+        if(indexPath.row == 0)
+        {
+            cell.titleLabel.text = @"Take Photo";
+            [cell.imageView setImage:[UIImage imageNamed:@"camera.png"]];
+        }
+        else if (indexPath.row == 1)
+        {
+            cell.titleLabel.text = @"Choose Photo";
+            [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
+        }
+        else if (indexPath.row == 2)
+        {
+            cell.titleLabel.text = @"Latest Photo";
+            [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
+        }
+    }
+    else if(indexPath.section == 1)
+    {
+        NSString *imageName = [[NSString stringWithFormat:@"%@.png",[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row]] lowercaseString];
+        UIImage *temp = [UIImage imageNamed:imageName];
+        [cell.imageView setImage:temp];
+        [cell.titleLabel setText:[ADD_SERVICES_ARRAY_NAMES objectAtIndex:indexPath.row]];
+    }
     
     return cell;
 }
@@ -114,32 +118,61 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
-}
+    if(indexPath.section == 0){
+        if(indexPath.row == 0)
+        {
 
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if([segue.identifier isEqualToString:@"showPhotos"])
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
+            [self presentViewController:picker animated:YES completion:nil];
+        }
+        else if (indexPath.row == 1)
+        {
+           [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            [self presentViewController:picker animated:YES completion:nil];
+            
+        }
+        else if (indexPath.row == 2)
+        {
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            
+            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+            
+            // Enumerate all the photos and videos group by using ALAssetsGroupAll.
+            [library enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+                
+                // Within the group enumeration block, filter to enumerate just photos.
+                [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+                
+                // Chooses the photo at the last index
+                [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndex:([group numberOfAssets] - 1)] options:0 usingBlock:^(ALAsset *alAsset, NSUInteger index, BOOL *innerStop) {
+                    
+                    // The end of the enumeration is signaled by asset == nil.
+                    if (alAsset) {
+                        ALAssetRepresentation *representation = [alAsset defaultRepresentation];
+                        UIImage *latestPhoto = [UIImage imageWithCGImage:[representation fullScreenImage]];
+                        NSLog(@"%@",[latestPhoto description]);
+                        // Do something interesting with the AV asset.
+                    }
+                }];
+            } failureBlock: ^(NSError *error) {
+                // Typically you should handle an error more gracefully than this.
+                NSLog(@"No groups");
+            }];
+        }
+    }
+    else if(indexPath.section == 1)
     {
-        AssetsCollectionViewController *acVC;
-        acVC=segue.destinationViewController;
-        
-        NSIndexPath *indexPath = [[self.tableView indexPathsForSelectedRows] objectAtIndex:0];
-        
-        ALAssetsGroup *assetsGroup = [self.assetsGroups objectAtIndex:indexPath.row];
-    
-        [acVC setAssetGroup:assetsGroup];
-        acVC.title = [assetsGroup valueForProperty:ALAssetsGroupPropertyName];
-        
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        NSString *type = [ADD_SERVICES_ARRAY_LINKS objectAtIndex:indexPath.row];
+
+        // Implement check if it's logged in. If yes show TableViewControllerWithAlbums, if not show WebView
     }
 }
+
 #pragma mark - Custom Methods
 
 - (void)setCancelButton
@@ -168,6 +201,24 @@
     }
 }
 
+#pragma mark - UIImagePicker Delegate Methods
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissModalViewControllerAnimated:YES];
+
+    if(self.delegate && [self.delegate respondsToSelector:@selector(photoPickerViewControllerDidCancel:)])
+        [self.delegate photoPickerViewControllerDidCancel:self];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        if(self.delegate && [self.delegate respondsToSelector:@selector(photoPickerViewController:didFinishPickingMediaWithInfo:)])
+            [self.delegate photoPickerViewController:self didFinishPickingMediaWithInfo:info];
+    }];
+    
+}
 //#pragma mark - AssetsCollectionViewControllerDelegate 
 //
 //-(void)assetCollectionViewController:(AssetsCollectionViewController *)assetCollectionViewController didFinishPickingAsset:(id)asset

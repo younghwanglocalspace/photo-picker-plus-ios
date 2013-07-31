@@ -9,12 +9,16 @@
 #import "PhotoPickerCell.h"
 
 @implementation PhotoPickerCell
+@synthesize titleLabel;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 10, 320, 25)];
+        self.titleLabel.font = [UIFont systemFontOfSize:15];
+        [self.contentView addSubview:titleLabel];
     }
     return self;
 }

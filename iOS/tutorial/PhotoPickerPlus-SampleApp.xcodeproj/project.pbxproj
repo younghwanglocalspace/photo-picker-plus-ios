@@ -29,6 +29,14 @@
 		CC7E46CD17A67A8C00BEF5B8 /* PhotoPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC7E46C817A67A8C00BEF5B8 /* PhotoPickerCell.m */; };
 		CC7E46CE17A67A8C00BEF5B8 /* PhotoPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC7E46CA17A67A8C00BEF5B8 /* PhotoPickerViewController.m */; };
 		CC7E46D117A67C8800BEF5B8 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E46CF17A67C8100BEF5B8 /* AssetsLibrary.framework */; };
+		CCEBDC0D17A89ACD001BA198 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEBDC0617A89ACD001BA198 /* camera.png */; };
+		CCEBDC0E17A89ACD001BA198 /* chute.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEBDC0717A89ACD001BA198 /* chute.png */; };
+		CCEBDC0F17A89ACD001BA198 /* defaultThumb.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEBDC0817A89ACD001BA198 /* defaultThumb.png */; };
+		CCEBDC1017A89ACD001BA198 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEBDC0917A89ACD001BA198 /* facebook.png */; };
+		CCEBDC1117A89ACD001BA198 /* flickr.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEBDC0A17A89ACD001BA198 /* flickr.png */; };
+		CCEBDC1217A89ACD001BA198 /* instagram.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEBDC0B17A89ACD001BA198 /* instagram.png */; };
+		CCEBDC1317A89ACD001BA198 /* picasa.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEBDC0C17A89ACD001BA198 /* picasa.png */; };
+		CCEBDC1517A89B53001BA198 /* GCConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = CCEBDC1417A89B53001BA198 /* GCConfig.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +83,14 @@
 		CC7E46C917A67A8C00BEF5B8 /* PhotoPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoPickerViewController.h; sourceTree = "<group>"; };
 		CC7E46CA17A67A8C00BEF5B8 /* PhotoPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoPickerViewController.m; sourceTree = "<group>"; };
 		CC7E46CF17A67C8100BEF5B8 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		CCEBDC0617A89ACD001BA198 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
+		CCEBDC0717A89ACD001BA198 /* chute.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chute.png; sourceTree = "<group>"; };
+		CCEBDC0817A89ACD001BA198 /* defaultThumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultThumb.png; sourceTree = "<group>"; };
+		CCEBDC0917A89ACD001BA198 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
+		CCEBDC0A17A89ACD001BA198 /* flickr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flickr.png; sourceTree = "<group>"; };
+		CCEBDC0B17A89ACD001BA198 /* instagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instagram.png; sourceTree = "<group>"; };
+		CCEBDC0C17A89ACD001BA198 /* picasa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picasa.png; sourceTree = "<group>"; };
+		CCEBDC1417A89B53001BA198 /* GCConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GCConfig.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +200,14 @@
 		CC7E46C117A67A8C00BEF5B8 /* PhotoPickerPlus */ = {
 			isa = PBXGroup;
 			children = (
+				CCEBDC1417A89B53001BA198 /* GCConfig.plist */,
+				CCEBDC0617A89ACD001BA198 /* camera.png */,
+				CCEBDC0717A89ACD001BA198 /* chute.png */,
+				CCEBDC0817A89ACD001BA198 /* defaultThumb.png */,
+				CCEBDC0917A89ACD001BA198 /* facebook.png */,
+				CCEBDC0A17A89ACD001BA198 /* flickr.png */,
+				CCEBDC0B17A89ACD001BA198 /* instagram.png */,
+				CCEBDC0C17A89ACD001BA198 /* picasa.png */,
 				CC7E46C217A67A8C00BEF5B8 /* AssetsCollectionViewController.h */,
 				CC7E46C317A67A8C00BEF5B8 /* AssetsCollectionViewController.m */,
 				CC7E46C417A67A8C00BEF5B8 /* AssetsCollectionViewControllerDelegate.h */,
@@ -275,6 +299,14 @@
 				CC7E469A17A5C0FA00BEF5B8 /* Default-568h@2x.png in Resources */,
 				CC7E469D17A5C0FA00BEF5B8 /* MainStoryboard_iPhone.storyboard in Resources */,
 				CC7E46A017A5C0FA00BEF5B8 /* MainStoryboard_iPad.storyboard in Resources */,
+				CCEBDC0D17A89ACD001BA198 /* camera.png in Resources */,
+				CCEBDC0E17A89ACD001BA198 /* chute.png in Resources */,
+				CCEBDC0F17A89ACD001BA198 /* defaultThumb.png in Resources */,
+				CCEBDC1017A89ACD001BA198 /* facebook.png in Resources */,
+				CCEBDC1117A89ACD001BA198 /* flickr.png in Resources */,
+				CCEBDC1217A89ACD001BA198 /* instagram.png in Resources */,
+				CCEBDC1317A89ACD001BA198 /* picasa.png in Resources */,
+				CCEBDC1517A89B53001BA198 /* GCConfig.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
