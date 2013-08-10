@@ -11,7 +11,6 @@ package com.chute.android.photopickerplus.ui.adapter;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,24 +19,20 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.chute.android.photopickerplus.R;
-import com.chute.sdk.v2.model.AccountObjectModel;
-
-import darko.imagedownloader.ImageLoader;
+import com.chute.sdk.v2.model.AccountAlbumModel;
 
 public class AlbumsAdapter extends BaseAdapter {
 
 	public static final String TAG = AlbumsAdapter.class.getSimpleName();
 
 	private static LayoutInflater inflater;
-	private final ImageLoader loader;
-	private final ArrayList<AccountObjectModel> collection;
-	private final Activity context;
+	private final ArrayList<AccountAlbumModel> collection;
+	private final Context context;
 
-	public AlbumsAdapter(final Activity context, final ArrayList<AccountObjectModel> collection) {
+	public AlbumsAdapter(final Context context, final ArrayList<AccountAlbumModel> collection) {
 		this.context = context;
 		this.collection = collection;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		loader = ImageLoader.getLoader(context);
 	}
 
 	@Override
@@ -46,7 +41,7 @@ public class AlbumsAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public AccountObjectModel getItem(final int position) {
+	public AccountAlbumModel getItem(final int position) {
 		return collection.get(position);
 	}
 

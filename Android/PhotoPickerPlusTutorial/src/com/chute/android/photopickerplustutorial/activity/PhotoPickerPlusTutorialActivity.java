@@ -9,14 +9,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 package com.chute.android.photopickerplustutorial.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.GridView;
@@ -26,8 +22,6 @@ import com.chute.android.photopickerplus.util.intent.GridActivityIntentWrapper;
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.android.photopickerplustutorial.adapter.GridAdapter;
 import com.chute.android.photopickerplustutorial.intent.PhotoPickerPlusIntentWrapper;
-import com.dg.libs.rest.callbacks.HttpCallback;
-import com.dg.libs.rest.domain.ResponseStatus;
 
 public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 
@@ -39,7 +33,6 @@ public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 	 * isMultipicker=true, otherwise set isMultiPicker=false.
 	 */
 	private final boolean isMultiPicker = true;
-	private List<String> serviceList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,9 +42,7 @@ public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 		findViewById(R.id.btnPhotoPicker).setOnClickListener(new OnPhotoPickerClickListener());
 		grid = (GridView) findViewById(R.id.grid);
 
-
 	}
-
 
 	private class OnPhotoPickerClickListener implements OnClickListener {
 
@@ -74,7 +65,7 @@ public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 		}
 		final GridActivityIntentWrapper wrapper = new GridActivityIntentWrapper(data);
 		grid.setAdapter(new GridAdapter(PhotoPickerPlusTutorialActivity.this, wrapper.getMediaCollection()));
-		// Log.d(TAG, wrapper.toString());
+		ALog.d(wrapper.getMediaCollection().toString());
 
 		// String path;
 		// Uri uri = Uri.parse(wrapper.getMediaCollection().get(0).getUrl());
@@ -83,6 +74,6 @@ public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 		// } else {
 		// path = uri.getPath();
 		// }
-		// Log.d(TAG, "The Path or url of the file " + path);
+		// ALog.d("The Path or url of the file " + path);
 	}
 }

@@ -28,7 +28,7 @@ import com.chute.android.photopickerplus.util.intent.PhotosIntentWrapper;
 import com.chute.sdk.v2.model.AccountMediaModel;
 
 public class GridActivity extends FragmentActivity implements GridCursorSingleSelectListener,
-		GridSocialSingleSelectListener, ButtonConfirmSocialAssetsListener, ButtonConfirmCursorAssetsListener {
+		GridSocialSingleSelectListener, ButtonConfirmSocialAssetsListener, ButtonConfirmCursorAssetsListener{
 
 	public static final String TAG = GridActivity.class.getSimpleName();
 	private String albumID;
@@ -88,5 +88,6 @@ public class GridActivity extends FragmentActivity implements GridCursorSingleSe
 		finish();
 
 	}
+
 
 }
