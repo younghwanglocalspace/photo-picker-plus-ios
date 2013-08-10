@@ -1,1 +1,1 @@
-../../../../../Chute-SDK/iOS/Chute-SDK/Chute-SDK/Models/GCResponse.h
+../../../../Chute-SDK/Chute-SDK/Models/GCResponse.h

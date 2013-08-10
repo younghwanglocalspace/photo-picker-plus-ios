@@ -1,1 +1,1 @@
-../../../../../Chute-SDK/iOS/Chute-SDK/Chute-SDK/API/Services/GCServiceAsset.h
+../../../../Chute-SDK/Chute-SDK/API/Services/GCServiceAsset.h

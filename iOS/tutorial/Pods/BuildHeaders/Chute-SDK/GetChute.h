@@ -1,1 +1,1 @@
-../../../../../Chute-SDK/iOS/Chute-SDK/Chute-SDK/GetChute.h
+../../../../Chute-SDK/Chute-SDK/GetChute.h

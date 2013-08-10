@@ -1,1 +1,1 @@
-../../../../../Chute-SDK/iOS/Chute-SDK/Chute-SDK/API/GCUploader.h
+../../../../Chute-SDK/Chute-SDK/API/GCUploader.h

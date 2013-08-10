@@ -1,1 +1,1 @@
-../../../../../Chute-SDK/iOS/Chute-SDK/Chute-SDK/Models/GCAssetSource.h
+../../../../Chute-SDK/Chute-SDK/Models/GCAssetSource.h

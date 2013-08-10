@@ -1,1 +1,1 @@
-../../../../../Chute-SDK/iOS/Chute-SDK/Chute-SDK/Models/GCImageData.h
+../../../../Chute-SDK/Chute-SDK/Models/GCImageData.h

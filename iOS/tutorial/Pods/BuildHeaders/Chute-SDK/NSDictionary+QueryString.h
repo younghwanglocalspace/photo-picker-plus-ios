@@ -1,1 +1,1 @@
-../../../../../Chute-SDK/iOS/Chute-SDK/Chute-SDK/Util/NSDictionary+QueryString.h
+../../../../Chute-SDK/Chute-SDK/Util/NSDictionary+QueryString.h
