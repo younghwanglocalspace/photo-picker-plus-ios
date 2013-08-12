@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PhotoPickerViewController.h"
+#import "GCPhotoPickerViewController.h"
 
-@interface ViewController : UIViewController <PhotoPickerViewControllerDelegate>
+@interface ViewController : UIViewController <PhotoPickerViewControllerDelegate, UINavigationControllerDelegate>
 
-@property (nonatomic, readonly) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) UIPopoverController   *popoverController;
 
--(IBAction)pickPhotoSelected:(id)sender;
+- (IBAction)pickPhotoSelected:(id)sender;
+- (IBAction)pickMultiplePhotosSelected:(id)sender;
 
 @end
