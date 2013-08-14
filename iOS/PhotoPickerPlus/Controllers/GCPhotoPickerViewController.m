@@ -200,10 +200,10 @@
         }
         
         GCService service = [GCOAuth2Client serviceForString:serviceName];
-        [GCLoginView showInView:self.navigationController.view fromStartPoint:startPoint oauth2Client:self.oauth2Client service:service success:^{
+        [GCLoginView showOAuth2Client:self.oauth2Client service:service success:^{
             NSLog(@"Logged in!");
             [GCServiceAccount getProfileInfoWithSuccess:^(GCResponseStatus *responseStatus, NSArray *accounts) {
-#warning Doesn't work with merges, this part must be changed!
+#warning Doesn't work with merges, this part must be changed in future!
                 GCAccount *account;
                 for (GCAccount *acc in accounts) {
                     NSLog(@"%@ compare: %@", acc.type, [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row]);

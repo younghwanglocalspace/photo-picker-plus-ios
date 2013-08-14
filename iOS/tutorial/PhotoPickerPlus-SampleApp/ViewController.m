@@ -51,7 +51,7 @@
     }
 }
 
-- (void)pickMultiplePhotosSelected:(id)sender
+- (IBAction)pickMultiplePhotosSelected:(id)sender
 {
     PhotoPickerViewController *picker = [PhotoPickerViewController new];
     [picker setDelegate:self];

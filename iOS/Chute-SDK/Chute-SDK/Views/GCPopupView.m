@@ -98,6 +98,12 @@ static CGPoint endPoint;
     
 }
 
++ (void)show
+{
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    [self showInView:window fromStartPoint:window.layer.position];
+}
+
 + (void)showInView:(UIView *)view {
     [self showInView:view fromStartPoint:view.layer.position];
 }
