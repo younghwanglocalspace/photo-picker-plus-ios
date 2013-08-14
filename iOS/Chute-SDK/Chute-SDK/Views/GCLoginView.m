@@ -33,18 +33,27 @@
     return self;
 }
 
-+ (void)showInView:(UIView *)_view oauth2Client:(GCOAuth2Client *)_oauth2Client service:(GCService)_service  {
++ (void)showOAuth2Client:(GCOAuth2Client *)_oauth2Client service:(GCService)_service  success:(void (^)(void))_success failure:(void (^)(NSError *))_failure
+{
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    [self showInView:window oauth2Client:_oauth2Client service:_service success:_success failure:_failure];
+}
+
++ (void)showInView:(UIView *)_view oauth2Client:(GCOAuth2Client *)_oauth2Client service:(GCService)_service
+{
         
     [self showInView:_view fromStartPoint:_view.layer.position oauth2Client:_oauth2Client service:_service success:nil failure:nil];
 }
 
-+ (void)showInView:(UIView *)_view fromStartPoint:(CGPoint)_startPoint oauth2Client:(GCOAuth2Client *)_oauth2Client service:(GCService)_service  {
++ (void)showInView:(UIView *)_view fromStartPoint:(CGPoint)_startPoint oauth2Client:(GCOAuth2Client *)_oauth2Client service:(GCService)_service
+{
     
     [self showInView:_view fromStartPoint:_startPoint oauth2Client:_oauth2Client service:_service  success:nil failure:nil];
 
 }
 
-+ (void)showInView:(UIView *)_view oauth2Client:(GCOAuth2Client *)_oauth2Client service:(GCService)_service  success:(void (^)(void))_success failure:(void (^)(NSError *))_failure {
++ (void)showInView:(UIView *)_view oauth2Client:(GCOAuth2Client *)_oauth2Client service:(GCService)_service  success:(void (^)(void))_success failure:(void (^)(NSError *))_failure
+{
     
     [self showInView:_view fromStartPoint:_view.layer.position oauth2Client:_oauth2Client service:_service success:_success failure:_failure];
 }
