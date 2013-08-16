@@ -16,13 +16,16 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 90, 90)];
+        self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 73.75, 73.75)];
         
         [self.contentView addSubview:imageView];
         
     }
     return self;
 }
+//#error  add two images, original and tinted
+
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

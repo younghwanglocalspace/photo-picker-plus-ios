@@ -38,9 +38,7 @@
                                     <action selector="pickMultiplePhotosSelected:" destination="2" eventType="touchUpInside" id="Gh3-VZ-2eN"/>
                                 </connections>
                             </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kBO-ip-Gaq">
-                                <color key="backgroundColor" red="0.5647059083" green="0.74117648599999997" blue="0.96470594409999999" alpha="1" colorSpace="deviceRGB"/>
-                            </scrollView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.99999999999999989" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kBO-ip-Gaq"/>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>

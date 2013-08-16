@@ -60,6 +60,9 @@
         [self getAccountAssets];
     
     [self.collectionView registerClass:[PhotoCell class] forCellWithReuseIdentifier:@"Cell"];
+//    [self.collectionView setContentInset:(UIEdgeInsetsMake(5, 5, 5, 5))];
+    [self.collectionView setContentMode:UIViewContentModeBottomLeft];
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
     [self.collectionView setContentInset:UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height, 0, 0, 0)];
     
 }
