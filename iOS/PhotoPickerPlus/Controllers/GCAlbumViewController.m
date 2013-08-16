@@ -97,7 +97,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewFlowLayout *aFlowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [aFlowLayout setItemSize:CGSizeMake(100, 100)];
+    [aFlowLayout setItemSize:CGSizeMake(73.75, 73.75)];
+    [aFlowLayout setMinimumInteritemSpacing:0.0f];
+    [aFlowLayout setMinimumLineSpacing:5];
+    [aFlowLayout setSectionInset:(UIEdgeInsetsMake(5, 5, 5, 5))];
     [aFlowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
     
     GCAssetsCollectionViewController *acVC = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:aFlowLayout];
@@ -110,7 +113,6 @@
     else
     {
         GCAccountAlbum *accAlbum = [self.albums objectAtIndex:indexPath.item];
-        NSLog(@"AlbumID:%@",accAlbum.id);
         
         [acVC setAccountID:self.accountID];
         [acVC setAlbumID:accAlbum.id];

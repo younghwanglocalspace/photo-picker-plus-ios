@@ -24,7 +24,7 @@
         
         self.photoPickerViewController = [GCPhotoPickerViewController new];
         [self setViewControllers:@[self.photoPickerViewController]];
-        [self setModalInPopover:YES];
+        [self setModalInPopover:NO];
     }
     return self;
 }

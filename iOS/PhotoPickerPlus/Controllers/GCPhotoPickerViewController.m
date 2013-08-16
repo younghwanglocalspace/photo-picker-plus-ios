@@ -249,6 +249,11 @@
         
         // Within the group enumeration block, filter to enumerate just photos.
         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+    
+        if (group != nil && [group numberOfAssets] == 0) {
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have a last photo." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            return;
+        }
         
         // Chooses the photo at the last index
         [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndex:([group numberOfAssets] - 1)] options:0 usingBlock:^(ALAsset *alAsset, NSUInteger index, BOOL *innerStop) {
