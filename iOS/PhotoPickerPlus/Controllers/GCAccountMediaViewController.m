@@ -24,7 +24,7 @@
 
 @synthesize scrollView;
 @synthesize albumViewController,assetViewController;
-@synthesize accountID,albumID,serviceName,isItDevice,isMultipleSelectionEnabled;
+@synthesize accountID, albumID, serviceName, isItDevice, isMultipleSelectionEnabled;
 @synthesize successBlock, cancelBlock;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -128,6 +128,8 @@
     {
         
         [self.assetViewController setAssets:self.files];
+        [self.assetViewController setSuccessBlock:[self successBlock]];
+        [self.assetViewController setCancelBlock:[self cancelBlock]];
         [self.assetViewController setIsItDevice:self.isItDevice];
         [self.assetViewController setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
         
@@ -142,6 +144,14 @@
         
         [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + collectionViewFrame.size.height)];
         [self.scrollView addSubview:self.assetViewController.collectionView];
+        
+        if ([self isMultipleSelectionEnabled]) {
+            [self.navigationItem setRightBarButtonItems:[self.assetViewController doneAndCancelButtons]];
+        }
+        else {
+            [self.navigationItem setRightBarButtonItem:[self.assetViewController cancelButton]];
+        }
+        
     }
     else {
         [self.assetViewController removeFromParentViewController];

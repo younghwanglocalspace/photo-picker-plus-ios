@@ -46,9 +46,9 @@
     [super viewDidLoad];
     self.navigationItem.title = @"Assets";
     if(self.isMultipleSelectionEnabled)
-        [self setDoneAndCancelButtons];
+        [self.navigationItem setRightBarButtonItems:[self doneAndCancelButtons]];
     else
-        [self setCancelButton];
+        [self.navigationItem setRightBarButtonItem:[self cancelButton]];
     
     self.selectedAssets = [@[] mutableCopy];
 
@@ -160,26 +160,21 @@
     }];
 }
 
-- (void)setCancelButton
+- (UIBarButtonItem *)cancelButton
 {
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
-    [self.navigationItem setRightBarButtonItem:cancelButton];
-
-    [self.navigationItem setRightBarButtonItem:cancelButton];
+    
+    return cancelButton;
 }
 
-- (void)setDoneAndCancelButtons
-{
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
-    [self.navigationItem setRightBarButtonItem:cancelButton];
+- (NSArray *)doneAndCancelButtons
+{    
+    self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    [self.doneButton setEnabled:NO];
     
-    doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-    [doneButton setEnabled:NO];
-    
-    NSArray *navBarItemsToBeAdd = [NSArray arrayWithObjects:doneButton,cancelButton,nil];
+    NSArray *navBarItemsToBeAdd = @[[self doneButton], [self cancelButton]];
 
-    [self.navigationItem setRightBarButtonItems:navBarItemsToBeAdd];
-
+    return navBarItemsToBeAdd;
 }
 
 #pragma mark - Instance Methods
