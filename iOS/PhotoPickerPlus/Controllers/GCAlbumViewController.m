@@ -8,8 +8,9 @@
 
 #import "GCAlbumViewController.h"
 #import "GCAssetsCollectionViewController.h"
-#import "GCServiceAccount.h"
+#import "GCAccountMediaViewController.h"
 #import "GCAccountAlbum.h"
+#import "PhotoPickerCell.h"
 
 #import <MBProgressHUD.h>
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -18,15 +19,14 @@
 @interface GCAlbumViewController ()
 
 @property (strong, nonatomic) ALAssetsLibrary *assetsLibrary;
-@property (strong, nonatomic) NSMutableArray *albums;
+@property (strong, nonatomic) NSMutableArray *tempAlbums;
 @property (strong, nonatomic) NSMutableArray *elementCount;
-@property (strong, nonatomic) NSMutableArray *thumbnails;
 
 @end
 
 @implementation GCAlbumViewController
 
-@synthesize albums, assetsLibrary,elementCount,thumbnails;
+@synthesize albums, assetsLibrary,elementCount,tempAlbums;
 
 @synthesize successBlock, cancelBlock;
 
@@ -44,12 +44,12 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"Albums";
-    [self setCancelButton];
     
     if(self.isItDevice)
+    {
         [self getAlbumsFromDevice];
-    else
-        [self getAlbumsFromAccount];
+        [self setCancelButton];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -66,12 +66,12 @@
     return [self.albums count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (PhotoPickerCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    PhotoPickerCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[PhotoPickerCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     if([self isItDevice])
     {
@@ -80,14 +80,15 @@
         NSString *numOfAssets = [elementCount objectAtIndex:indexPath.row];
         
         cell.imageView.image = [UIImage imageWithCGImage:[albumForCell posterImage]];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@  (%@)", albumName,numOfAssets];
+        cell.titleLabel.text = [NSString stringWithFormat:@"%@  (%@)", albumName,numOfAssets];
     }
     else
     {
         GCAccountAlbum *albumForCell = [self.albums objectAtIndex:indexPath.row];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@",albumForCell.name];
+        cell.titleLabel.text = [NSString stringWithFormat:@"%@",albumForCell.name];
+        
     }
-    cell.accessoryType =UITableViewCellAccessoryDisclosureIndicator;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
    
     return cell;
 }
@@ -103,22 +104,33 @@
     [aFlowLayout setSectionInset:(UIEdgeInsetsMake(5, 5, 5, 5))];
     [aFlowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
     
-    GCAssetsCollectionViewController *acVC = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:aFlowLayout];
-    [acVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-    [acVC setSuccessBlock:self.successBlock];
-    [acVC setCancelBlock:self.cancelBlock];
-    [acVC setIsItDevice:self.isItDevice];
     if(self.isItDevice)
+    {
+        GCAssetsCollectionViewController *acVC = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:aFlowLayout];
+        [acVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+        [acVC setSuccessBlock:self.successBlock];
+        [acVC setCancelBlock:self.cancelBlock];
+        [acVC setIsItDevice:self.isItDevice];
         [acVC setAssetGroup:[self.albums objectAtIndex:indexPath.item]];
+
+        [self.navigationController pushViewController:acVC animated:YES];
+    }
     else
     {
         GCAccountAlbum *accAlbum = [self.albums objectAtIndex:indexPath.item];
+        GCAccountMediaViewController *amVC = [GCAccountMediaViewController new];
+        [amVC setAccountID:self.accountID];
+        [amVC setAlbumID:accAlbum.id];
+        [amVC setServiceName:self.serviceName];
+        [amVC setIsItDevice:self.isItDevice];
+        [amVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+        [amVC setSuccessBlock:self.successBlock];
+        [amVC setCancelBlock:self.cancelBlock];
         
-        [acVC setAccountID:self.accountID];
-        [acVC setAlbumID:accAlbum.id];
+        [self.parentViewController.navigationController pushViewController:amVC animated:YES];
     }
     
-    [self.navigationController pushViewController:acVC animated:YES];
+
 }
 
 #pragma mark - Custom Methods
@@ -131,42 +143,30 @@
         assetsLibrary = [[ALAssetsLibrary alloc] init];
     }
     if (!albums) {
-        albums = [[NSMutableArray alloc] init];
+        tempAlbums = [[NSMutableArray alloc] init];
     } else {
-        [albums removeAllObjects];
+        [tempAlbums removeAllObjects];
     }
 
     ALAssetsLibraryGroupsEnumerationResultsBlock listGroupBlock =  ^(ALAssetsGroup *group, BOOL *stop) {
         if(group != nil) {
             //Add the album to the array
-            [albums addObject: group];
+            [tempAlbums addObject: group];
             [group setAssetsFilter:[ALAssetsFilter allPhotos]];
             [elementCount addObject: [NSNumber numberWithInt:group.numberOfAssets]];
             
-            //Add thumbnail to array
-            [thumbnails addObject:[UIImage imageWithCGImage:[group posterImage]]];
-            
         } else
+        {
+            [self setAlbums:tempAlbums];
             [self.tableView reloadData];
+        }
+    
     };
     
     [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:listGroupBlock failureBlock:^(NSError *error) {
         NSLog(@"Failure");
     }];
     
-}
-
-- (void)getAlbumsFromAccount
-{
-    [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-    [GCServiceAccount getAlbumsForAccountWithID:self.accountID withSuccess:^(GCResponseStatus *responseStatus, NSArray *accountAlbums) {
-        [MBProgressHUD hideHUDForView:self.navigationController.view animated:NO];
-        self.albums = [[NSMutableArray alloc] initWithArray:accountAlbums];
-        [self.tableView reloadData];
-    } failure:^(NSError *error) {
-        [MBProgressHUD hideHUDForView:self.navigationController.view animated:NO];
-        [[[UIAlertView alloc] initWithTitle:@"Warning" message:@"Cannot Fetch Account Albums!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-    }];
 }
 
 - (void)setCancelButton
@@ -199,6 +199,12 @@
 {
     if(_isItDevice != isItDevice)
         _isItDevice = isItDevice;
+}
+
+- (void)setServiceName:(NSString *)serviceName
+{
+    if(_serviceName != serviceName)
+        _serviceName = serviceName;
 }
 
 @end

@@ -14,6 +14,6 @@
 
 + (void)getProfileInfoWithSuccess:(void(^)(GCResponseStatus *responseStatus,NSArray *accounts))success failure:(void (^)(NSError *error))failure;
 
-+ (void)getAlbumsForAccountWithID:(NSNumber *)albumID withSuccess:(void(^)(GCResponseStatus *responseStatus, NSArray *accountAlbums))success failure:(void(^)(NSError *error))failure;
++ (void)getDataForServiceWithName:(NSString *)serviceName forAccountWithID:(NSNumber *)accountID forAlbumWithID:(NSNumber *)albumID success:(void(^)(GCResponseStatus *responseStatus,NSArray *folders, NSArray *files))success failure:(void(^)(NSError *error))failure;
 
 @end

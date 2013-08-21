@@ -15,12 +15,14 @@
 
 @property (nonatomic, strong) ALAssetsGroup *assetGroup;
 
+@property (nonatomic, strong) NSArray *assets;
+
+@property (strong, nonatomic) NSString *serviceName;
 @property (strong, nonatomic) NSNumber *accountID;
 @property (strong, nonatomic) NSNumber *albumID;
 
 @property (nonatomic) BOOL isMultipleSelectionEnabled;
 @property (nonatomic) BOOL isItDevice;
-
 
 @property (readwrite, copy) void (^successBlock)(id selectedItems);
 @property (readwrite, copy) void (^cancelBlock)(void);

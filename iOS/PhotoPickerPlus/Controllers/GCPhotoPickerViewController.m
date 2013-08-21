@@ -10,6 +10,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "PhotoPickerCell.h"
 #import "GCAssetsCollectionViewController.h"
+#import "GCAccountMediaViewController.h"
 #import "GCAlbumViewController.h"
 #import "NSDictionary+ALAsset.h"
 #import "GCServiceAccount.h"
@@ -18,6 +19,7 @@
 
 #import <Chute-SDK/GCOAuth2Client.h>
 #import <Chute-SDK/GCLoginView.h>
+#import <MBProgressHUD/MBProgressHUD.h>
 
 
 @interface GCPhotoPickerViewController ()
@@ -50,12 +52,12 @@
     [self.tableView registerClass:[PhotoPickerCell class] forCellReuseIdentifier:@"GroupCell"];
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    self.navigationController.navigationBar.translucent = YES;
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
-}
+//-(void)viewWillAppear:(BOOL)animated
+//{
+//    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+//    self.navigationController.navigationBar.translucent = YES;
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
+//}
 
 - (void)didReceiveMemoryWarning
 {
@@ -186,14 +188,25 @@
         
         for (GCAccount *account in [[GCConfiguration configuration] accounts]) {
             if ([account.type isEqualToString:serviceName]) {
-                GCAlbumViewController *daVC = [[GCAlbumViewController alloc] init];
-                [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-                [daVC setIsItDevice:self.isItDevice];
-                [daVC setAccountID:account.id];
-                [daVC setSuccessBlock:[self successBlock]];
-                [daVC setCancelBlock:[self cancelBlock]];
                 
-                [self.navigationController pushViewController:daVC animated:YES];
+                GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];
+                [amVC setIsItDevice:self.isItDevice];
+                [amVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+                [amVC setAccountID:account.id];
+                [amVC setServiceName:serviceName];
+                [amVC setSuccessBlock:[self successBlock]];
+                [amVC setCancelBlock:[self cancelBlock]];
+                
+                
+//                GCAlbumViewController *daVC = [[GCAlbumViewController alloc] init];
+//                [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+//                [daVC setIsItDevice:self.isItDevice];
+//                [daVC setAccountID:account.id];
+//                [daVC setServiceName:serviceName];
+//                [daVC setSuccessBlock:[self successBlock]];
+//                [daVC setCancelBlock:[self cancelBlock]];
+                
+                [self.navigationController pushViewController:amVC animated:YES];
                 [self.tableView reloadData];
                 return;
             }
@@ -216,14 +229,24 @@
                 NSLog(@"AccountID:%@",[account id]);
                 [[GCConfiguration configuration] addAccount:account];
                 
-                GCAlbumViewController *daVC = [[GCAlbumViewController alloc] init];
-                [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-                [daVC setIsItDevice:self.isItDevice];
-                [daVC setAccountID:account.id];
-                [daVC setSuccessBlock:[self successBlock]];
-                [daVC setCancelBlock:[self cancelBlock]];
+                GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];
+                [amVC setIsItDevice:self.isItDevice];
+                [amVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+                [amVC setAccountID:account.id];
+                [amVC setServiceName:serviceName];
+                [amVC setSuccessBlock:[self successBlock]];
+                [amVC setCancelBlock:[self cancelBlock]];
+
                 
-                [self.navigationController pushViewController:daVC animated:YES];
+//                GCAlbumViewController *daVC = [[GCAlbumViewController alloc] init];
+//                [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+//                [daVC setIsItDevice:self.isItDevice];
+//                [daVC setAccountID:account.id];
+//                [daVC setServiceName:serviceName];
+//                [daVC setSuccessBlock:[self successBlock]];
+//                [daVC setCancelBlock:[self cancelBlock]];
+                
+                [self.navigationController pushViewController:amVC animated:YES];
                 
             } failure:^(NSError *error) {
                 NSLog(@"No Account Data");
@@ -251,7 +274,7 @@
         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
     
         if (group != nil && [group numberOfAssets] == 0) {
-            [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have a last photo." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have any photos." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
             return;
         }
         
@@ -306,11 +329,9 @@
 {
     void (^successBlock)(id selectedItems) = ^(id selectedItems){
         if ([selectedItems isKindOfClass:[NSDictionary class]] && [self.delegate respondsToSelector:@selector(photoPickerViewController:didFinishPickingMediaWithInfo:)]) {
-            
             [self.delegate photoPickerViewController:(PhotoPickerViewController *)self.navigationController didFinishPickingMediaWithInfo:selectedItems];
         }
         else if ([selectedItems isKindOfClass:[NSArray class]] && [self.delegate respondsToSelector:@selector(photoPickerViewController:didFinishPickingArrayOfMediaWithInfo:)]) {
-            
             [self.delegate photoPickerViewController:(PhotoPickerViewController *)self.navigationController didFinishPickingArrayOfMediaWithInfo:selectedItems];
         }
     };
