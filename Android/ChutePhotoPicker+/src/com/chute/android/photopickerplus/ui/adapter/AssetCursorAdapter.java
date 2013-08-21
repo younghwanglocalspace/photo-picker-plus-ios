@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,34 +17,32 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.chute.android.photopickerplus.R;
+import com.chute.android.photopickerplus.ui.activity.AssetActivity;
 import com.chute.android.photopickerplus.util.AppUtil;
 
 import darko.imagedownloader.ImageLoader;
 
-public class PhotoSelectCursorAdapter extends CursorAdapter implements MediaAdapter,
-    OnScrollListener {
+public class AssetCursorAdapter extends CursorAdapter implements
+    OnScrollListener, AssetSelectListener {
 
-  public static final String TAG = PhotoSelectCursorAdapter.class.getSimpleName();
+  public static final String TAG = AssetCursorAdapter.class.getSimpleName();
 
   private static LayoutInflater inflater = null;
   public ImageLoader loader;
   private final int dataIndex;
   public HashMap<Integer, String> tick;
   private boolean shouldLoadImages = true;
-  private final Context context;
-  private ArrayList<Integer> selectedItems = new ArrayList<Integer>();
 
   @SuppressWarnings("deprecation")
-  public PhotoSelectCursorAdapter(Context context, Cursor c) {
+  public AssetCursorAdapter(FragmentActivity context, Cursor c) {
     super(context, c);
-    this.context = context;
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     loader = ImageLoader.getLoader(context);
     dataIndex = c.getColumnIndex(MediaStore.Images.Media.DATA);
     tick = new HashMap<Integer, String>();
+    ((AssetActivity) context).setAdapterListener(this);
 
   }
 
@@ -62,18 +61,14 @@ public class PhotoSelectCursorAdapter extends CursorAdapter implements MediaAdap
     if (shouldLoadImages) {
       loader.displayImage(Uri.fromFile(new File(path)).toString(), holder.imageViewThumb,
           null);
-    } else {
-      loader.displayImage(null, holder.imageViewThumb, null);
-    }
+    } 
     AppUtil.configureImageViewDimensions(holder.imageViewThumb, context);
     if (tick.containsKey(cursor.getPosition())) {
       holder.imageViewTick.setVisibility(View.VISIBLE);
       view.setBackgroundColor(context.getResources().getColor(R.color.sky_blue));
-      // selectedItems.add(cursor.getPosition());
     } else {
       holder.imageViewTick.setVisibility(View.GONE);
       view.setBackgroundColor(context.getResources().getColor(R.color.gray_light));
-      // selectedItems.remove(cursor.getPosition());
     }
   }
 
@@ -125,15 +120,6 @@ public class PhotoSelectCursorAdapter extends CursorAdapter implements MediaAdap
     return photos;
   }
 
-  public ArrayList<Integer> getSelectedItemPositions() {
-    final ArrayList<Integer> positions = new ArrayList<Integer>();
-    final Iterator<Integer> iterator = tick.keySet().iterator();
-    while (iterator.hasNext()) {
-      positions.add(iterator.next());
-    }
-    return positions;
-  }
-
   public boolean hasSelectedItems() {
     return tick.size() > 0;
   }
@@ -149,6 +135,16 @@ public class PhotoSelectCursorAdapter extends CursorAdapter implements MediaAdap
       tick.put(position, getItem(position));
     }
     notifyDataSetChanged();
+  }
+
+  @Override
+  public ArrayList<Integer> getSelectedItemPositions() {
+    final ArrayList<Integer> positions = new ArrayList<Integer>();
+    final Iterator<Integer> iterator = tick.keySet().iterator();
+    while (iterator.hasNext()) {
+      positions.add(iterator.next());
+    }
+    return positions;
   }
 
 }

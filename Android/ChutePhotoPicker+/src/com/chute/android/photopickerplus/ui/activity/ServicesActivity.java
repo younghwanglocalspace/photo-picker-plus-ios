@@ -14,43 +14,39 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Window;
-import android.widget.Toast;
 
 import com.araneaapps.android.libs.logger.ALog;
 import com.chute.android.photopickerplus.R;
 import com.chute.android.photopickerplus.dao.MediaDAO;
-import com.chute.android.photopickerplus.ui.fragment.FragmentAssets.AssetFragmentListener;
+import com.chute.android.photopickerplus.ui.fragment.AccountFilesListener;
+import com.chute.android.photopickerplus.ui.fragment.CursorFilesListener;
 import com.chute.android.photopickerplus.ui.fragment.FragmentServices;
 import com.chute.android.photopickerplus.ui.fragment.FragmentServices.ServiceClickedListener;
 import com.chute.android.photopickerplus.util.AppUtil;
 import com.chute.android.photopickerplus.util.Constants;
 import com.chute.android.photopickerplus.util.NotificationUtil;
 import com.chute.android.photopickerplus.util.PhotoFilterType;
-import com.chute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
 import com.chute.android.photopickerplus.util.intent.IntentUtil;
 import com.chute.android.photopickerplus.util.intent.PhotoPickerPlusIntentWrapper;
 import com.chute.android.photopickerplus.util.intent.PhotosIntentWrapper;
 import com.chute.sdk.v2.api.accounts.GCAccounts;
-import com.chute.sdk.v2.api.authentication.AuthenticationFactory;
 import com.chute.sdk.v2.model.AccountMediaModel;
 import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.enums.AccountType;
-import com.chute.sdk.v2.model.enums.Service;
 import com.chute.sdk.v2.model.response.ListResponseModel;
 import com.chute.sdk.v2.utils.PreferenceUtil;
 import com.dg.libs.rest.callbacks.HttpCallback;
 import com.dg.libs.rest.domain.ResponseStatus;
 
-public class ServicesActivity extends FragmentActivity implements AssetFragmentListener,
+public class ServicesActivity extends FragmentActivity implements AccountFilesListener,
+    CursorFilesListener,
     ServiceClickedListener {
 
   private static final String TAG = ServicesActivity.class.getSimpleName();
 
-  private Service serviceType;
-  private AccountType accountType;
   private PhotoPickerPlusIntentWrapper ppWrapper;
 
-  private FragmentServices fragmentServicesVertical;
+  private FragmentServices fragmentServices;
 
   private static FragmentManager fragmentManager;
 
@@ -62,36 +58,8 @@ public class ServicesActivity extends FragmentActivity implements AssetFragmentL
     setContentView(R.layout.main_layout);
 
     ppWrapper = new PhotoPickerPlusIntentWrapper(getIntent());
-    fragmentServicesVertical = (FragmentServices) fragmentManager
+    fragmentServices = (FragmentServices) fragmentManager
         .findFragmentById(R.id.fragmentServices);
-
-    ArrayList<Service> serviceList = new ArrayList<Service>();
-    if (PhotoPickerPreferenceUtil.get().hasAccountName(Service.FACEBOOK)) {
-      serviceList.add(Service.FACEBOOK);
-    }
-    if (PhotoPickerPreferenceUtil.get().hasAccountName(Service.FLICKR)) {
-      serviceList.add(Service.FLICKR);
-    }
-    if (PhotoPickerPreferenceUtil.get().hasAccountName(Service.PICASA)) {
-      serviceList.add(Service.PICASA);
-    }
-    if (PhotoPickerPreferenceUtil.get().hasAccountName(Service.INSTAGRAM)) {
-      serviceList.add(Service.INSTAGRAM);
-    }
-    if (PhotoPickerPreferenceUtil.get().hasAccountName(Service.ALL_PHOTOS)) {
-      serviceList.add(Service.ALL_PHOTOS);
-    }
-    if (PhotoPickerPreferenceUtil.get().hasAccountName(Service.CAMERA_SHOTS)) {
-      serviceList.add(Service.CAMERA_SHOTS);
-    }
-    if (PhotoPickerPreferenceUtil.get().hasAccountName(Service.LAST_PHOTO_TAKEN)) {
-      serviceList.add(Service.LAST_PHOTO_TAKEN);
-    }
-    if (PhotoPickerPreferenceUtil.get().hasAccountName(Service.TAKE_PHOTO)) {
-      serviceList.add(Service.TAKE_PHOTO);
-    }
-    fragmentServicesVertical.configureServices(serviceList);
-
   }
 
   @Override
@@ -151,17 +119,17 @@ public class ServicesActivity extends FragmentActivity implements AssetFragmentL
   }
 
   @Override
-  public void accountLogin(Service type) {
-    serviceType = type;
-    if (PreferenceUtil.get().hasAccount(serviceType.getLabel())) {
+  public void accountLogin(AccountType type) {
+    if (PreferenceUtil.get().hasAccount(type.getLoginMethod())) {
       AccountModel account = PreferenceUtil.get()
-          .getAccount(serviceType.getLabel());
+          .getAccount(type.getLoginMethod());
       accountClicked(account.getId(), account.getType(), account.getShortcut());
     } else {
-      PhotoPickerPreferenceUtil.get().setAccountType(serviceType.getLabel());
+      // Rework, needs to save complete accounts then pull them if needed
+     /* PhotoPickerPreferenceUtil.get().setAccountType(serviceType.getLabel());
       accountType = AccountType.valueOf(serviceType.name());
       AuthenticationFactory.getInstance().startAuthenticationActivity(
-          ServicesActivity.this, accountType);
+          ServicesActivity.this, accountType);*/
     }
 
   }
@@ -217,7 +185,9 @@ public class ServicesActivity extends FragmentActivity implements AssetFragmentL
 
     @Override
     public void onSuccess(ListResponseModel<AccountModel> responseData) {
-      if (accountType == null) {
+      // FIX this to work with accounts
+      // Send in the callback constructor, the AccountType if you need it for some reason
+      /*if (accountType == null) {
         // return;
         String type = PhotoPickerPreferenceUtil.get().getAccountType();
         accountType = AccountType.valueOf(type);
@@ -231,7 +201,7 @@ public class ServicesActivity extends FragmentActivity implements AssetFragmentL
       AccountModel accountModel = responseData.getData().get(0);
       PreferenceUtil.get().saveAccount(accountModel);
       accountClicked(accountModel.getId(), accountModel.getType(),
-          accountModel.getShortcut());
+          accountModel.getShortcut());*/
     }
 
     @Override
@@ -255,26 +225,33 @@ public class ServicesActivity extends FragmentActivity implements AssetFragmentL
   }
 
   @Override
-  public void onConfirmedSocialAssets(ArrayList<AccountMediaModel> accountMediaModelList) {
+  public void onDeliverAccountFiles(ArrayList<AccountMediaModel> accountMediaModelList) {
     IntentUtil.deliverDataToInitialActivity(ServicesActivity.this, accountMediaModelList);
 
   }
 
   @Override
-  public void onConfirmedCursorAssets(ArrayList<String> assetPathList) {
+  public void onDeliverCursorAssets(ArrayList<String> assetPathList) {
     IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
         AppUtil.getPhotoCollection(assetPathList));
 
   }
 
   @Override
-  public void onSelectedSocialItem(AccountMediaModel accountMediaModel) {
+  public void onAccountFilesSelect(AccountMediaModel accountMediaModel) {
     IntentUtil.deliverDataToInitialActivity(ServicesActivity.this, accountMediaModel);
   }
 
   @Override
-  public void onSelectedCursorItem(AccountMediaModel accountMediaModel) {
+  public void onCursorAssetsSelect(AccountMediaModel accountMediaModel) {
     IntentUtil.deliverDataToInitialActivity(ServicesActivity.this, accountMediaModel);
+  }
+
+  @Override
+  public void onAccountFolderSelect(String accountType, String accountShortcut,
+      String folderId, boolean isMultipicker) {
+    // TODO Auto-generated method stub
+
   }
 
 }

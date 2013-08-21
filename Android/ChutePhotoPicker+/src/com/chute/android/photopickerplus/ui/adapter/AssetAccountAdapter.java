@@ -14,38 +14,39 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.chute.android.photopickerplus.R;
+import com.chute.android.photopickerplus.ui.activity.AssetActivity;
 import com.chute.android.photopickerplus.util.AppUtil;
 import com.chute.sdk.v2.model.AccountAlbumModel;
 import com.chute.sdk.v2.model.AccountBaseModel;
 import com.chute.sdk.v2.model.AccountMediaModel;
-import com.chute.sdk.v2.model.MediaViewType;
-import com.chute.sdk.v2.model.enums.MediaType;
+import com.chute.sdk.v2.model.enums.AccountMediaType;
+import com.chute.sdk.v2.model.interfaces.AccountMedia;
 
 import darko.imagedownloader.ImageLoader;
 
-public class AssetAdapter extends BaseAdapter {
+public class AssetAccountAdapter extends BaseAdapter implements AssetSelectListener {
 
   @SuppressWarnings("unused")
-  private static final String TAG = AssetAdapter.class.getSimpleName();
+  private static final String TAG = AssetAccountAdapter.class.getSimpleName();
 
   private static final int TYPE_MAX_COUNT = 2;
 
   private static LayoutInflater inflater;
   public ImageLoader loader;
   public HashMap<Integer, AccountMediaModel> tick;
-  private final Activity context;
-  private List<MediaViewType> rows;
+  private final FragmentActivity context;
+  private List<AccountMedia> rows;
   private AdapterItemClickListener listener;
 
   public interface AdapterItemClickListener {
@@ -55,14 +56,15 @@ public class AssetAdapter extends BaseAdapter {
     public void onFileClicked(int position);
   }
 
-  public AssetAdapter(Activity context, AccountBaseModel baseModel,
+  public AssetAccountAdapter(FragmentActivity context, AccountBaseModel baseModel,
       AdapterItemClickListener listener) {
     this.context = context;
     this.listener = listener;
+    ((AssetActivity) context).setAdapterListener(this);
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     loader = ImageLoader.getLoader(context);
     tick = new HashMap<Integer, AccountMediaModel>();
-    rows = new ArrayList<MediaViewType>();
+    rows = new ArrayList<AccountMedia>();
 
     if (baseModel.getFiles() != null) {
       for (AccountMediaModel file : baseModel.getFiles()) {
@@ -82,7 +84,7 @@ public class AssetAdapter extends BaseAdapter {
 
   @Override
   public int getItemViewType(int position) {
-    return rows.get(position).getViewType();
+    return rows.get(position).getViewType().ordinal();
   }
 
   public int getCount() {
@@ -101,6 +103,7 @@ public class AssetAdapter extends BaseAdapter {
 
     public ImageView imageViewThumb;
     public ImageView imageViewTick;
+    public TextView textViewFolderTitle;
   }
 
   @SuppressWarnings("deprecation")
@@ -116,18 +119,22 @@ public class AssetAdapter extends BaseAdapter {
       AppUtil.configureImageViewDimensions(holder.imageViewThumb, context);
       holder.imageViewTick = (ImageView) vi.findViewById(R.id.imageViewTick);
       holder.imageViewTick.setTag(position);
+      holder.textViewFolderTitle = (TextView) vi.findViewById(R.id.textViewFolderTitle);
       vi.setTag(holder);
     } else {
       holder = (ViewHolder) vi.getTag();
     }
 
     holder.imageViewThumb.setTag(position);
-    if (type == MediaType.FOLDER.ordinal()) {
+    if (type == AccountMediaType.FOLDER.ordinal()) {
       holder.imageViewTick.setVisibility(View.GONE);
+      holder.textViewFolderTitle.setVisibility(View.VISIBLE);
+      String folderName = ((AccountAlbumModel) getItem(position)).getName();
+      holder.textViewFolderTitle.setText(folderName != null ? folderName : " ");
       holder.imageViewThumb.setBackgroundDrawable(context.getResources().getDrawable(
           R.drawable.album_default));
       holder.imageViewThumb.setOnClickListener(new OnFolderClickedListener());
-    } else if (type == MediaType.FILE.ordinal()) {
+    } else if (type == AccountMediaType.FILE.ordinal()) {
       holder.imageViewTick.setVisibility(View.VISIBLE);
       loader.displayImage(((AccountMediaModel) getItem(position)).getThumbnail(),
           holder.imageViewThumb, null);
@@ -153,15 +160,6 @@ public class AssetAdapter extends BaseAdapter {
     return photos;
   }
 
-  public ArrayList<Integer> getSelectedItemPositions() {
-    final ArrayList<Integer> positions = new ArrayList<Integer>();
-    final Iterator<Integer> iterator = tick.keySet().iterator();
-    while (iterator.hasNext()) {
-      positions.add(iterator.next());
-    }
-    return positions;
-  }
-
   public boolean hasSelectedItems() {
     return tick.size() > 0;
   }
@@ -171,10 +169,14 @@ public class AssetAdapter extends BaseAdapter {
   }
 
   public void toggleTick(final int position) {
-    if (tick.containsKey(position)) {
-      tick.remove(position);
-    } else {
-      tick.put(position, (AccountMediaModel) getItem(position));
+    if (getCount() > position) {
+      if (getItemViewType(position) == AccountMediaType.FILE.ordinal()) {
+        if (tick.containsKey(position)) {
+          tick.remove(position);
+        } else {
+          tick.put(position, (AccountMediaModel) getItem(position));
+        }
+      }
     }
     notifyDataSetChanged();
   }
@@ -199,5 +201,15 @@ public class AssetAdapter extends BaseAdapter {
 
     }
 
+  }
+
+  @Override
+  public ArrayList<Integer> getSelectedItemPositions() {
+    final ArrayList<Integer> positions = new ArrayList<Integer>();
+    final Iterator<Integer> iterator = tick.keySet().iterator();
+    while (iterator.hasNext()) {
+      positions.add(iterator.next());
+    }
+    return positions;
   }
 }
