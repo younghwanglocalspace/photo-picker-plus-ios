@@ -36,7 +36,7 @@
 {
     PhotoPickerViewController *picker = [PhotoPickerViewController new];
     [picker setDelegate:self];
-    [picker setOauth2Client:[GCOAuth2Client clientWithClientID:@"4f3c39ff38ecef0c89000003" clientSecret:@"c9a8cb57c52f49384ab6117c4f6483a1a5c5a14c4a50d4cef276a9a13286efc9"]];
+//    [picker setOauth2Client:[GCOAuth2Client clientWithClientID:@"4f3c39ff38ecef0c89000003" clientSecret:@"c9a8cb57c52f49384ab6117c4f6483a1a5c5a14c4a50d4cef276a9a13286efc9"]];
     [picker setIsMultipleSelectionEnabled:NO];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (![[self popoverController] isPopoverVisible]) {
@@ -57,7 +57,7 @@
 {
     PhotoPickerViewController *picker = [PhotoPickerViewController new];
     [picker setDelegate:self];
-    [picker setOauth2Client:[GCOAuth2Client clientWithClientID:@"4f3c39ff38ecef0c89000003" clientSecret:@"c9a8cb57c52f49384ab6117c4f6483a1a5c5a14c4a50d4cef276a9a13286efc9"]];
+//    [picker setOauth2Client:[GCOAuth2Client clientWithClientID:@"4f3c39ff38ecef0c89000003" clientSecret:@"c9a8cb57c52f49384ab6117c4f6483a1a5c5a14c4a50d4cef276a9a13286efc9"]];
     [picker setIsMultipleSelectionEnabled:YES];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (![[self popoverController] isPopoverVisible]) {

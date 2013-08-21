@@ -20,7 +20,6 @@ static NSString * const kGCType = @"type";
 static NSString * const kGCTypeValue = @"web_server";
 static NSString * const kGCResponseType = @"response_type";
 static NSString * const kGCResponseTypeValue = @"code";
-static NSString * const kGCClientID = @"client_id";
 static NSString * const kGCRedirectURI = @"redirect_uri";
 static NSString * const kGCRedirectURIDefaultValue = @"http://getchute.com/oauth/callback";
 
@@ -38,6 +37,7 @@ static NSString * kGCServices[] = {
 };
 int const kGCServicesCount = 8;
 
+NSString * const kGCClientID = @"client_id";
 NSString * const kGCClientSecret = @"client_secret";
 NSString * const kGCCode = @"code";
 NSString * const kGCGrantType = @"grant_type";

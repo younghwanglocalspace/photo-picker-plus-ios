@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Chute-SDK/GCOAuth2Client.h>
 
 @class PhotoPickerViewController;
 
@@ -22,7 +21,7 @@
 @interface PhotoPickerViewController : UINavigationController
 
 @property (weak, nonatomic) id<PhotoPickerViewControllerDelegate, UINavigationControllerDelegate>delegate;
-@property (strong, nonatomic) GCOAuth2Client *oauth2Client;
+//@property (strong, nonatomic) GCOAuth2Client *oauth2Client;
 @property (assign, nonatomic) BOOL isMultipleSelectionEnabled;
 
 @end

@@ -26,6 +26,8 @@ typedef enum {
     NSString *scope;
 }
 
+extern NSString * const kGCClientID;
+extern NSString * const kGCClientSecret;
 extern int const kGCServicesCount;
 
 @property (strong, nonatomic) NSArray *gcServices;
