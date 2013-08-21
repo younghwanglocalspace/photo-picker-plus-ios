@@ -33,10 +33,13 @@
 		CCA4C50817B5A78500D203A9 /* PhotoPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA4C50617B5A78500D203A9 /* PhotoPickerCell.m */; };
 		CCA4C50C17B5BDED00D203A9 /* PhotoPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA4C50B17B5BDEC00D203A9 /* PhotoPickerViewController.m */; };
 		E433D04B17B4E65F00D3D39B /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E46AA17A5C0FB00BEF5B8 /* SenTestingKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		E43C535517BE72D000680283 /* gradient_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = E43C535417BE72CF00680283 /* gradient_blue.png */; };
 		E49CFD6B17B4EF290063C248 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E46CF17A67C8100BEF5B8 /* AssetsLibrary.framework */; };
+		E4A0114F17BE3B1F0097D3BF /* overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A0114D17BE3B1F0097D3BF /* overlay@2x.png */; };
+		E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A0114E17BE3B1F0097D3BF /* overlay.png */; };
+		E4A222DB17C382C3000A3A14 /* GCAccountMediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4A222DA17C382C3000A3A14 /* GCAccountMediaViewController.m */; };
 		E4BDB53417B55C9C000D4034 /* PhotoPickerClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51417B55C9C000D4034 /* PhotoPickerClient.m */; };
 		E4BDB53517B55C9C000D4034 /* GCServiceAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51717B55C9C000D4034 /* GCServiceAccount.m */; };
-		E4BDB53617B55C9C000D4034 /* GCServiceAccountAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51917B55C9C000D4034 /* GCServiceAccountAlbum.m */; };
 		E4BDB53717B55C9C000D4034 /* NSDictionary+ALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51C17B55C9C000D4034 /* NSDictionary+ALAsset.m */; };
 		E4BDB53817B55C9C000D4034 /* GCAssetsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51F17B55C9C000D4034 /* GCAssetsCollectionViewController.m */; };
 		E4BDB53917B55C9C000D4034 /* GCAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB52117B55C9C000D4034 /* GCAlbumViewController.m */; };
@@ -104,12 +107,15 @@
 		CCA4C50A17B5BDEC00D203A9 /* PhotoPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoPickerViewController.h; sourceTree = "<group>"; };
 		CCA4C50B17B5BDEC00D203A9 /* PhotoPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoPickerViewController.m; sourceTree = "<group>"; };
 		D6A44E3EFCB047F48E216318 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		E43C535417BE72CF00680283 /* gradient_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_blue.png; sourceTree = "<group>"; };
+		E4A0114D17BE3B1F0097D3BF /* overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "overlay@2x.png"; sourceTree = "<group>"; };
+		E4A0114E17BE3B1F0097D3BF /* overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = overlay.png; sourceTree = "<group>"; };
+		E4A222D917C382C3000A3A14 /* GCAccountMediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAccountMediaViewController.h; sourceTree = "<group>"; };
+		E4A222DA17C382C3000A3A14 /* GCAccountMediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAccountMediaViewController.m; sourceTree = "<group>"; };
 		E4BDB51317B55C9C000D4034 /* PhotoPickerClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoPickerClient.h; sourceTree = "<group>"; };
 		E4BDB51417B55C9C000D4034 /* PhotoPickerClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoPickerClient.m; sourceTree = "<group>"; };
 		E4BDB51617B55C9C000D4034 /* GCServiceAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCServiceAccount.h; sourceTree = "<group>"; };
 		E4BDB51717B55C9C000D4034 /* GCServiceAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCServiceAccount.m; sourceTree = "<group>"; };
-		E4BDB51817B55C9C000D4034 /* GCServiceAccountAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCServiceAccountAlbum.h; sourceTree = "<group>"; };
-		E4BDB51917B55C9C000D4034 /* GCServiceAccountAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCServiceAccountAlbum.m; sourceTree = "<group>"; };
 		E4BDB51B17B55C9C000D4034 /* NSDictionary+ALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+ALAsset.h"; sourceTree = "<group>"; };
 		E4BDB51C17B55C9C000D4034 /* NSDictionary+ALAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ALAsset.m"; sourceTree = "<group>"; };
 		E4BDB51E17B55C9C000D4034 /* GCAssetsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAssetsCollectionViewController.h; sourceTree = "<group>"; };
@@ -292,8 +298,6 @@
 			children = (
 				E4BDB51617B55C9C000D4034 /* GCServiceAccount.h */,
 				E4BDB51717B55C9C000D4034 /* GCServiceAccount.m */,
-				E4BDB51817B55C9C000D4034 /* GCServiceAccountAlbum.h */,
-				E4BDB51917B55C9C000D4034 /* GCServiceAccountAlbum.m */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -312,6 +316,8 @@
 		E4BDB51D17B55C9C000D4034 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E4A222D917C382C3000A3A14 /* GCAccountMediaViewController.h */,
+				E4A222DA17C382C3000A3A14 /* GCAccountMediaViewController.m */,
 				E4BDB51E17B55C9C000D4034 /* GCAssetsCollectionViewController.h */,
 				E4BDB51F17B55C9C000D4034 /* GCAssetsCollectionViewController.m */,
 				E4BDB52017B55C9C000D4034 /* GCAlbumViewController.h */,
@@ -327,6 +333,9 @@
 		E4BDB52817B55C9C000D4034 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E43C535417BE72CF00680283 /* gradient_blue.png */,
+				E4A0114D17BE3B1F0097D3BF /* overlay@2x.png */,
+				E4A0114E17BE3B1F0097D3BF /* overlay.png */,
 				E4BDB52917B55C9C000D4034 /* camera.png */,
 				E4BDB52A17B55C9C000D4034 /* chute.png */,
 				E4BDB52B17B55C9C000D4034 /* defaultThumb.png */,
@@ -426,6 +435,9 @@
 				E4BDB54217B55C9C000D4034 /* GCConfiguration.plist in Resources */,
 				E4BDB54317B55C9C000D4034 /* instagram.png in Resources */,
 				E4BDB54417B55C9C000D4034 /* picasa.png in Resources */,
+				E4A0114F17BE3B1F0097D3BF /* overlay@2x.png in Resources */,
+				E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */,
+				E43C535517BE72D000680283 /* gradient_blue.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,7 +505,6 @@
 				CC7E46A317A5C0FA00BEF5B8 /* ViewController.m in Sources */,
 				E4BDB53417B55C9C000D4034 /* PhotoPickerClient.m in Sources */,
 				E4BDB53517B55C9C000D4034 /* GCServiceAccount.m in Sources */,
-				E4BDB53617B55C9C000D4034 /* GCServiceAccountAlbum.m in Sources */,
 				E4BDB53717B55C9C000D4034 /* NSDictionary+ALAsset.m in Sources */,
 				E4BDB53817B55C9C000D4034 /* GCAssetsCollectionViewController.m in Sources */,
 				E4BDB53917B55C9C000D4034 /* GCAlbumViewController.m in Sources */,
@@ -506,6 +517,7 @@
 				CC72FBCC17B6142B00E3981B /* GCAccountAssets.m in Sources */,
 				CC72FBCF17B6156600E3981B /* GCConfiguration.m in Sources */,
 				CC72FBD217B63FCF00E3981B /* NSObject+GCDictionary.m in Sources */,
+				E4A222DB17C382C3000A3A14 /* GCAccountMediaViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

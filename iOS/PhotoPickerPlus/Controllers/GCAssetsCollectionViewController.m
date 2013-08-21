@@ -9,7 +9,6 @@
 #import "GCAssetsCollectionViewController.h"
 #import "PhotoCell.h"
 #import "GCAccountAssets.h"
-#import "GCServiceAccountAlbum.h"
 #import "NSDictionary+ALAsset.h"
 
 #import <MBProgressHUD.h>
@@ -18,7 +17,6 @@
 @interface GCAssetsCollectionViewController ()
 
 @property (strong, nonatomic) NSMutableArray *selectedAssets;
-@property (nonatomic, strong) NSMutableArray *assets;
 
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
 
@@ -56,15 +54,10 @@
 
     if(self.isItDevice)
         [self getLocalAssets];
-    else
-        [self getAccountAssets];
+//    else
+//        [self getAccountAssets];
     
     [self.collectionView registerClass:[PhotoCell class] forCellWithReuseIdentifier:@"Cell"];
-//    [self.collectionView setContentInset:(UIEdgeInsetsMake(5, 5, 5, 5))];
-    [self.collectionView setContentMode:UIViewContentModeBottomLeft];
-    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-    [self.collectionView setContentInset:UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height, 0, 0, 0)];
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -92,16 +85,11 @@
     else
     {
         GCAccountAssets *asset = [self.assets objectAtIndex:indexPath.row];
-       AFImageRequestOperation *operation = [AFImageRequestOperation imageRequestOperationWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[asset thumb]]] success:^(UIImage *image) {
+       AFImageRequestOperation *operation = [AFImageRequestOperation imageRequestOperationWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[asset thumbnail]]] success:^(UIImage *image) {
             [cell.imageView setImage:image];
        }];
         [operation start];
     }
-    
-    if (cell.selected)
-        cell.backgroundColor = [UIColor blueColor]; // highlight selection
-    else
-        cell.backgroundColor = [UIColor whiteColor]; // Default color
 
     return cell;
 }
@@ -125,9 +113,6 @@
     {
         [self.collectionView setAllowsMultipleSelection:YES];
         
-        PhotoCell *cell = (PhotoCell *)[collectionView cellForItemAtIndexPath:indexPath];
-        cell.backgroundColor = [UIColor blueColor];
-        
         if([self.selectedAssets count] > 0)
             [self.doneButton setEnabled:YES];
     }
@@ -140,10 +125,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if(self.isMultipleSelectionEnabled)
-    {
-        PhotoCell *cell = (PhotoCell *)[collectionView cellForItemAtIndexPath:indexPath];
-        cell.backgroundColor = [UIColor whiteColor];
-        
+    {        
         if([self isItDevice])
         {
             ALAsset *asset = [self.assets objectAtIndex:indexPath.row];
@@ -178,19 +160,6 @@
     }];
 }
 
-- (void)getAccountAssets
-{
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [GCServiceAccountAlbum getMediaForAccountWithID:self.accountID forAccountAlbumWithID:self.albumID success:^(GCResponseStatus *responseStatus, NSArray *accountAssets) {
-        [MBProgressHUD hideHUDForView:self.view animated:NO];
-        self.assets = [[NSMutableArray alloc] initWithArray:accountAssets];
-        [self.collectionView reloadData];
-    } failure:^(NSError *error) {
-        [MBProgressHUD hideHUDForView:self.view animated:NO];
-        [[[UIAlertView alloc] initWithTitle:@"Warning" message:@"Cannot Fetch Account Assets!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-    }];
-}
-
 - (void)setCancelButton
 {
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
@@ -218,29 +187,40 @@
 - (void)done
 {
     if (self.successBlock) {
-        if ([self isMultipleSelectionEnabled]) {
-
-            NSMutableArray *info = [NSMutableArray array];
-            if(self.isItDevice){
-                for (ALAsset *asset in self.selectedAssets) {
-                    [info addObject:([NSDictionary infoFromALAsset:asset])];
+        
+        __block id info;
+        
+        MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+        [self.navigationController.view addSubview:HUD];
+        [HUD showAnimated:YES whileExecutingBlock:^{
+            
+            if ([self isMultipleSelectionEnabled]) {
+                
+                NSMutableArray *infoArray = [NSMutableArray array];
+                if(self.isItDevice){
+                    for (ALAsset *asset in self.selectedAssets) {
+                        [infoArray addObject:([NSDictionary infoFromALAsset:asset])];
+                    }
                 }
-            }
-            else
-            {
-                for(GCAccountAssets *asset in self.selectedAssets){
-                    [info addObject:([NSDictionary infoFromGCAccountAsset:asset])];
+                else
+                {
+                    for(GCAccountAssets *asset in self.selectedAssets){
+                        [infoArray addObject:([NSDictionary infoFromGCAccountAsset:asset])];
+                    }
                 }
+                info = infoArray;
             }
+            else {
+                if(self.isItDevice)
+                    info = [NSDictionary infoFromALAsset:[self.selectedAssets objectAtIndex:0]];
+                else
+                    info = [NSDictionary infoFromGCAccountAsset:[self.selectedAssets objectAtIndex:0]];
+            }
+            
+        } completionBlock:^{
+            [HUD removeFromSuperview];
             [self successBlock](info);
-
-        }
-        else {
-            if(self.isItDevice)
-                [self successBlock]([NSDictionary infoFromALAsset:[self.selectedAssets objectAtIndex:0]]);
-            else
-                [self successBlock]([NSDictionary infoFromGCAccountAsset:[self.selectedAssets objectAtIndex:0]]);
-        }
+        }];
     }
 }
 
@@ -276,4 +256,9 @@
         _albumID = albumID;
 }
 
+- (void)setServiceName:(NSString *)serviceName
+{
+    if(_serviceName != serviceName)
+        _serviceName = serviceName;
+}
 @end
