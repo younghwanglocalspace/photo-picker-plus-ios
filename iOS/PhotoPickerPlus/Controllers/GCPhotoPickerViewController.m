@@ -197,18 +197,6 @@
                 [amVC setSuccessBlock:[self successBlock]];
                 [amVC setCancelBlock:[self cancelBlock]];
                 
-<<<<<<< HEAD
-                
-//                GCAlbumViewController *daVC = [[GCAlbumViewController alloc] init];
-//                [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-//                [daVC setIsItDevice:self.isItDevice];
-//                [daVC setAccountID:account.id];
-//                [daVC setServiceName:serviceName];
-//                [daVC setSuccessBlock:[self successBlock]];
-//                [daVC setCancelBlock:[self cancelBlock]];
-                
-=======
->>>>>>> Layout for parent view controller.
                 [self.navigationController pushViewController:amVC animated:YES];
                 [self.tableView reloadData];
                 return;
@@ -239,20 +227,7 @@
                 [amVC setServiceName:serviceName];
                 [amVC setSuccessBlock:[self successBlock]];
                 [amVC setCancelBlock:[self cancelBlock]];
-<<<<<<< HEAD
-
                 
-//                GCAlbumViewController *daVC = [[GCAlbumViewController alloc] init];
-//                [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-//                [daVC setIsItDevice:self.isItDevice];
-//                [daVC setAccountID:account.id];
-//                [daVC setServiceName:serviceName];
-//                [daVC setSuccessBlock:[self successBlock]];
-//                [daVC setCancelBlock:[self cancelBlock]];
-                
-=======
-                
->>>>>>> Layout for parent view controller.
                 [self.navigationController pushViewController:amVC animated:YES];
                 
             } failure:^(NSError *error) {
@@ -332,19 +307,11 @@
 - (void (^)(id selectedItems))successBlock
 {
     void (^successBlock)(id selectedItems) = ^(id selectedItems){
-<<<<<<< HEAD
-        if ([selectedItems isKindOfClass:[NSDictionary class]] && [self.delegate respondsToSelector:@selector(photoPickerViewController:didFinishPickingMediaWithInfo:)]) {
-            [self.delegate photoPickerViewController:(PhotoPickerViewController *)self.navigationController didFinishPickingMediaWithInfo:selectedItems];
-        }
-        else if ([selectedItems isKindOfClass:[NSArray class]] && [self.delegate respondsToSelector:@selector(photoPickerViewController:didFinishPickingArrayOfMediaWithInfo:)]) {
-            [self.delegate photoPickerViewController:(PhotoPickerViewController *)self.navigationController didFinishPickingArrayOfMediaWithInfo:selectedItems];
-=======
         if ([selectedItems isKindOfClass:[NSDictionary class]] && [self.delegate respondsToSelector:@selector(imagePickerController:didFinishPickingMediaWithInfo:)]) {
             [self.delegate imagePickerController:(PhotoPickerViewController *)self.navigationController didFinishPickingMediaWithInfo:selectedItems];
         }
         else if ([selectedItems isKindOfClass:[NSArray class]] && [self.delegate respondsToSelector:@selector(imagePickerController:didFinishPickingArrayOfMediaWithInfo:)]) {
             [self.delegate imagePickerController:(PhotoPickerViewController *)self.navigationController didFinishPickingArrayOfMediaWithInfo:selectedItems];
->>>>>>> Layout for parent view controller.
         }
     };
     return successBlock;

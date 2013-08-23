@@ -79,7 +79,6 @@
 - (void)imagePickerController:(GCPhotoPickerViewController *)picker didFinishPickingArrayOfMediaWithInfo:(NSArray *)info
 {
 
-//    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     for (UIView *v in [scrollView subviews]) {
         [v removeFromSuperview];
     }
