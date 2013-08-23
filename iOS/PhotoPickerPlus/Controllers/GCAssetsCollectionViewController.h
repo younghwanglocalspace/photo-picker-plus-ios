@@ -30,4 +30,8 @@
 - (UIBarButtonItem *)cancelButton;
 - (NSArray *)doneAndCancelButtons;
 
+<<<<<<< HEAD
+=======
++ (UICollectionViewFlowLayout *)setupLayout;
+>>>>>>> Layout for parent view controller.
 @end

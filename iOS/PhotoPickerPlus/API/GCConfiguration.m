@@ -17,7 +17,8 @@ static NSString * const kGCAccounts = @"accounts";
 
 static NSString * const kGCConfiguration = @"GCConfiguration";
 static NSString * const kGCExtension = @"plist";
-static NSString * const kGCConfigurationURL = @"http://s3.amazonaws.com/store.getchute.com/51eeae5e6e29310c9a000001";
+//static NSString * const kGCConfigurationURL = @"http://s3.amazonaws.com/store.getchute.com/51eeae5e6e29310c9a000001";
+static NSString *const kGCConfigurationURL = @"https://dl.dropboxusercontent.com/u/50812247/config";
 
 static GCConfiguration *sharedData = nil;
 static dispatch_queue_t serialQueue;

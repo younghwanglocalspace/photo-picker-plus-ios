@@ -36,6 +36,18 @@
     return self;
 }
 
++ (UICollectionViewFlowLayout *)setupLayout
+{
+    UICollectionViewFlowLayout *aFlowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [aFlowLayout setItemSize:CGSizeMake(73.75, 73.75)];
+    [aFlowLayout setMinimumInteritemSpacing:0.0f];
+    [aFlowLayout setMinimumLineSpacing:5];
+    [aFlowLayout setSectionInset:(UIEdgeInsetsMake(5, 5, 5, 5))];
+    [aFlowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    
+    return aFlowLayout;
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -54,8 +66,11 @@
 
     if(self.isItDevice)
         [self getLocalAssets];
+<<<<<<< HEAD
 //    else
 //        [self getAccountAssets];
+=======
+>>>>>>> Layout for parent view controller.
     
     [self.collectionView registerClass:[PhotoCell class] forCellWithReuseIdentifier:@"Cell"];
 }
@@ -204,6 +219,7 @@
                     }
                 }
                 info = infoArray;
+<<<<<<< HEAD
             }
             else {
                 if(self.isItDevice)
@@ -211,6 +227,15 @@
                 else
                     info = [NSDictionary infoFromGCAccountAsset:[self.selectedAssets objectAtIndex:0]];
             }
+=======
+            }
+            else {
+                if(self.isItDevice)
+                    info = [NSDictionary infoFromALAsset:[self.selectedAssets objectAtIndex:0]];
+                else
+                    info = [NSDictionary infoFromGCAccountAsset:[self.selectedAssets objectAtIndex:0]];
+            }
+>>>>>>> Layout for parent view controller.
             
         } completionBlock:^{
             [HUD removeFromSuperview];
