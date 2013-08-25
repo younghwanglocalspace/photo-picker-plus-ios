@@ -38,27 +38,32 @@
 
 - (void)viewDidLoad
 {
+
     self.albumViewController = [GCAlbumViewController new];
     [self addChildViewController:self.albumViewController];
     [self.albumViewController didMoveToParentViewController:self];
     
-#warning MOVE THIS AS GCAlbumViewController FACTORY METHOD
-    UICollectionViewFlowLayout *aFlowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [aFlowLayout setItemSize:CGSizeMake(73.75, 73.75)];
-    [aFlowLayout setMinimumInteritemSpacing:0.0f];
-    [aFlowLayout setMinimumLineSpacing:5];
-    [aFlowLayout setSectionInset:(UIEdgeInsetsMake(5, 5, 5, 5))];
-    [aFlowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    self.assetViewController = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:[GCAssetsCollectionViewController setupLayout]];
     
-    self.assetViewController = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:aFlowLayout];
+    
     [self addChildViewController:self.assetViewController];
     [self.assetViewController didMoveToParentViewController:self];
-    
+
     [super viewDidLoad];
+
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
+    scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    NSLog(@"DidLoad:scrollViewFrame:%@",NSStringFromCGRect(self.scrollView.bounds));
+    [self.scrollView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.scrollView];
-    [self.scrollView setBackgroundColor:[UIColor purpleColor]];
+    
+    [self.albumViewController.tableView setFrame:CGRectZero];
+    [self.assetViewController.collectionView setFrame:CGRectZero];
+    
+    [self.scrollView addSubview:self.albumViewController.tableView];
+    [self.scrollView addSubview:self.assetViewController.collectionView];
 
     [self getDataFromAccount];
 
@@ -68,6 +73,12 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    [self setScrollViewContentSize];
 }
 
 #pragma mark - Custom Methods
@@ -91,14 +102,10 @@
 
 - (void)setupViewControllers
 {
-    // need to set frames depending on view controllers.
-    
-    CGFloat scrollViewWidth = self.scrollView.frame.size.width;
-    [self.scrollView setContentSize:CGSizeZero];
     
     if(self.folders != nil)
     {
-        
+               
         [self.albumViewController setServiceName:self.serviceName];
         [self.albumViewController setAccountID:self.accountID];
         [self.albumViewController setAlbums:self.folders];
@@ -109,24 +116,16 @@
         
         [self.albumViewController.tableView reloadData];
         
-        CGRect tableViewFrame = self.albumViewController.tableView.bounds;
-        tableViewFrame.size.height = self.albumViewController.tableView.contentSize.height;
-        tableViewFrame.origin.y = self.scrollView.contentSize.height;
-        self.albumViewController.tableView.frame = tableViewFrame;
-        [self.albumViewController.tableView setScrollEnabled:NO];
-        
-        [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + tableViewFrame.size.height)];
-        [self.scrollView addSubview:self.albumViewController.tableView];
     }
     else {
+        [self.albumViewController.tableView removeFromSuperview];
         [self.albumViewController removeFromParentViewController];
         self.albumViewController = nil;
     }
     
     
     if(self.files != nil)
-    {
-        
+    {        
         [self.assetViewController setAssets:self.files];
         [self.assetViewController setSuccessBlock:[self successBlock]];
         [self.assetViewController setCancelBlock:[self cancelBlock]];
@@ -135,16 +134,7 @@
         
         [self.assetViewController.collectionView reloadData];
         
-        CGRect collectionViewFrame = self.assetViewController.collectionView.bounds;
-//        collectionViewFrame.size.height = self.assetViewController.collectionView.contentSize.height;
-        collectionViewFrame.size.height = self.assetViewController.collectionView.collectionViewLayout.collectionViewContentSize.height;
-        collectionViewFrame.origin.y = self.scrollView.contentSize.height;
-        self.assetViewController.collectionView.frame = collectionViewFrame;
-        [self.assetViewController.collectionView setScrollEnabled:NO];
-        
-        [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + collectionViewFrame.size.height)];
-        [self.scrollView addSubview:self.assetViewController.collectionView];
-        
+
         if ([self isMultipleSelectionEnabled]) {
             [self.navigationItem setRightBarButtonItems:[self.assetViewController doneAndCancelButtons]];
         }
@@ -154,10 +144,55 @@
         
     }
     else {
+        [self.assetViewController.collectionView removeFromSuperview];
         [self.assetViewController removeFromParentViewController];
         self.assetViewController = nil;
     }
     
+    [self setScrollViewContentSize];
+    
+}
+
+- (void)setScrollViewContentSize
+{
+    CGFloat scrollViewWidth = self.view.bounds.size.width;
+    self.scrollView.frame = self.view.bounds;
+
+    [self.scrollView setContentSize:CGSizeZero];
+    
+    if (self.albumViewController != nil)
+        self.albumViewController.tableView.bounds = self.scrollView.bounds;
+    if (self.assetViewController != nil)
+        self.assetViewController.collectionView.bounds = self.scrollView.bounds;
+
+
+    if(self.folders !=nil)
+    {
+        
+        CGRect tableViewFrame = self.albumViewController.tableView.bounds;
+        tableViewFrame.size.height = self.albumViewController.tableView.contentSize.height;
+        tableViewFrame.size.width = scrollViewWidth;
+        tableViewFrame.origin.y = self.scrollView.contentSize.height;
+        self.albumViewController.tableView.frame = tableViewFrame;
+        [self.albumViewController.tableView setScrollEnabled:NO];
+
+        [self.albumViewController.tableView reloadData];
+
+        [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + tableViewFrame.size.height)];
+
+    }
+    if (self.files != nil) {
+        
+        CGRect collectionViewFrame = self.assetViewController.collectionView.bounds;
+        collectionViewFrame.size.height = self.assetViewController.collectionView.collectionViewLayout.collectionViewContentSize.height;
+        collectionViewFrame.size.width = scrollViewWidth;
+        collectionViewFrame.origin.y = self.scrollView.contentSize.height;
+        self.assetViewController.collectionView.frame = collectionViewFrame;
+        [self.assetViewController.collectionView setScrollEnabled:NO];
+                
+        [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + collectionViewFrame.size.height)];
+        
+    }
 }
 
 @end

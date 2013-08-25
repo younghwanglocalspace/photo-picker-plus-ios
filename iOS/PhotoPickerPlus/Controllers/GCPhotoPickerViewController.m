@@ -197,15 +197,6 @@
                 [amVC setSuccessBlock:[self successBlock]];
                 [amVC setCancelBlock:[self cancelBlock]];
                 
-                
-//                GCAlbumViewController *daVC = [[GCAlbumViewController alloc] init];
-//                [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-//                [daVC setIsItDevice:self.isItDevice];
-//                [daVC setAccountID:account.id];
-//                [daVC setServiceName:serviceName];
-//                [daVC setSuccessBlock:[self successBlock]];
-//                [daVC setCancelBlock:[self cancelBlock]];
-                
                 [self.navigationController pushViewController:amVC animated:YES];
                 [self.tableView reloadData];
                 return;
@@ -236,15 +227,6 @@
                 [amVC setServiceName:serviceName];
                 [amVC setSuccessBlock:[self successBlock]];
                 [amVC setCancelBlock:[self cancelBlock]];
-
-                
-//                GCAlbumViewController *daVC = [[GCAlbumViewController alloc] init];
-//                [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-//                [daVC setIsItDevice:self.isItDevice];
-//                [daVC setAccountID:account.id];
-//                [daVC setServiceName:serviceName];
-//                [daVC setSuccessBlock:[self successBlock]];
-//                [daVC setCancelBlock:[self cancelBlock]];
                 
                 [self.navigationController pushViewController:amVC animated:YES];
                 
@@ -255,9 +237,6 @@
             NSLog(@"Failure - %@", [error localizedDescription]);
         }];
 
-        // Implement check if it's logged in.
-        // If yes send request for the account, if OK show albums in TableViewControllerWithAlbums.
-        // If not show WebView for login.
     }
 }
 
@@ -300,9 +279,9 @@
 
 - (void)cancel
 {
-    if([self.delegate respondsToSelector:@selector(photoPickerViewControllerDidCancel:)])
+    if([self.delegate respondsToSelector:@selector(imagePickerControllerDidCancel:)])
     {
-        [self.delegate photoPickerViewControllerDidCancel:(PhotoPickerViewController *)self.navigationController];
+        [self.delegate imagePickerControllerDidCancel:(PhotoPickerViewController *)self.navigationController];
     }
 }
 
@@ -328,11 +307,11 @@
 - (void (^)(id selectedItems))successBlock
 {
     void (^successBlock)(id selectedItems) = ^(id selectedItems){
-        if ([selectedItems isKindOfClass:[NSDictionary class]] && [self.delegate respondsToSelector:@selector(photoPickerViewController:didFinishPickingMediaWithInfo:)]) {
-            [self.delegate photoPickerViewController:(PhotoPickerViewController *)self.navigationController didFinishPickingMediaWithInfo:selectedItems];
+        if ([selectedItems isKindOfClass:[NSDictionary class]] && [self.delegate respondsToSelector:@selector(imagePickerController:didFinishPickingMediaWithInfo:)]) {
+            [self.delegate imagePickerController:(PhotoPickerViewController *)self.navigationController didFinishPickingMediaWithInfo:selectedItems];
         }
-        else if ([selectedItems isKindOfClass:[NSArray class]] && [self.delegate respondsToSelector:@selector(photoPickerViewController:didFinishPickingArrayOfMediaWithInfo:)]) {
-            [self.delegate photoPickerViewController:(PhotoPickerViewController *)self.navigationController didFinishPickingArrayOfMediaWithInfo:selectedItems];
+        else if ([selectedItems isKindOfClass:[NSArray class]] && [self.delegate respondsToSelector:@selector(imagePickerController:didFinishPickingArrayOfMediaWithInfo:)]) {
+            [self.delegate imagePickerController:(PhotoPickerViewController *)self.navigationController didFinishPickingArrayOfMediaWithInfo:selectedItems];
         }
     };
     return successBlock;
@@ -341,9 +320,9 @@
 - (void (^)(void))cancelBlock
 {
     void (^cancelBlock)(void) = ^{
-        if([self.delegate respondsToSelector:@selector(photoPickerViewControllerDidCancel:)])
+        if([self.delegate respondsToSelector:@selector(imagePickerControllerDidCancel:)])
         {
-            [self.delegate photoPickerViewControllerDidCancel:(PhotoPickerViewController *)self.navigationController];
+            [self.delegate imagePickerControllerDidCancel:(PhotoPickerViewController *)self.navigationController];
         }
     };
     return cancelBlock;

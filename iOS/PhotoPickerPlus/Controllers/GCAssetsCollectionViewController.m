@@ -36,6 +36,18 @@
     return self;
 }
 
++ (UICollectionViewFlowLayout *)setupLayout
+{
+    UICollectionViewFlowLayout *aFlowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [aFlowLayout setItemSize:CGSizeMake(73.75, 73.75)];
+    [aFlowLayout setMinimumInteritemSpacing:0.0f];
+    [aFlowLayout setMinimumLineSpacing:5];
+    [aFlowLayout setSectionInset:(UIEdgeInsetsMake(5, 5, 5, 5))];
+    [aFlowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    
+    return aFlowLayout;
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -54,8 +66,6 @@
 
     if(self.isItDevice)
         [self getLocalAssets];
-//    else
-//        [self getAccountAssets];
     
     [self.collectionView registerClass:[PhotoCell class] forCellWithReuseIdentifier:@"Cell"];
 }

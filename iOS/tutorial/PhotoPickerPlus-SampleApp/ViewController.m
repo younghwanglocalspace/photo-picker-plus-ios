@@ -76,10 +76,9 @@
 
 #pragma mark - PhotoPickerViewController Delegate Methods
 
-- (void)photoPickerViewController:(GCPhotoPickerViewController *)picker didFinishPickingArrayOfMediaWithInfo:(NSArray *)info
+- (void)imagePickerController:(GCPhotoPickerViewController *)picker didFinishPickingArrayOfMediaWithInfo:(NSArray *)info
 {
 
-//    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     for (UIView *v in [scrollView subviews]) {
         [v removeFromSuperview];
     }
@@ -110,7 +109,7 @@
     }
 }
 
-- (void)photoPickerViewController:(GCPhotoPickerViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+- (void)imagePickerController:(GCPhotoPickerViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
 
     for (UIView *v in [scrollView subviews]) {
@@ -140,7 +139,7 @@
     
 }
 
-- (void)photoPickerViewControllerDidCancel:(GCPhotoPickerViewController *)picker
+- (void)imagePickerControllerDidCancel:(GCPhotoPickerViewController *)picker
 {
     if (self.popoverController) {
         [self.popoverController dismissPopoverAnimated:YES];

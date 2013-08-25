@@ -30,4 +30,5 @@
 - (UIBarButtonItem *)cancelButton;
 - (NSArray *)doneAndCancelButtons;
 
++ (UICollectionViewFlowLayout *)setupLayout;
 @end

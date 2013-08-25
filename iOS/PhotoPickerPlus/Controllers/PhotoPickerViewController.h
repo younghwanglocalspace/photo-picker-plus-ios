@@ -13,9 +13,9 @@
 @protocol PhotoPickerViewControllerDelegate <NSObject>
 
 @optional
-- (void)photoPickerViewController:(PhotoPickerViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info;
-- (void)photoPickerViewController:(PhotoPickerViewController *)picker didFinishPickingArrayOfMediaWithInfo:(NSArray *)info;
-- (void)photoPickerViewControllerDidCancel:(PhotoPickerViewController *)picker;
+- (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info;
+- (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingArrayOfMediaWithInfo:(NSArray *)info;
+- (void)imagePickerControllerDidCancel:(PhotoPickerViewController *)picker;
 @end
 
 @interface PhotoPickerViewController : UINavigationController

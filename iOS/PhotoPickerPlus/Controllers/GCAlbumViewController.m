@@ -85,6 +85,7 @@
     else
     {
         GCAccountAlbum *albumForCell = [self.albums objectAtIndex:indexPath.row];
+        cell.imageView.image = [UIImage imageNamed:@"album_default.png"];
         cell.titleLabel.text = [NSString stringWithFormat:@"%@",albumForCell.name];
         
     }
@@ -97,16 +98,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewFlowLayout *aFlowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [aFlowLayout setItemSize:CGSizeMake(73.75, 73.75)];
-    [aFlowLayout setMinimumInteritemSpacing:0.0f];
-    [aFlowLayout setMinimumLineSpacing:5];
-    [aFlowLayout setSectionInset:(UIEdgeInsetsMake(5, 5, 5, 5))];
-    [aFlowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-    
     if(self.isItDevice)
     {
-        GCAssetsCollectionViewController *acVC = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:aFlowLayout];
+        GCAssetsCollectionViewController *acVC = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:[GCAssetsCollectionViewController setupLayout]];
         [acVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
         [acVC setSuccessBlock:self.successBlock];
         [acVC setCancelBlock:self.cancelBlock];
