@@ -26,16 +26,34 @@ static NSString * const kGCRedirectURIDefaultValue = @"http://getchute.com/oauth
 static NSString * const kGCOAuth = @"oauth";
 
 static NSString * kGCServices[] = {
-    @"chute",
     @"facebook",
-    @"twitter",
-    @"google",
-    @"trendabl",
-    @"flickr",
     @"instagram",
-    @"foursquare"
+    @"skydrive",
+    @"google_drive",
+    @"google_plus",
+    @"picasa",
+    @"flickr",
+    @"twitter",
+    @"chute",
+    @"foursquare",
+    @"dropbox"
 };
-int const kGCServicesCount = 8;
+
+static NSString * kGCLoginMethods[] = {
+    @"facebook",
+    @"instagram",
+    @"microsoft_account",
+    @"google",
+    @"google",
+    @"google",
+    @"flickr",
+    @"twitter",
+    @"chute",
+    @"foursquare",
+    @"dropbox"
+};
+
+int const kGCServicesCount = 11;
 
 NSString * const kGCClientID = @"client_id";
 NSString * const kGCClientSecret = @"client_secret";
@@ -133,7 +151,7 @@ NSString * const kGCGrantTypeValue = @"authorization_code";
                              };
 
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://getchute.com/v2/oauth/%@/authorize?%@",
-                                                                               kGCServices[service],
+                                                                               kGCLoginMethods[service],
                                                                                [params stringWithFormEncodedComponents]]]];
     [self clearCookiesForService:service];
     return request;

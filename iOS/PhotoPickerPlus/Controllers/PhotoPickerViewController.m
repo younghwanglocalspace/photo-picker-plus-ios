@@ -34,7 +34,7 @@
         [self.navigationBar setTintColor:[UIColor colorWithRed:0.2078431 green:0.4862745 blue:0.6117647 alpha:1.0]];
 
         [self setViewControllers:@[self.photoPickerViewController]];
-        [self setModalInPopover:YES];
+//        [self setModalInPopover:YES];
     }
     return self;
 }

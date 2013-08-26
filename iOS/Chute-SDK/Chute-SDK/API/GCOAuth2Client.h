@@ -9,14 +9,17 @@
 #import "AFHTTPClient.h"
 
 typedef enum {
-    GCServiceChute,
     GCServiceFacebook,
-    GCServiceTwitter,
-    GCServiceGoogle,
-    GCServiceTrendabl,
-    GCServiceFlickr,
     GCServiceInstagram,
+    GCServiceSkydrive,
+    GCServiceGoogleDrive,
+    GCServiceGooglePlus,
+    GCServicePicasa,
+    GCServiceFlickr,
+    GCServiceTwitter,
+    GCServiceChute,
     GCServiceFoursquare,
+    GCServiceDropbox
 } GCService;
 
 @interface GCOAuth2Client : AFHTTPClient {

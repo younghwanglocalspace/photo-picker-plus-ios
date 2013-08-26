@@ -120,7 +120,8 @@
         [cell.imageView setImage:temp];
         
         NSString *serviceName = [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row];
-        NSString *cellTitle = [serviceName capitalizedString];
+        NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+
         for (GCAccount *account in [[GCConfiguration configuration] accounts]) {
             if ([account.type isEqualToString:serviceName]) {
                 if (account.name) {
