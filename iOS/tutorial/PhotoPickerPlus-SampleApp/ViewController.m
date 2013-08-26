@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import <MBProgressHUD/MBProgressHUD.h>
-
+#import "GCPopoverBackgroundView.h"
 
 @interface ViewController ()
 
@@ -21,7 +21,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)didReceiveMemoryWarning
@@ -41,6 +40,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (![[self popoverController] isPopoverVisible]) {
             UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:picker];
+            [popover setPopoverBackgroundViewClass:[GCPopoverBackgroundView class]];
             [popover presentPopoverFromRect:[sender frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             self.popoverController = popover;
         }
@@ -62,6 +62,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (![[self popoverController] isPopoverVisible]) {
             UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:picker];
+            [popover setPopoverBackgroundViewClass:[GCPopoverBackgroundView class]];
             [popover presentPopoverFromRect:[sender frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             self.popoverController = popover;
         }

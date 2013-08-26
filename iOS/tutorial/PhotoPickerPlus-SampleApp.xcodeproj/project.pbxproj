@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC1430DF17CADC2D0089A020 /* GCPopoverBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1430DE17CADC2D0089A020 /* GCPopoverBackgroundView.m */; };
+		CC1430E217CAE97A0089A020 /* popover_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = CC1430E017CAE97A0089A020 /* popover_arrow.png */; };
+		CC1430E317CAE97A0089A020 /* popover_border.png in Resources */ = {isa = PBXBuildFile; fileRef = CC1430E117CAE97A0089A020 /* popover_border.png */; };
 		CC72FBCA17B6142B00E3981B /* GCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBC517B6142B00E3981B /* GCAccount.m */; };
 		CC72FBCB17B6142B00E3981B /* GCAccountAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBC717B6142B00E3981B /* GCAccountAlbum.m */; };
 		CC72FBCC17B6142B00E3981B /* GCAccountAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBC917B6142B00E3981B /* GCAccountAssets.m */; };
@@ -67,6 +70,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CC1430DD17CADC2D0089A020 /* GCPopoverBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPopoverBackgroundView.h; sourceTree = "<group>"; };
+		CC1430DE17CADC2D0089A020 /* GCPopoverBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPopoverBackgroundView.m; sourceTree = "<group>"; };
+		CC1430E017CAE97A0089A020 /* popover_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = popover_arrow.png; sourceTree = "<group>"; };
+		CC1430E117CAE97A0089A020 /* popover_border.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = popover_border.png; sourceTree = "<group>"; };
 		CC72FBC417B6142B00E3981B /* GCAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAccount.h; sourceTree = "<group>"; };
 		CC72FBC517B6142B00E3981B /* GCAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAccount.m; sourceTree = "<group>"; };
 		CC72FBC617B6142B00E3981B /* GCAccountAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAccountAlbum.h; sourceTree = "<group>"; };
@@ -265,6 +272,8 @@
 				CCA4C50417B5A78500D203A9 /* PhotoCell.m */,
 				CCA4C50517B5A78500D203A9 /* PhotoPickerCell.h */,
 				CCA4C50617B5A78500D203A9 /* PhotoPickerCell.m */,
+				CC1430DD17CADC2D0089A020 /* GCPopoverBackgroundView.h */,
+				CC1430DE17CADC2D0089A020 /* GCPopoverBackgroundView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -335,6 +344,8 @@
 		E4BDB52817B55C9C000D4034 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CC1430E017CAE97A0089A020 /* popover_arrow.png */,
+				CC1430E117CAE97A0089A020 /* popover_border.png */,
 				E441095F17C7C5C200FCAEBD /* album_default.png */,
 				E43C535417BE72CF00680283 /* gradient_blue.png */,
 				E4A0114D17BE3B1F0097D3BF /* overlay@2x.png */,
@@ -442,6 +453,8 @@
 				E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */,
 				E43C535517BE72D000680283 /* gradient_blue.png in Resources */,
 				E441096017C7C5C200FCAEBD /* album_default.png in Resources */,
+				CC1430E217CAE97A0089A020 /* popover_arrow.png in Resources */,
+				CC1430E317CAE97A0089A020 /* popover_border.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +535,7 @@
 				CC72FBD217B63FCF00E3981B /* NSObject+GCDictionary.m in Sources */,
 				E4A222DB17C382C3000A3A14 /* GCAccountMediaViewController.m in Sources */,
 				CCE8E20917C51D3E0058A203 /* GCAlbumViewController.m in Sources */,
+				CC1430DF17CADC2D0089A020 /* GCPopoverBackgroundView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
