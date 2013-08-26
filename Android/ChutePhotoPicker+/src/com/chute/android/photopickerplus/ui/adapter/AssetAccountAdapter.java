@@ -16,6 +16,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 
 import com.chute.android.photopickerplus.R;
 import com.chute.android.photopickerplus.ui.activity.AssetActivity;
+import com.chute.android.photopickerplus.ui.activity.ServicesActivity;
 import com.chute.android.photopickerplus.util.AppUtil;
 import com.chute.sdk.v2.model.AccountAlbumModel;
 import com.chute.sdk.v2.model.AccountBaseModel;
@@ -47,7 +49,7 @@ public class AssetAccountAdapter extends BaseAdapter implements AssetSelectListe
   public HashMap<Integer, AccountMediaModel> tick;
   private final FragmentActivity context;
   private List<AccountMedia> rows;
-  private AdapterItemClickListener listener;
+  private AdapterItemClickListener adapterItemClickListener;
 
   public interface AdapterItemClickListener {
 
@@ -57,10 +59,9 @@ public class AssetAccountAdapter extends BaseAdapter implements AssetSelectListe
   }
 
   public AssetAccountAdapter(FragmentActivity context, AccountBaseModel baseModel,
-      AdapterItemClickListener listener) {
+      AdapterItemClickListener adapterItemClicklistener) {
     this.context = context;
-    this.listener = listener;
-    ((AssetActivity) context).setAdapterListener(this);
+    this.adapterItemClickListener = adapterItemClicklistener;
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     loader = ImageLoader.getLoader(context);
     tick = new HashMap<Integer, AccountMediaModel>();
@@ -74,6 +75,11 @@ public class AssetAccountAdapter extends BaseAdapter implements AssetSelectListe
       for (AccountAlbumModel folder : baseModel.getFolders()) {
         rows.add(folder);
       }
+    }
+    if (context.getResources().getBoolean(R.bool.has_two_panes)) {
+      ((ServicesActivity) context).setAssetSelectListener(this);
+    } else {
+      ((AssetActivity) context).setAssetSelectListener(this);
     }
   }
 
@@ -169,7 +175,7 @@ public class AssetAccountAdapter extends BaseAdapter implements AssetSelectListe
   }
 
   public void toggleTick(final int position) {
-    if (getCount() > position) {
+    if (getCount() >= position) {
       if (getItemViewType(position) == AccountMediaType.FILE.ordinal()) {
         if (tick.containsKey(position)) {
           tick.remove(position);
@@ -186,7 +192,7 @@ public class AssetAccountAdapter extends BaseAdapter implements AssetSelectListe
     @Override
     public void onClick(View v) {
       Integer position = (Integer) v.getTag();
-      listener.onFolderClicked(position);
+      adapterItemClickListener.onFolderClicked(position);
 
     }
 
@@ -197,7 +203,7 @@ public class AssetAccountAdapter extends BaseAdapter implements AssetSelectListe
     @Override
     public void onClick(View v) {
       Integer position = (Integer) v.getTag();
-      listener.onFileClicked(position);
+      adapterItemClickListener.onFileClicked(position);
 
     }
 

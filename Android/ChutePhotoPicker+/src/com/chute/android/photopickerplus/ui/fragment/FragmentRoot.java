@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +25,7 @@ import com.chute.android.photopickerplus.loaders.AssetsAsyncTaskLoader;
 import com.chute.android.photopickerplus.ui.adapter.AssetCursorAdapter;
 import com.chute.android.photopickerplus.ui.adapter.AssetAccountAdapter;
 import com.chute.android.photopickerplus.ui.adapter.AssetAccountAdapter.AdapterItemClickListener;
+import com.chute.android.photopickerplus.ui.adapter.AssetSelectListener;
 import com.chute.android.photopickerplus.util.AppUtil;
 import com.chute.android.photopickerplus.util.NotificationUtil;
 import com.chute.android.photopickerplus.util.PhotoFilterType;
@@ -31,6 +33,7 @@ import com.chute.sdk.v2.api.accounts.GCAccounts;
 import com.chute.sdk.v2.model.AccountAlbumModel;
 import com.chute.sdk.v2.model.AccountBaseModel;
 import com.chute.sdk.v2.model.AccountMediaModel;
+import com.chute.sdk.v2.model.enums.AccountType;
 import com.chute.sdk.v2.model.response.ResponseModel;
 import com.dg.libs.rest.callbacks.HttpCallback;
 import com.dg.libs.rest.domain.ResponseStatus;
@@ -138,7 +141,12 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 
     @Override
     public void onHttpError(ResponseStatus responseStatus) {
-      NotificationUtil.makeConnectionProblemToast(getActivity().getApplicationContext());
+      if (responseStatus.getStatusCode() == 401) {
+        accountListener.googleAccountLoggedOut(true);
+      } else {
+        NotificationUtil
+            .makeConnectionProblemToast(getActivity().getApplicationContext());
+      }
       toggleEmptyViewErrorMessage();
 
     }

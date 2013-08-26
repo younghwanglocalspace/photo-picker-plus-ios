@@ -20,6 +20,7 @@ import android.widget.ImageView;
 
 import com.chute.android.photopickerplus.R;
 import com.chute.android.photopickerplus.ui.activity.AssetActivity;
+import com.chute.android.photopickerplus.ui.activity.ServicesActivity;
 import com.chute.android.photopickerplus.util.AppUtil;
 
 import darko.imagedownloader.ImageLoader;
@@ -42,7 +43,11 @@ public class AssetCursorAdapter extends CursorAdapter implements
     loader = ImageLoader.getLoader(context);
     dataIndex = c.getColumnIndex(MediaStore.Images.Media.DATA);
     tick = new HashMap<Integer, String>();
-    ((AssetActivity) context).setAdapterListener(this);
+    if (context.getResources().getBoolean(R.bool.has_two_panes)) {
+      ((ServicesActivity) context).setAssetSelectListener(this);
+    } else {
+      ((AssetActivity) context).setAssetSelectListener(this);
+    }
 
   }
 
@@ -129,10 +134,12 @@ public class AssetCursorAdapter extends CursorAdapter implements
   }
 
   public void toggleTick(int position) {
+    if (getCount() >= position) {
     if (tick.containsKey(position)) {
       tick.remove(position);
     } else {
       tick.put(position, getItem(position));
+    }
     }
     notifyDataSetChanged();
   }

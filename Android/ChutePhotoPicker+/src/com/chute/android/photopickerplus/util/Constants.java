@@ -17,7 +17,15 @@ public class Constants {
   public static final int DELAY_TIME = 500;
   public static final int CAMERA_PIC_REQUEST = 2500;
 
-  public static final String TAG_FRAGMENT_ALBUM = "AlbumFrag";
+  public static final String TAG_FRAGMENT_FOLDER = "FolderFrag";
   public static final String TAG_FRAGMENT_FILES = "FilesFrag";
+  public static final String TAG_FRAGMENT_EMPTY = "EmptyFrag";
 
+  public static final String KEY_SELECTED_ITEMS = "keySelectedItems";
+  public static final String KEY_FOLDER_ID = "keyFolderId";
+  public static final String KEY_ACCOUNT_TYPE = "keyAccountType";
+  public static final String KEY_ACCOUNT_SHORTCUT = "keyAccountShortcut";
+  public static final String KEY_PHOTO_FILTER_TYPE = "keyPhotoFilterType";
+
+  public static final String KEY_EXPIRED_SESSION = "keyExpiredSession";
 }
