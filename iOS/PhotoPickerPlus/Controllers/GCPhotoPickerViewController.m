@@ -115,15 +115,17 @@
     }
     else if(indexPath.section == 1)
     {
-        NSString *imageName = [NSString stringWithFormat:@"%@.png", [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row]];
+        NSString *serviceName = [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row];
+        GCService service = [GCOAuth2Client serviceForString:serviceName];
+        
+        NSString *imageName = [NSString stringWithFormat:@"%@.png", serviceName];
         UIImage *temp = [UIImage imageNamed:imageName];
         [cell.imageView setImage:temp];
         
-        NSString *serviceName = [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row];
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 
         for (GCAccount *account in [[GCConfiguration configuration] accounts]) {
-            if ([account.type isEqualToString:serviceName]) {
+            if ([account.type isEqualToString:[GCOAuth2Client loginMethodForService:service]]) {
                 if (account.name) {
                     cellTitle = account.name;
                 }
@@ -182,9 +184,6 @@
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         self.isItDevice = NO;
         
-        CGRect cellRect = [self.tableView rectForRowAtIndexPath:indexPath];;
-        CGPoint startPoint = CGPointMake(CGRectGetMidX(cellRect), CGRectGetMidY(cellRect));
-
         NSString *serviceName = [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row];
         
         for (GCAccount *account in [[GCConfiguration configuration] accounts]) {
@@ -211,15 +210,17 @@
 #warning Doesn't work with merges, this part must be changed in future!
                 GCAccount *account;
                 for (GCAccount *acc in accounts) {
-                    NSLog(@"%@ compare: %@", acc.type, [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row]);
-                    if ([acc.type isEqualToString:[[[GCConfiguration configuration] services] objectAtIndex:indexPath.row]])
+                    NSLog(@"%@ compare: %@", [GCOAuth2Client loginMethodForService:service], acc.type);
+                    if ([[GCOAuth2Client loginMethodForService:service] isEqualToString:acc.type])
                         account = acc;
+                    
+                    [[GCConfiguration configuration] addAccount:acc];
                 }
                 if (!account)
                     return;
                 
                 NSLog(@"AccountID:%@",[account id]);
-                [[GCConfiguration configuration] addAccount:account];
+//                [[GCConfiguration configuration] addAccount:account];
                 
                 GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];
                 [amVC setIsItDevice:self.isItDevice];
@@ -229,6 +230,7 @@
                 [amVC setSuccessBlock:[self successBlock]];
                 [amVC setCancelBlock:[self cancelBlock]];
                 
+                [self.tableView reloadData];
                 [self.navigationController pushViewController:amVC animated:YES];
                 
             } failure:^(NSError *error) {

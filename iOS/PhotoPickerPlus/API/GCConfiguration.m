@@ -18,7 +18,7 @@ static NSString * const kGCAccounts = @"accounts";
 static NSString * const kGCConfiguration = @"GCConfiguration";
 static NSString * const kGCExtension = @"plist";
 //static NSString * const kGCConfigurationURL = @"http://s3.amazonaws.com/store.getchute.com/51eeae5e6e29310c9a000001";
-static NSString *const kGCConfigurationURL = @"https://dl.dropboxusercontent.com/u/50812247/config";
+static NSString *const kGCConfigurationURL = @"https://dl.dropboxusercontent.com/u/23635319/ChuteAPI/config.json";
 
 static GCConfiguration *sharedData = nil;
 static dispatch_queue_t serialQueue;
@@ -101,6 +101,13 @@ static dispatch_queue_t serialQueue;
 {
     if (![self accounts])
         self.accounts = [NSMutableArray new];
+    
+    for (int i = 0; i < [self.accounts count]; i++) {
+        if ([account.type isEqualToString:[self.accounts objectAtIndex:i]]) {
+            [self.accounts removeObjectAtIndex:i];
+            i--;
+        }
+    }
     
     [self.accounts addObject:account];
     [self serialize];

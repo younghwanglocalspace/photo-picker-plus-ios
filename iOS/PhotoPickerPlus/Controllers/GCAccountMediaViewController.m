@@ -55,12 +55,12 @@
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    NSLog(@"DidLoad:scrollViewFrame:%@",NSStringFromCGRect(self.scrollView.bounds));
     [self.scrollView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.scrollView];
     
     [self.albumViewController.tableView setFrame:CGRectZero];
     [self.assetViewController.collectionView setFrame:CGRectZero];
+    [self.assetViewController.collectionView setBackgroundColor:[UIColor whiteColor]];
     
     [self.scrollView addSubview:self.albumViewController.tableView];
     [self.scrollView addSubview:self.assetViewController.collectionView];

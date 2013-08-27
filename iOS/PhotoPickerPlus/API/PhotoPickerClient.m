@@ -90,44 +90,4 @@ static NSString *const kFiles = @"files";
     success(responseStatus, folders, files);
 }
 
-//- (void)request:(NSMutableURLRequest *)request factoryClass:(Class)factoryClass success:(void (^)(GCResponse *response))success failure:(void (^)(NSError *error))failure {
-//    
-//    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-//        
-//        [self parseJSON:JSON withFactoryClass:factoryClass success:success];
-//        
-//    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-//        NSLog(@"Failure: %@", JSON);
-//        
-//        failure(error);
-//        
-//    }];
-//    
-//    [self enqueueHTTPRequestOperation:operation];
-//}
-//
-//- (void)parseJSON:(id)JSON withFactoryClass:(Class)factoryClass success:(void (^)(GCResponse *))success
-//{
-//    
-//    DCKeyValueObjectMapping *responseParser = [DCKeyValueObjectMapping mapperForClass:[GCResponseStatus class]];
-//    DCKeyValueObjectMapping *dataParser = [DCKeyValueObjectMapping mapperForClass:factoryClass];
-//    
-//    GCResponse *gcResponse = [GCResponse new];
-//    gcResponse.response = [responseParser parseDictionary:[JSON objectForKey:kResponse]];
-//    
-//    if (factoryClass != nil) {
-//        if ([[JSON objectForKey:kData] isKindOfClass:[NSArray class]]) {
-//            gcResponse.data = [dataParser parseArray:[JSON objectForKey:kData]];
-//        } else {
-//            gcResponse.data = [dataParser parseDictionary:[JSON objectForKey:kData]];
-//        }
-//    }
-//    else {
-//        gcResponse.data = [JSON objectForKey:kData];
-//    }
-//        
-//    success(gcResponse);
-//}
-
-
 @end

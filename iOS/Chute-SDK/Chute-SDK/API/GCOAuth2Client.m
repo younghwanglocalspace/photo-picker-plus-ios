@@ -11,7 +11,6 @@
 #import "NSDictionary+QueryString.h"
 #import "GCClient.h"
 
-//#error change in Chute-SDK too
 static NSString * const kGCBaseURLString = @"https://getchute.com";
 
 static NSString * const kGCScope = @"scope";
@@ -29,8 +28,8 @@ static NSString * kGCServices[] = {
     @"facebook",
     @"instagram",
     @"skydrive",
-    @"google_drive",
-    @"google_plus",
+    @"googledrive",
+    @"google",
     @"picasa",
     @"flickr",
     @"twitter",
@@ -102,12 +101,12 @@ NSString * const kGCGrantTypeValue = @"authorization_code";
     redirectURI = _redirectURI;
     scope = _scope;
     
-    [self setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        if (status == AFNetworkReachabilityStatusNotReachable) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"No Internet connection detected." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alertView show];
-        }
-    }];
+//    [self setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+//        if (status == AFNetworkReachabilityStatusNotReachable) {
+//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"No Internet connection detected." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//            [alertView show];
+//        }
+//    }];
     
     [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
     
@@ -181,6 +180,23 @@ NSString * const kGCGrantTypeValue = @"authorization_code";
 {
     for (int i = 0; i < kGCServicesCount; i++) {
         if ([serviceString isEqualToString:kGCServices[i]]) {
+            return i;
+        }
+    }
+    return nil;
+}
+
++ (NSString *)loginMethodForService:(GCService)service
+{
+    if (service >= kGCServicesCount)
+        return @"";
+    return kGCLoginMethods[service];
+}
+
++ (GCService)serviceForLoginMethod:(NSString *)loginMethod
+{
+    for (int i = 0; i < kGCServicesCount; i++) {
+        if ([loginMethod isEqualToString:kGCLoginMethods[i]]) {
             return i;
         }
     }

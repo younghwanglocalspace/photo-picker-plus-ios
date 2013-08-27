@@ -38,21 +38,22 @@
                                     <action selector="pickMultiplePhotosSelected:" destination="2" eventType="touchUpInside" id="Gh3-VZ-2eN"/>
                                 </connections>
                             </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kBO-ip-Gaq">
-                                <color key="backgroundColor" red="0.5647059083" green="0.74117648599999997" blue="0.96470594409999999" alpha="1" colorSpace="deviceRGB"/>
-                            </scrollView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kBO-ip-Gaq"/>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" hidesForSinglePage="YES" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="ASk-Ly-JIw"/>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="IJN-tv-mfm" firstAttribute="top" secondItem="kBO-ip-Gaq" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="54d-DW-kz3"/>
+                            <constraint firstItem="kBO-ip-Gaq" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="2nI-rp-imk"/>
+                            <constraint firstItem="kBO-ip-Gaq" firstAttribute="top" secondItem="3" secondAttribute="top" constant="20" symbolic="YES" type="default" id="Bnr-JB-yRk"/>
                             <constraint firstAttribute="trailing" secondItem="IJN-tv-mfm" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="F3H-jZ-rbd"/>
-                            <constraint firstItem="kBO-ip-Gaq" firstAttribute="top" secondItem="3" secondAttribute="top" constant="20" symbolic="YES" type="default" id="Orf-f0-VdY"/>
-                            <constraint firstItem="kBO-ip-Gaq" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="ZpJ-59-mS6"/>
+                            <constraint firstItem="ASk-Ly-JIw" firstAttribute="top" secondItem="kBO-ip-Gaq" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Kir-eq-Nxy"/>
+                            <constraint firstItem="ASk-Ly-JIw" firstAttribute="centerX" secondItem="IJN-tv-mfm" secondAttribute="centerX" type="default" id="djX-wH-BwT"/>
                             <constraint firstItem="IJN-tv-mfm" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="j9G-nM-Ajg"/>
                             <constraint firstAttribute="bottom" secondItem="g2o-eL-JuF" secondAttribute="bottom" constant="6" id="jTY-QA-kf2"/>
+                            <constraint firstAttribute="trailing" secondItem="kBO-ip-Gaq" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="kdo-au-h4B"/>
                             <constraint firstItem="g2o-eL-JuF" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="m3g-id-Cih"/>
-                            <constraint firstAttribute="trailing" secondItem="kBO-ip-Gaq" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="qyK-DU-p8V"/>
                             <constraint firstItem="g2o-eL-JuF" firstAttribute="top" secondItem="IJN-tv-mfm" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="xnW-XI-MyG"/>
+                            <constraint firstAttribute="bottom" secondItem="ASk-Ly-JIw" secondAttribute="bottom" constant="109" id="y7P-zY-vAh"/>
                             <constraint firstAttribute="trailing" secondItem="g2o-eL-JuF" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="z6p-lL-4m0"/>
                         </constraints>
                     </view>

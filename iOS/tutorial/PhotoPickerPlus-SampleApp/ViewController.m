@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import <MBProgressHUD/MBProgressHUD.h>
-#import "GCPopoverBackgroundView.h"
+//#import "GCPopoverBackgroundView.h"
 
 @interface ViewController ()
 
@@ -40,7 +40,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (![[self popoverController] isPopoverVisible]) {
             UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:picker];
-            [popover setPopoverBackgroundViewClass:[GCPopoverBackgroundView class]];
+//            [popover setPopoverBackgroundViewClass:[GCPopoverBackgroundView class]];
             [popover presentPopoverFromRect:[sender frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             self.popoverController = popover;
         }
@@ -62,7 +62,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (![[self popoverController] isPopoverVisible]) {
             UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:picker];
-            [popover setPopoverBackgroundViewClass:[GCPopoverBackgroundView class]];
+//            [popover setPopoverBackgroundViewClass:[GCPopoverBackgroundView class]];
             [popover presentPopoverFromRect:[sender frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             self.popoverController = popover;
         }
@@ -77,7 +77,7 @@
 
 #pragma mark - PhotoPickerViewController Delegate Methods
 
-- (void)imagePickerController:(GCPhotoPickerViewController *)picker didFinishPickingArrayOfMediaWithInfo:(NSArray *)info
+- (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingArrayOfMediaWithInfo:(NSArray *)info
 {
 
     for (UIView *v in [scrollView subviews]) {
@@ -110,7 +110,7 @@
     }
 }
 
-- (void)imagePickerController:(GCPhotoPickerViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+- (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
 
     for (UIView *v in [scrollView subviews]) {
@@ -140,7 +140,7 @@
     
 }
 
-- (void)imagePickerControllerDidCancel:(GCPhotoPickerViewController *)picker
+- (void)imagePickerControllerDidCancel:(PhotoPickerViewController *)picker
 {
     if (self.popoverController) {
         [self.popoverController dismissPopoverAnimated:YES];

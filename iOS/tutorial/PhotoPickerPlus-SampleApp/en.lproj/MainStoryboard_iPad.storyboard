@@ -44,9 +44,7 @@
                                     <action selector="pickMultiplePhotosSelected:" destination="2" eventType="touchUpInside" id="NpE-PQ-4oe"/>
                                 </connections>
                             </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJh-V3-VTL">
-                                <color key="backgroundColor" red="0.5647059083" green="0.74117648599999997" blue="0.96470594409999999" alpha="1" colorSpace="deviceRGB"/>
-                            </scrollView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJh-V3-VTL"/>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>

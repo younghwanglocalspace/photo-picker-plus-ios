@@ -21,6 +21,4 @@
 @property (readwrite, copy) void (^successBlock)(id selectedItems);
 @property (readwrite, copy) void (^cancelBlock)(void);
 
-- (void)something;
-
 @end

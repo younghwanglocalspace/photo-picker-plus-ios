@@ -10,7 +10,7 @@
 #import "GCPopupView.h"
 #import "GCOAuth2Client.h"
 
-@interface GCLoginView : GCPopupView <UIWebViewDelegate>
+@interface GCLoginView : GCPopupView <UIWebViewDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, strong) GCOAuth2Client *oauth2Client;

@@ -11,6 +11,7 @@
 #import "GCAccountAlbum.h"
 #import "PhotoPickerClient.h"
 
+#import <Chute-SDK/NSString+QueryString.h>
 #import <Chute-SDK/GCResponse.h>
 #import <Chute-SDK/GCClient.h>
 #import <Chute-SDK/GCResponseStatus.h>
@@ -38,8 +39,12 @@
     if(albumID == nil)
         path = [NSString stringWithFormat:@"%@/%@/files",serviceName,accountID];
     else
-        path = [NSString stringWithFormat:@"%@/%@/folders/%@/files",serviceName,accountID,albumID];
+    {
+        NSString *albumIDString = [[NSString stringWithFormat:@"%@",albumID] stringByEscapingForURL];
+        path = [NSString stringWithFormat:@"%@/%@/folders/%@/files",serviceName,accountID,albumIDString];
+    }
     
+    NSLog(@"path:%@",path);
     NSMutableURLRequest *request = [apiClient requestWithMethod:@"GET" path:path parameters:nil];
     
     [apiClient request:request success:^(GCResponseStatus *responseStatus, NSArray *folders, NSArray *files) {

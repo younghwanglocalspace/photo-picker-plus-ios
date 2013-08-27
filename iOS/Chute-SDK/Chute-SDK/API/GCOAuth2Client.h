@@ -43,6 +43,9 @@ extern int const kGCServicesCount;
 + (NSString *)serviceString:(GCService)service;
 + (GCService)serviceForString:(NSString *)serviceString;
 
++ (NSString *)loginMethodForService:(GCService)service;
++ (GCService)serviceForLoginMethod:(NSString *)loginMethod;
+
 - (NSURLRequest *)requestAccessForService:(GCService)service;
 - (void)verifyAuthorizationWithAccessCode:(NSString *)code success:(void(^)(void))success failure:(void(^)(NSError *error))failure;
 
