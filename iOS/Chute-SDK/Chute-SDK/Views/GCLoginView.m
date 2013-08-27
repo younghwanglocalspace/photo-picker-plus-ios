@@ -129,6 +129,7 @@
         NSString *_code = [[NSDictionary dictionaryWithFormEncodedString:[[request URL] query]] objectForKey:@"code"];
     
     if (_code && [_code length] > 0) {
+        NSLog(_code);
         [self.oauth2Client verifyAuthorizationWithAccessCode:_code success:^{
             [self closePopupWithCompletition:^{
                 if (success)
@@ -147,7 +148,7 @@
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
-    [MBProgressHUD showHUDAddedTo:contentView animated:YES];
+//    [MBProgressHUD showHUDAddedTo:contentView animated:YES];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {

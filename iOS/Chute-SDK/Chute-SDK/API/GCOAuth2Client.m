@@ -102,12 +102,12 @@ NSString * const kGCGrantTypeValue = @"authorization_code";
     redirectURI = _redirectURI;
     scope = _scope;
     
-    [self setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        if (status == AFNetworkReachabilityStatusNotReachable) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"No Internet connection detected." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alertView show];
-        }
-    }];
+//    [self setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+//        if (status == AFNetworkReachabilityStatusNotReachable) {
+//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"No Internet connection detected." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//            [alertView show];
+//        }
+//    }];
     
     [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
     

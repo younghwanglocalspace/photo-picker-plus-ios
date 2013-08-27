@@ -76,6 +76,8 @@ static CGPoint endPoint;
     //    NSLog(@"\n PARENT: x:%f y:%f w:%f h:%f \n POPUP: FRAME: x:%f y:%f w:%f h:%f BOUNDS: x:%f y:%f w:%f h:%f  \n CONTENT: FRAME: x:%f y:%f w:%f h:%f BOUNDS: x:%f y:%f w:%f h:%f  \n \n", _parentView.frame.origin.x, _parentView.frame.origin.y, _parentView.frame.size.width, _parentView.frame.size.height, self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height, self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, self.bounds.size.height, contentView.frame.origin.x, contentView.frame.origin.y, contentView.frame.size.width, contentView.frame.size.height, contentView.bounds.origin.x, contentView.bounds.origin.y, contentView.bounds.size.width, contentView.bounds.size.height);
 }
 
+- should
+
 - (CGRect)closeButtonFrame {
     return CGRectMake(0.0, 0.0, kSpacingSize * 2, kSpacingSize * 2);
 }
