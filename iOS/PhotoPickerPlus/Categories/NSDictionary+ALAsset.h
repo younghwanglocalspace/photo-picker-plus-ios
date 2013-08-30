@@ -12,7 +12,30 @@
 
 @interface NSDictionary (ALAsset)
 
+///-----------------------------------
+/// @name Creating custom `NSDictionary`
+///-----------------------------------
+
+/**
+ Creates `NSDictionary` from `ALAsset`.
+ 
+ @param asset The `ALAsset` object from which it should be created NSDictionary object
+ 
+ @return `NSDictionary`
+ 
+ @warning This method requires `ALAsset` class. Add an `#import <AssetsLibrary/ALAsset.h>` to your header file.
+*/
 + (NSDictionary *)infoFromALAsset:(ALAsset *)asset;
+
+/**
+ Creates NSDictionary from `GCAccountAssets`.
+ 
+ @param asset The `GCAccountAssets` object from which it should be created NSDictionary object
+
+ @return `NSDictionary`
+ 
+ @warning This method requires `ALAsset` class. Add an `#import "GCAccountAssets.h"` to your header file.
+*/
 + (NSDictionary *)infoFromGCAccountAsset:(GCAccountAssets *)asset;
 
 

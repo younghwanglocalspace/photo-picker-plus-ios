@@ -27,6 +27,8 @@ static CGPoint endPoint;
 
 @interface GCPopupView () {
     UIView *_parentView;
+    CGAffineTransform rotationTransform;
+        
 }
 
 @end
@@ -56,6 +58,7 @@ static CGPoint endPoint;
         contentView.clipsToBounds = YES;
         
         [self setShadow];
+        [self  registerForNotifications];
         
         [self addSubview:contentView];
         [self addSubview:closeButton];
@@ -66,9 +69,13 @@ static CGPoint endPoint;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+        
+	if (_parentView) {
+		self.frame = _parentView.bounds;
+	}
+	CGRect bounds = self.bounds;
     
     [self setFrame:[GCPopupView popupFrameForView:_parentView withStartPoint:CGPointZero]];
-    [self setBounds:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     [closeButton setFrame:[self closeButtonFrame]];
     [contentView setFrame:[self contentViewFrame]];
     
@@ -158,6 +165,7 @@ static CGPoint endPoint;
             [self setTransform:CGAffineTransformMakeScale(1.1, 1.1)];
         } completion:^(BOOL finished) {
             completition();
+            [self setTransformForCurrentOrientation:YES];
         }];
     }];
 }
@@ -170,9 +178,64 @@ static CGPoint endPoint;
         [self setTransform:CGAffineTransformMakeScale(0.001, 0.001)];
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
+        [self unregisterFromNotifications];
         if (completition)
             completition();
     }];
+}
+#pragma mark - Notifications
+
+- (void)registerForNotifications {
+	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+	[nc addObserver:self selector:@selector(deviceOrientationDidChange:)
+			   name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
+- (void)unregisterFromNotifications {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)deviceOrientationDidChange:(NSNotification *)notification {
+	UIView *superview = self.superview;
+	if (!superview) {
+		return;
+	} else if ([superview isKindOfClass:[UIWindow class]]) {
+		[self setTransformForCurrentOrientation:YES];
+	} else {
+		self.bounds = self.superview.bounds;
+		[self setNeedsDisplay];
+	}
+}
+
+- (void)setTransformForCurrentOrientation:(BOOL)animated {
+	// Stay in sync with the superview
+	if (self.superview) {
+		self.bounds = self.superview.bounds;
+		[self setNeedsDisplay];
+	}
+	
+	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	CGFloat radians = 0;
+	if (UIInterfaceOrientationIsLandscape(orientation)) {
+		if (orientation == UIInterfaceOrientationLandscapeLeft) { radians = -(CGFloat)M_PI_2; }
+		else { radians = (CGFloat)M_PI_2; }
+		
+        // Window coordinates differ!
+		self.bounds = CGRectMake(0, 0, self.bounds.size.height, self.bounds.size.width);
+
+	} else {
+		if (orientation == UIInterfaceOrientationPortraitUpsideDown) { radians = (CGFloat)M_PI; }
+		else { radians = 0; }
+	}
+	rotationTransform = CGAffineTransformMakeRotation(radians);
+    
+	if (animated) {
+		[UIView beginAnimations:nil context:nil];
+	}
+	[self setTransform:rotationTransform];
+	if (animated) {
+		[UIView commitAnimations];
+	}
 }
 
 @end

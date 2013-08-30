@@ -104,7 +104,7 @@
 
 - (void)closePopupWithCompletition:(void (^)(void))completition
 {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [super closePopupWithCompletition:completition];
 }
 
@@ -164,12 +164,12 @@
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 //    [MBProgressHUD hideHUDForView:contentView animated:YES];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 //    [MBProgressHUD hideHUDForView:contentView animated:YES];
     
     if (error.code == NSURLErrorCancelled) return;
@@ -186,5 +186,6 @@
     if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:@"Reload"])
         [self.webView loadRequest:[self.oauth2Client requestAccessForService:self.service]];
 }
+
 
 @end

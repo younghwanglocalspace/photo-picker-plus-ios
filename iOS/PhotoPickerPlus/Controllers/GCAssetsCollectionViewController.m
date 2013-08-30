@@ -9,6 +9,7 @@
 #import "GCAssetsCollectionViewController.h"
 #import "PhotoCell.h"
 #import "GCAccountAssets.h"
+#import "GCServiceAccount.h"
 #import "NSDictionary+ALAsset.h"
 
 #import <MBProgressHUD.h>
@@ -209,6 +210,15 @@
                 }
                 else
                 {
+                    // JUST AN ASSUMPTION!!!
+                    
+//                    [GCServiceAccount postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
+//                        for(GCAccountAssets *asset in self.selectedAssets){
+//                            [infoArray addObject:([NSDictionary infoFromGCAccountAsset:asset])];
+//                        }
+//                    } failure:^(NSError *error) {
+//                        NSLog(@"Failure posting data");
+//                    }];
                     for(GCAccountAssets *asset in self.selectedAssets){
                         [infoArray addObject:([NSDictionary infoFromGCAccountAsset:asset])];
                     }

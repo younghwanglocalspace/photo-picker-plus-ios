@@ -54,7 +54,7 @@ static NSString *const kFiles = @"files";
     return self;
 }
 #pragma mark - Base Method for the Services
-// request, class, success, failure
+// request, success, failure
 
 - (void)request:(NSMutableURLRequest *)request success:(void(^)(GCResponseStatus *, NSArray *, NSArray *))success failure:(void(^)(NSError *))failure
 {

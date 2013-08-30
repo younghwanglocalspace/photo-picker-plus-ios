@@ -39,6 +39,23 @@
 		E433D04B17B4E65F00D3D39B /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E46AA17A5C0FB00BEF5B8 /* SenTestingKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E43C535517BE72D000680283 /* gradient_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = E43C535417BE72CF00680283 /* gradient_blue.png */; };
 		E441096017C7C5C200FCAEBD /* album_default.png in Resources */ = {isa = PBXBuildFile; fileRef = E441095F17C7C5C200FCAEBD /* album_default.png */; };
+		E4464FBE17CCFABF00C83F14 /* dropbox.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FB617CCFABF00C83F14 /* dropbox.png */; };
+		E4464FBF17CCFABF00C83F14 /* dropbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FB717CCFABF00C83F14 /* dropbox@2x.png */; };
+		E4464FC017CCFABF00C83F14 /* google.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FB817CCFABF00C83F14 /* google.png */; };
+		E4464FC117CCFABF00C83F14 /* google@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FB917CCFABF00C83F14 /* google@2x.png */; };
+		E4464FC217CCFABF00C83F14 /* googledrive.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FBA17CCFABF00C83F14 /* googledrive.png */; };
+		E4464FC317CCFABF00C83F14 /* googledrive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FBB17CCFABF00C83F14 /* googledrive@2x.png */; };
+		E4464FC417CCFABF00C83F14 /* skydrive.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FBC17CCFABF00C83F14 /* skydrive.png */; };
+		E4464FC517CCFABF00C83F14 /* skydrive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FBD17CCFABF00C83F14 /* skydrive@2x.png */; };
+		E4464FCE17CCFCB800C83F14 /* instagram@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FC617CCFCB800C83F14 /* instagram@2x.png */; };
+		E4464FCF17CCFCB800C83F14 /* flickr@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FC717CCFCB800C83F14 /* flickr@2x.png */; };
+		E4464FD017CCFCB800C83F14 /* instagram.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FC817CCFCB800C83F14 /* instagram.png */; };
+		E4464FD117CCFCB800C83F14 /* facebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FC917CCFCB800C83F14 /* facebook@2x.png */; };
+		E4464FD217CCFCB800C83F14 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FCA17CCFCB800C83F14 /* facebook.png */; };
+		E4464FD317CCFCB800C83F14 /* picassa.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FCB17CCFCB800C83F14 /* picassa.png */; };
+		E4464FD417CCFCB800C83F14 /* flickr.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FCC17CCFCB800C83F14 /* flickr.png */; };
+		E4464FD517CCFCB800C83F14 /* picassa@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FCD17CCFCB800C83F14 /* picassa@2x.png */; };
+		E49B000617CF4D7E006E286C /* GCOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = E49B000517CF4D7E006E286C /* GCOptions.m */; };
 		E49CFD6B17B4EF290063C248 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E46CF17A67C8100BEF5B8 /* AssetsLibrary.framework */; };
 		E4A0114F17BE3B1F0097D3BF /* overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A0114D17BE3B1F0097D3BF /* overlay@2x.png */; };
 		E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A0114E17BE3B1F0097D3BF /* overlay.png */; };
@@ -51,11 +68,7 @@
 		E4BDB53D17B55C9C000D4034 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52917B55C9C000D4034 /* camera.png */; };
 		E4BDB53E17B55C9C000D4034 /* chute.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52A17B55C9C000D4034 /* chute.png */; };
 		E4BDB53F17B55C9C000D4034 /* defaultThumb.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52B17B55C9C000D4034 /* defaultThumb.png */; };
-		E4BDB54017B55C9C000D4034 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52C17B55C9C000D4034 /* facebook.png */; };
-		E4BDB54117B55C9C000D4034 /* flickr.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52D17B55C9C000D4034 /* flickr.png */; };
 		E4BDB54217B55C9C000D4034 /* GCConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52E17B55C9C000D4034 /* GCConfiguration.plist */; };
-		E4BDB54317B55C9C000D4034 /* instagram.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52F17B55C9C000D4034 /* instagram.png */; };
-		E4BDB54417B55C9C000D4034 /* picasa.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB53017B55C9C000D4034 /* picasa.png */; };
 		E5C227AF2E6B4E428ADAEC4B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAF8DED3820048119B12E914 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -118,6 +131,24 @@
 		D6A44E3EFCB047F48E216318 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		E43C535417BE72CF00680283 /* gradient_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_blue.png; sourceTree = "<group>"; };
 		E441095F17C7C5C200FCAEBD /* album_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = album_default.png; sourceTree = "<group>"; };
+		E4464FB617CCFABF00C83F14 /* dropbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dropbox.png; sourceTree = "<group>"; };
+		E4464FB717CCFABF00C83F14 /* dropbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropbox@2x.png"; sourceTree = "<group>"; };
+		E4464FB817CCFABF00C83F14 /* google.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = google.png; sourceTree = "<group>"; };
+		E4464FB917CCFABF00C83F14 /* google@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "google@2x.png"; sourceTree = "<group>"; };
+		E4464FBA17CCFABF00C83F14 /* googledrive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = googledrive.png; sourceTree = "<group>"; };
+		E4464FBB17CCFABF00C83F14 /* googledrive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "googledrive@2x.png"; sourceTree = "<group>"; };
+		E4464FBC17CCFABF00C83F14 /* skydrive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skydrive.png; sourceTree = "<group>"; };
+		E4464FBD17CCFABF00C83F14 /* skydrive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "skydrive@2x.png"; sourceTree = "<group>"; };
+		E4464FC617CCFCB800C83F14 /* instagram@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "instagram@2x.png"; sourceTree = "<group>"; };
+		E4464FC717CCFCB800C83F14 /* flickr@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flickr@2x.png"; sourceTree = "<group>"; };
+		E4464FC817CCFCB800C83F14 /* instagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instagram.png; sourceTree = "<group>"; };
+		E4464FC917CCFCB800C83F14 /* facebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook@2x.png"; sourceTree = "<group>"; };
+		E4464FCA17CCFCB800C83F14 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
+		E4464FCB17CCFCB800C83F14 /* picassa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picassa.png; sourceTree = "<group>"; };
+		E4464FCC17CCFCB800C83F14 /* flickr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flickr.png; sourceTree = "<group>"; };
+		E4464FCD17CCFCB800C83F14 /* picassa@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "picassa@2x.png"; sourceTree = "<group>"; };
+		E49B000417CF4D7E006E286C /* GCOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOptions.h; sourceTree = "<group>"; };
+		E49B000517CF4D7E006E286C /* GCOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCOptions.m; sourceTree = "<group>"; };
 		E4A0114D17BE3B1F0097D3BF /* overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "overlay@2x.png"; sourceTree = "<group>"; };
 		E4A0114E17BE3B1F0097D3BF /* overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = overlay.png; sourceTree = "<group>"; };
 		E4A222D917C382C3000A3A14 /* GCAccountMediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAccountMediaViewController.h; sourceTree = "<group>"; };
@@ -136,11 +167,7 @@
 		E4BDB52917B55C9C000D4034 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		E4BDB52A17B55C9C000D4034 /* chute.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chute.png; sourceTree = "<group>"; };
 		E4BDB52B17B55C9C000D4034 /* defaultThumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultThumb.png; sourceTree = "<group>"; };
-		E4BDB52C17B55C9C000D4034 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
-		E4BDB52D17B55C9C000D4034 /* flickr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flickr.png; sourceTree = "<group>"; };
 		E4BDB52E17B55C9C000D4034 /* GCConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GCConfiguration.plist; sourceTree = "<group>"; };
-		E4BDB52F17B55C9C000D4034 /* instagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instagram.png; sourceTree = "<group>"; };
-		E4BDB53017B55C9C000D4034 /* picasa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picasa.png; sourceTree = "<group>"; };
 		EAF8DED3820048119B12E914 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -180,6 +207,8 @@
 				CC72FBC717B6142B00E3981B /* GCAccountAlbum.m */,
 				CC72FBC817B6142B00E3981B /* GCAccountAssets.h */,
 				CC72FBC917B6142B00E3981B /* GCAccountAssets.m */,
+				E49B000417CF4D7E006E286C /* GCOptions.h */,
+				E49B000517CF4D7E006E286C /* GCOptions.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -348,16 +377,28 @@
 				CC1430E117CAE97A0089A020 /* popover_border.png */,
 				E441095F17C7C5C200FCAEBD /* album_default.png */,
 				E43C535417BE72CF00680283 /* gradient_blue.png */,
+				E4464FB617CCFABF00C83F14 /* dropbox.png */,
+				E4464FB717CCFABF00C83F14 /* dropbox@2x.png */,
+				E4464FB817CCFABF00C83F14 /* google.png */,
+				E4464FB917CCFABF00C83F14 /* google@2x.png */,
+				E4464FBA17CCFABF00C83F14 /* googledrive.png */,
+				E4464FBB17CCFABF00C83F14 /* googledrive@2x.png */,
+				E4464FBC17CCFABF00C83F14 /* skydrive.png */,
+				E4464FBD17CCFABF00C83F14 /* skydrive@2x.png */,
 				E4A0114D17BE3B1F0097D3BF /* overlay@2x.png */,
 				E4A0114E17BE3B1F0097D3BF /* overlay.png */,
 				E4BDB52917B55C9C000D4034 /* camera.png */,
 				E4BDB52A17B55C9C000D4034 /* chute.png */,
+				E4464FC617CCFCB800C83F14 /* instagram@2x.png */,
+				E4464FC717CCFCB800C83F14 /* flickr@2x.png */,
+				E4464FC817CCFCB800C83F14 /* instagram.png */,
+				E4464FC917CCFCB800C83F14 /* facebook@2x.png */,
+				E4464FCA17CCFCB800C83F14 /* facebook.png */,
+				E4464FCB17CCFCB800C83F14 /* picassa.png */,
+				E4464FCC17CCFCB800C83F14 /* flickr.png */,
+				E4464FCD17CCFCB800C83F14 /* picassa@2x.png */,
 				E4BDB52B17B55C9C000D4034 /* defaultThumb.png */,
-				E4BDB52C17B55C9C000D4034 /* facebook.png */,
-				E4BDB52D17B55C9C000D4034 /* flickr.png */,
 				E4BDB52E17B55C9C000D4034 /* GCConfiguration.plist */,
-				E4BDB52F17B55C9C000D4034 /* instagram.png */,
-				E4BDB53017B55C9C000D4034 /* picasa.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -444,17 +485,29 @@
 				E4BDB53D17B55C9C000D4034 /* camera.png in Resources */,
 				E4BDB53E17B55C9C000D4034 /* chute.png in Resources */,
 				E4BDB53F17B55C9C000D4034 /* defaultThumb.png in Resources */,
-				E4BDB54017B55C9C000D4034 /* facebook.png in Resources */,
-				E4BDB54117B55C9C000D4034 /* flickr.png in Resources */,
 				E4BDB54217B55C9C000D4034 /* GCConfiguration.plist in Resources */,
-				E4BDB54317B55C9C000D4034 /* instagram.png in Resources */,
-				E4BDB54417B55C9C000D4034 /* picasa.png in Resources */,
 				E4A0114F17BE3B1F0097D3BF /* overlay@2x.png in Resources */,
 				E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */,
 				E43C535517BE72D000680283 /* gradient_blue.png in Resources */,
 				E441096017C7C5C200FCAEBD /* album_default.png in Resources */,
 				CC1430E217CAE97A0089A020 /* popover_arrow.png in Resources */,
 				CC1430E317CAE97A0089A020 /* popover_border.png in Resources */,
+				E4464FBE17CCFABF00C83F14 /* dropbox.png in Resources */,
+				E4464FBF17CCFABF00C83F14 /* dropbox@2x.png in Resources */,
+				E4464FC017CCFABF00C83F14 /* google.png in Resources */,
+				E4464FC117CCFABF00C83F14 /* google@2x.png in Resources */,
+				E4464FC217CCFABF00C83F14 /* googledrive.png in Resources */,
+				E4464FC317CCFABF00C83F14 /* googledrive@2x.png in Resources */,
+				E4464FC417CCFABF00C83F14 /* skydrive.png in Resources */,
+				E4464FC517CCFABF00C83F14 /* skydrive@2x.png in Resources */,
+				E4464FCE17CCFCB800C83F14 /* instagram@2x.png in Resources */,
+				E4464FCF17CCFCB800C83F14 /* flickr@2x.png in Resources */,
+				E4464FD017CCFCB800C83F14 /* instagram.png in Resources */,
+				E4464FD117CCFCB800C83F14 /* facebook@2x.png in Resources */,
+				E4464FD217CCFCB800C83F14 /* facebook.png in Resources */,
+				E4464FD317CCFCB800C83F14 /* picassa.png in Resources */,
+				E4464FD417CCFCB800C83F14 /* flickr.png in Resources */,
+				E4464FD517CCFCB800C83F14 /* picassa@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -536,6 +589,7 @@
 				E4A222DB17C382C3000A3A14 /* GCAccountMediaViewController.m in Sources */,
 				CCE8E20917C51D3E0058A203 /* GCAlbumViewController.m in Sources */,
 				CC1430DF17CADC2D0089A020 /* GCPopoverBackgroundView.m in Sources */,
+				E49B000617CF4D7E006E286C /* GCOptions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,7 +711,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../Chute-SDK/iOS/Chute-SDK/Vendor/KeyValueObjectMapping\"",
+					"\"$(SRCROOT)/../Chute-SDK/Vendor/KeyValueObjectMapping\"",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -674,7 +728,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../Chute-SDK/iOS/Chute-SDK/Vendor/KeyValueObjectMapping\"",
+					"\"$(SRCROOT)/../Chute-SDK/Vendor/KeyValueObjectMapping\"",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
