@@ -27,9 +27,8 @@ import com.chute.android.photopickerplus.ui.fragment.AccountFilesListener;
 import com.chute.android.photopickerplus.ui.fragment.CursorFilesListener;
 import com.chute.android.photopickerplus.ui.fragment.EmptyFragment;
 import com.chute.android.photopickerplus.ui.fragment.FragmentRoot;
-import com.chute.android.photopickerplus.ui.fragment.FragmentServices;
-import com.chute.android.photopickerplus.ui.fragment.FragmentSingle;
 import com.chute.android.photopickerplus.ui.fragment.FragmentServices.ServiceClickedListener;
+import com.chute.android.photopickerplus.ui.fragment.FragmentSingle;
 import com.chute.android.photopickerplus.util.AppUtil;
 import com.chute.android.photopickerplus.util.Constants;
 import com.chute.android.photopickerplus.util.NotificationUtil;
@@ -55,13 +54,11 @@ public class ServicesActivity extends FragmentActivity implements AccountFilesLi
 
   private FragmentTransaction fragmentTransaction;
   private static FragmentManager fragmentManager;
-  private FragmentServices fragmentServices;
   private AccountType accountType;
   private boolean dualPanes;
   private ArrayList<Integer> selectedItemPositions;
   private String folderId;
-  private String accountName;
-  private String accountShortcut;
+  private AccountModel account;
   private AssetSelectListener assetSelectListener;
   private FragmentSingle fragmentSingle;
   private FragmentRoot fragmentRoot;
@@ -91,8 +88,6 @@ public class ServicesActivity extends FragmentActivity implements AccountFilesLi
         && getResources().getConfiguration().orientation != Configuration.ORIENTATION_PORTRAIT) {
       replaceContentWithEmptyFragment();
     }
-    fragmentServices = (FragmentServices) fragmentManager
-        .findFragmentById(R.id.fragmentServices);
 
   }
 
@@ -140,7 +135,7 @@ public class ServicesActivity extends FragmentActivity implements AccountFilesLi
       wrapper.startActivityForResult(ServicesActivity.this,
           PhotosIntentWrapper.ACTIVITY_FOR_RESULT_STREAM_KEY);
     } else {
-      replaceContentWithRootFragment(null, null, null, PhotoFilterType.ALL_PHOTOS);
+      replaceContentWithRootFragment(null, PhotoFilterType.ALL_PHOTOS);
     }
 
   }
@@ -155,48 +150,43 @@ public class ServicesActivity extends FragmentActivity implements AccountFilesLi
       wrapper.startActivityForResult(ServicesActivity.this,
           PhotosIntentWrapper.ACTIVITY_FOR_RESULT_STREAM_KEY);
     } else {
-      replaceContentWithRootFragment(null, null, null, PhotoFilterType.CAMERA_ROLL);
+      replaceContentWithRootFragment(null, PhotoFilterType.CAMERA_ROLL);
     }
 
   }
 
-  public void accountClicked(String accountId, String accountName, String accountShortcut) {
+  public void accountClicked(AccountModel account) {
     photoFilterType = PhotoFilterType.SOCIAL_PHOTOS.ordinal();
     selectedItemPositions = null;
     if (!dualPanes) {
       final PhotosIntentWrapper wrapper = new PhotosIntentWrapper(ServicesActivity.this);
       wrapper.setFilterType(PhotoFilterType.SOCIAL_PHOTOS);
-      wrapper.setAccountId(accountId);
-      wrapper.setAccountName(accountName);
-      wrapper.setAccountShortcut(accountShortcut);
+      wrapper.setAccount(account);
       wrapper.startActivityForResult(ServicesActivity.this,
           PhotosIntentWrapper.ACTIVITY_FOR_RESULT_STREAM_KEY);
     } else {
-      replaceContentWithRootFragment(accountName, accountId, accountShortcut,
-          PhotoFilterType.SOCIAL_PHOTOS);
+      replaceContentWithRootFragment(account, PhotoFilterType.SOCIAL_PHOTOS);
     }
 
   }
 
-  public void replaceContentWithSingleFragment(String accountName,
-      ArrayList<Integer> selectedItemPositions,
-      String accountShortcut, String folderId) {
+  public void replaceContentWithSingleFragment(AccountModel account, String folderId,
+      ArrayList<Integer> selectedItemPositions) {
     fragmentTransaction = fragmentManager.beginTransaction();
     fragmentTransaction.replace(R.id.fragments,
-        FragmentSingle.newInstance(accountName, accountShortcut,
-            folderId, selectedItemPositions),
+        FragmentSingle.newInstance(account, folderId, selectedItemPositions),
         Constants.TAG_FRAGMENT_FILES);
     fragmentTransaction.addToBackStack(null);
     fragmentTransaction.commit();
 
   }
 
-  public void replaceContentWithRootFragment(String accountName, String accountID,
-      String accountShortcut, PhotoFilterType filterType) {
+  public void replaceContentWithRootFragment(AccountModel account,
+      PhotoFilterType filterType) {
     fragmentTransaction = fragmentManager.beginTransaction();
     fragmentTransaction.replace(R.id.fragments,
-        FragmentRoot.newInstance(filterType, accountID, selectedItemPositions,
-            accountName, accountShortcut), Constants.TAG_FRAGMENT_FOLDER);
+        FragmentRoot.newInstance(account, filterType, selectedItemPositions),
+        Constants.TAG_FRAGMENT_FOLDER);
     fragmentTransaction.commit();
   }
 
@@ -210,12 +200,12 @@ public class ServicesActivity extends FragmentActivity implements AccountFilesLi
   @Override
   public void accountLogin(AccountType type) {
     accountType = type;
+    PhotoPickerPreferenceUtil.get().setAccountType(accountType);
     if (PreferenceUtil.get().hasAccount(type.getLoginMethod())) {
       AccountModel account = PreferenceUtil.get()
           .getAccount(type.getLoginMethod());
-      accountClicked(account.getId(), type.name().toLowerCase(), account.getShortcut());
+      accountClicked(account);
     } else {
-      PhotoPickerPreferenceUtil.get().setAccountType(accountType);
       AuthenticationFactory.getInstance().startAuthenticationActivity(
           ServicesActivity.this, accountType);
     }
@@ -231,8 +221,6 @@ public class ServicesActivity extends FragmentActivity implements AccountFilesLi
       if (requestCode == PhotosIntentWrapper.ACTIVITY_FOR_RESULT_STREAM_KEY) {
         finish();
       } else if (requestCode == Constants.CAMERA_PIC_REQUEST) {
-        // Bitmap image = (Bitmap) data.getExtras().get("data");
-
         String path = "";
         File tempFile = AppUtil.getTempFile(getApplicationContext());
         if (AppUtil.hasImageCaptureBug() == false && tempFile.length() > 0) {
@@ -285,8 +273,7 @@ public class ServicesActivity extends FragmentActivity implements AccountFilesLi
       for (AccountModel accountModel : responseData.getData()) {
         if (accountModel.getType().equals(accountType.getLoginMethod())) {
           PreferenceUtil.get().saveAccount(accountModel);
-          accountClicked(accountModel.getId(), accountType.name().toLowerCase(),
-              accountModel.getShortcut());
+          accountClicked(accountModel);
         }
       }
 
@@ -324,23 +311,20 @@ public class ServicesActivity extends FragmentActivity implements AccountFilesLi
   }
 
   @Override
-  public void onAccountFolderSelect(String accountName, String accountShortcut,
+  public void onAccountFolderSelect(AccountModel account,
       String folderId) {
     selectedItemPositions = null;
     photoFilterType = PhotoFilterType.SOCIAL_PHOTOS.ordinal();
     this.folderId = folderId;
-    this.accountName = accountName;
-    this.accountShortcut = accountShortcut;
-    replaceContentWithSingleFragment(accountName, selectedItemPositions, accountShortcut,
-        folderId);
+    this.account = account;
+    replaceContentWithSingleFragment(account, folderId, selectedItemPositions);
   }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putString(Constants.KEY_FOLDER_ID, folderId);
-    outState.putString(Constants.KEY_ACCOUNT_SHORTCUT, accountShortcut);
-    outState.putString(Constants.KEY_ACCOUNT_TYPE, accountName);
+    outState.putParcelable(Constants.KEY_ACCOUNT, account);
     outState.putInt(Constants.KEY_PHOTO_FILTER_TYPE, photoFilterType);
     if (assetSelectListener != null
         && assetSelectListener.getSelectedItemPositions() !=
@@ -360,16 +344,16 @@ public class ServicesActivity extends FragmentActivity implements AccountFilesLi
     fragmentRoot = (FragmentRoot) getSupportFragmentManager().findFragmentByTag(
         Constants.TAG_FRAGMENT_FOLDER);
     if (fragmentSingle != null
-        && photoFilterType == PhotoFilterType.SOCIAL_PHOTOS.ordinal()) {
+        && photoFilterType == PhotoFilterType.SOCIAL_PHOTOS.ordinal()
+        && fragmentSingle.isInLayout()) {
       fragmentSingle.setRetainInstance(true);
-      fragmentSingle.updateFragment(accountName, accountShortcut, folderId,
-          selectedItemPositions);
+      fragmentSingle.updateFragment(account, folderId, selectedItemPositions);
     }
     if (fragmentRoot != null
         && photoFilterType != PhotoFilterType.SOCIAL_PHOTOS.ordinal()) {
       fragmentRoot.setRetainInstance(true);
       fragmentRoot.updateFragment(null, PhotoFilterType.values()[photoFilterType],
-          selectedItemPositions, null, null);
+          selectedItemPositions);
     }
   }
 
@@ -382,13 +366,9 @@ public class ServicesActivity extends FragmentActivity implements AccountFilesLi
         .getString(Constants.KEY_FOLDER_ID)
         : null;
 
-    accountName = savedInstanceState != null ? savedInstanceState
-        .getString(Constants.KEY_ACCOUNT_TYPE)
-        : null;
-
-    accountShortcut = savedInstanceState != null ? savedInstanceState
-        .getString(Constants.KEY_ACCOUNT_SHORTCUT)
-        : null;
+    account = (AccountModel) (savedInstanceState != null ? savedInstanceState
+        .getParcelable(Constants.KEY_ACCOUNT)
+        : null);
 
     photoFilterType = savedInstanceState != null ? savedInstanceState
         .getInt(Constants.KEY_PHOTO_FILTER_TYPE)
@@ -412,7 +392,7 @@ public class ServicesActivity extends FragmentActivity implements AccountFilesLi
   }
 
   @Override
-  public void onSessionExpired(boolean isSessionExpired, AccountType accountType) {
+  public void onSessionExpired(AccountType accountType) {
     PhotoPickerPreferenceUtil.get().setAccountType(accountType);
     AuthenticationFactory.getInstance().startAuthenticationActivity(
         ServicesActivity.this, accountType);

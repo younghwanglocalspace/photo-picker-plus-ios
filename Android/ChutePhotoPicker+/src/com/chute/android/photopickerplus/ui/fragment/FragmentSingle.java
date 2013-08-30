@@ -16,22 +16,24 @@ import android.widget.TextView;
 
 import com.araneaapps.android.libs.logger.ALog;
 import com.chute.android.photopickerplus.R;
+import com.chute.android.photopickerplus.callback.ImageDataResponseLoader;
 import com.chute.android.photopickerplus.config.PhotoPicker;
 import com.chute.android.photopickerplus.ui.adapter.AssetAccountAdapter;
 import com.chute.android.photopickerplus.ui.adapter.AssetAccountAdapter.AdapterItemClickListener;
 import com.chute.android.photopickerplus.util.NotificationUtil;
+import com.chute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
 import com.chute.sdk.v2.api.accounts.GCAccounts;
 import com.chute.sdk.v2.model.AccountAlbumModel;
 import com.chute.sdk.v2.model.AccountBaseModel;
 import com.chute.sdk.v2.model.AccountMediaModel;
+import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.response.ResponseModel;
 import com.dg.libs.rest.callbacks.HttpCallback;
 import com.dg.libs.rest.domain.ResponseStatus;
 
 public class FragmentSingle extends Fragment implements AdapterItemClickListener {
 
-  private static final String ARG_ACCOUNT_NAME = "argAccountName";
-  private static final String ARG_ACCOUNT_SHORTCUT = "argAccountShortcut";
+  private static final String ARG_ACCOUNT_MODEL = "argAccountModel";
   private static final String ARG_FOLDER_ID = "argAlbumId";
   private static final String ARG_SELECTED_ITEM_POSITIONS = "argSelectedItemPositions";
 
@@ -39,8 +41,7 @@ public class FragmentSingle extends Fragment implements AdapterItemClickListener
   private TextView textViewSelectPhotos;
   private View emptyView;
 
-  private String accountName;
-  private String accountShortcut;
+  private AccountModel account;
   private String folderId;
   private boolean isMultipicker;
   private ArrayList<Integer> selectedItemsPositions;
@@ -48,12 +49,11 @@ public class FragmentSingle extends Fragment implements AdapterItemClickListener
   private AssetAccountAdapter accountAssetAdapter;
   private AccountFilesListener accountListener;
 
-  public static FragmentSingle newInstance(String accountName, String accountShortcut,
+  public static FragmentSingle newInstance(AccountModel account,
       String folderId, ArrayList<Integer> selectedItemPositions) {
     FragmentSingle frag = new FragmentSingle();
     Bundle args = new Bundle();
-    args.putString(ARG_ACCOUNT_NAME, accountName);
-    args.putString(ARG_ACCOUNT_SHORTCUT, accountShortcut);
+    args.putParcelable(ARG_ACCOUNT_MODEL, account);
     args.putString(ARG_FOLDER_ID, folderId);
     args.putIntegerArrayList(ARG_SELECTED_ITEM_POSITIONS, selectedItemPositions);
     frag.setArguments(args);
@@ -84,13 +84,11 @@ public class FragmentSingle extends Fragment implements AdapterItemClickListener
     gridView.setEmptyView(emptyView);
 
     if (getArguments() != null) {
-      accountName = getArguments().getString(ARG_ACCOUNT_NAME);
-      accountShortcut = getArguments().getString(ARG_ACCOUNT_SHORTCUT);
+      account = getArguments().getParcelable(ARG_ACCOUNT_MODEL);
       folderId = getArguments().getString(ARG_FOLDER_ID);
       selectedItemsPositions = getArguments().getIntegerArrayList(
           ARG_SELECTED_ITEM_POSITIONS);
-      updateFragment(accountName, accountShortcut, folderId,
-          selectedItemsPositions);
+      updateFragment(account, folderId, selectedItemsPositions);
     }
 
     Button ok = (Button) view.findViewById(R.id.buttonOk);
@@ -103,16 +101,17 @@ public class FragmentSingle extends Fragment implements AdapterItemClickListener
     return view;
   }
 
-  public void updateFragment(String accountName, String accountShortcut, String folderId,
+  public void updateFragment(AccountModel account, String folderId,
       ArrayList<Integer> selectedItemsPositions) {
     isMultipicker = PhotoPicker.getInstance().isMultiPicker();
-    this.accountName = accountName;
+    this.account = account;
     this.selectedItemsPositions = selectedItemsPositions;
-    this.accountShortcut = accountShortcut;
     this.folderId = folderId;
 
     String encodedId = Uri.encode(folderId);
-    GCAccounts.accountSingle(getActivity(), accountName, accountShortcut, encodedId,
+    GCAccounts.accountSingle(getActivity(),
+        PhotoPickerPreferenceUtil.get().getAccountType().name().toLowerCase(),
+        account.getShortcut(), encodedId,
         new AccountSingleCallback()).executeAsync();
 
   }
@@ -130,7 +129,7 @@ public class FragmentSingle extends Fragment implements AdapterItemClickListener
 
     @Override
     public void onSuccess(ResponseModel<AccountBaseModel> responseData) {
-      if (responseData != null && getActivity() != null) {
+      if (responseData.getData() != null && getActivity() != null) {
         accountAssetAdapter = new AssetAccountAdapter(getActivity(),
             responseData.getData(),
             FragmentSingle.this);
@@ -157,6 +156,7 @@ public class FragmentSingle extends Fragment implements AdapterItemClickListener
         }
         NotificationUtil.showPhotosAdapterToast(getActivity().getApplicationContext(),
             accountAssetAdapter.getCount());
+
       }
 
     }
@@ -166,7 +166,7 @@ public class FragmentSingle extends Fragment implements AdapterItemClickListener
   @Override
   public void onFolderClicked(int position) {
     AccountAlbumModel album = (AccountAlbumModel) accountAssetAdapter.getItem(position);
-    accountListener.onAccountFolderSelect(accountName, accountShortcut,
+    accountListener.onAccountFolderSelect(account,
         album.getId());
 
   }
@@ -176,6 +176,12 @@ public class FragmentSingle extends Fragment implements AdapterItemClickListener
     if (isMultipicker == true) {
       accountAssetAdapter.toggleTick(position);
     } else {
+      // ArrayList<AccountMediaModel> accountMediaModelList = new
+      // ArrayList<AccountMediaModel>();
+      // accountMediaModelList.add((AccountMediaModel) accountAssetAdapter
+      // .getItem(position));
+      // ImageDataResponseLoader.postImageData(getActivity().getApplicationContext(),
+      // accountMediaModelList, accountListener);
       accountListener.onAccountFilesSelect((AccountMediaModel) accountAssetAdapter
           .getItem(position));
     }
@@ -195,6 +201,8 @@ public class FragmentSingle extends Fragment implements AdapterItemClickListener
 
     @Override
     public void onClick(View v) {
+//      ImageDataResponseLoader.postImageData(getActivity().getApplicationContext(),
+//          accountAssetAdapter.getPhotoCollection(), accountListener);
       accountListener.onDeliverAccountFiles(accountAssetAdapter.getPhotoCollection());
     }
   }
