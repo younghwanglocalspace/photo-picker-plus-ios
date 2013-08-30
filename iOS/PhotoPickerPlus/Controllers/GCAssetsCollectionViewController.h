@@ -27,8 +27,32 @@
 @property (readwrite, copy) void (^successBlock)(id selectedItems);
 @property (readwrite, copy) void (^cancelBlock)(void);
 
+///----------------------------------
+/// @name Setting NavigationBar items
+///----------------------------------
+
+/**
+ Sets cancel button in the right corner of NavigationBar.
+ 
+ @return UIBarButtonItem
+*/
 - (UIBarButtonItem *)cancelButton;
+
+/**
+ Sets cancel and done buttons in right corner of NavigationBar.
+ 
+ @return NSArray of UIBarButtonItem objects.
+ */
 - (NSArray *)doneAndCancelButtons;
 
+///------------------------------------
+/// @name Setting CollectionView layout
+///------------------------------------
+
+/**
+ Instance method for setting collectionView layout when initializing new CollectionViewController.
+ 
+ @return UICollectionViewFlowLayout that is used for initializing new CollectionViewController.
+ */
 + (UICollectionViewFlowLayout *)setupLayout;
 @end

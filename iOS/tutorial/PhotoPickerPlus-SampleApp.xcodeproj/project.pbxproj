@@ -55,6 +55,7 @@
 		E4464FD317CCFCB800C83F14 /* picassa.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FCB17CCFCB800C83F14 /* picassa.png */; };
 		E4464FD417CCFCB800C83F14 /* flickr.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FCC17CCFCB800C83F14 /* flickr.png */; };
 		E4464FD517CCFCB800C83F14 /* picassa@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FCD17CCFCB800C83F14 /* picassa@2x.png */; };
+		E49B000617CF4D7E006E286C /* GCOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = E49B000517CF4D7E006E286C /* GCOptions.m */; };
 		E49CFD6B17B4EF290063C248 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E46CF17A67C8100BEF5B8 /* AssetsLibrary.framework */; };
 		E4A0114F17BE3B1F0097D3BF /* overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A0114D17BE3B1F0097D3BF /* overlay@2x.png */; };
 		E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A0114E17BE3B1F0097D3BF /* overlay.png */; };
@@ -146,6 +147,8 @@
 		E4464FCB17CCFCB800C83F14 /* picassa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picassa.png; sourceTree = "<group>"; };
 		E4464FCC17CCFCB800C83F14 /* flickr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flickr.png; sourceTree = "<group>"; };
 		E4464FCD17CCFCB800C83F14 /* picassa@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "picassa@2x.png"; sourceTree = "<group>"; };
+		E49B000417CF4D7E006E286C /* GCOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOptions.h; sourceTree = "<group>"; };
+		E49B000517CF4D7E006E286C /* GCOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCOptions.m; sourceTree = "<group>"; };
 		E4A0114D17BE3B1F0097D3BF /* overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "overlay@2x.png"; sourceTree = "<group>"; };
 		E4A0114E17BE3B1F0097D3BF /* overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = overlay.png; sourceTree = "<group>"; };
 		E4A222D917C382C3000A3A14 /* GCAccountMediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAccountMediaViewController.h; sourceTree = "<group>"; };
@@ -204,6 +207,8 @@
 				CC72FBC717B6142B00E3981B /* GCAccountAlbum.m */,
 				CC72FBC817B6142B00E3981B /* GCAccountAssets.h */,
 				CC72FBC917B6142B00E3981B /* GCAccountAssets.m */,
+				E49B000417CF4D7E006E286C /* GCOptions.h */,
+				E49B000517CF4D7E006E286C /* GCOptions.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -584,6 +589,7 @@
 				E4A222DB17C382C3000A3A14 /* GCAccountMediaViewController.m in Sources */,
 				CCE8E20917C51D3E0058A203 /* GCAlbumViewController.m in Sources */,
 				CC1430DF17CADC2D0089A020 /* GCPopoverBackgroundView.m in Sources */,
+				E49B000617CF4D7E006E286C /* GCOptions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,7 +711,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../Chute-SDK/iOS/Chute-SDK/Vendor/KeyValueObjectMapping\"",
+					"\"$(SRCROOT)/../Chute-SDK/Vendor/KeyValueObjectMapping\"",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -722,7 +728,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../Chute-SDK/iOS/Chute-SDK/Vendor/KeyValueObjectMapping\"",
+					"\"$(SRCROOT)/../Chute-SDK/Vendor/KeyValueObjectMapping\"",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
