@@ -48,7 +48,7 @@
     if(self.isItDevice)
     {
         [self getAlbumsFromDevice];
-        [self setCancelButton];
+        [self.navigationItem setRightBarButtonItem:[self setCancelButton]];
     }
 }
 
@@ -163,10 +163,11 @@
     
 }
 
-- (void)setCancelButton
+- (UIBarButtonItem *)setCancelButton
 {
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
-    [self.navigationItem setRightBarButtonItem:cancelButton];
+
+    return cancelButton;
 }
 
 - (void)cancel

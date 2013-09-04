@@ -38,26 +38,33 @@
                                     <action selector="pickMultiplePhotosSelected:" destination="2" eventType="touchUpInside" id="Gh3-VZ-2eN"/>
                                 </connections>
                             </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kBO-ip-Gaq"/>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" hidesForSinglePage="YES" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="ASk-Ly-JIw"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kBO-ip-Gaq"/>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" hidesForSinglePage="YES" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="ASk-Ly-JIw">
+                                <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="currentPageIndicatorTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="changePage:" destination="2" eventType="valueChanged" id="jqJ-cL-4JW"/>
+                                </connections>
+                            </pageControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="kBO-ip-Gaq" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="2nI-rp-imk"/>
                             <constraint firstItem="kBO-ip-Gaq" firstAttribute="top" secondItem="3" secondAttribute="top" constant="20" symbolic="YES" type="default" id="Bnr-JB-yRk"/>
                             <constraint firstAttribute="trailing" secondItem="IJN-tv-mfm" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="F3H-jZ-rbd"/>
-                            <constraint firstItem="ASk-Ly-JIw" firstAttribute="top" secondItem="kBO-ip-Gaq" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Kir-eq-Nxy"/>
+                            <constraint firstItem="IJN-tv-mfm" firstAttribute="top" secondItem="kBO-ip-Gaq" secondAttribute="bottom" constant="38" type="user" id="SDq-ap-2fA"/>
                             <constraint firstItem="ASk-Ly-JIw" firstAttribute="centerX" secondItem="IJN-tv-mfm" secondAttribute="centerX" type="default" id="djX-wH-BwT"/>
                             <constraint firstItem="IJN-tv-mfm" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="j9G-nM-Ajg"/>
-                            <constraint firstAttribute="bottom" secondItem="g2o-eL-JuF" secondAttribute="bottom" constant="6" id="jTY-QA-kf2"/>
+                            <constraint firstAttribute="bottom" secondItem="g2o-eL-JuF" secondAttribute="bottom" constant="6" type="user" id="jTY-QA-kf2"/>
                             <constraint firstAttribute="trailing" secondItem="kBO-ip-Gaq" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="kdo-au-h4B"/>
+                            <constraint firstItem="IJN-tv-mfm" firstAttribute="top" secondItem="ASk-Ly-JIw" secondAttribute="bottom" constant="8" symbolic="YES" type="user" id="knP-5Q-OyM"/>
                             <constraint firstItem="g2o-eL-JuF" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="m3g-id-Cih"/>
-                            <constraint firstItem="g2o-eL-JuF" firstAttribute="top" secondItem="IJN-tv-mfm" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="xnW-XI-MyG"/>
-                            <constraint firstAttribute="bottom" secondItem="ASk-Ly-JIw" secondAttribute="bottom" constant="109" id="y7P-zY-vAh"/>
+                            <constraint firstItem="g2o-eL-JuF" firstAttribute="top" secondItem="IJN-tv-mfm" secondAttribute="bottom" constant="8" symbolic="YES" type="user" id="xnW-XI-MyG"/>
                             <constraint firstAttribute="trailing" secondItem="g2o-eL-JuF" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="z6p-lL-4m0"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="pageControl" destination="ASk-Ly-JIw" id="ZI2-Qs-k4V"/>
                         <outlet property="scrollView" destination="kBO-ip-Gaq" id="Gfn-7V-7V3"/>
                     </connections>
                 </viewController>
@@ -74,6 +81,7 @@
             <relationships>
                 <relationship kind="action" name="pickMultiplePhotosSelected:"/>
                 <relationship kind="action" name="pickPhotoSelected:"/>
+                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
         </class>

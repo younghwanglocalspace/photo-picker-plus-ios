@@ -10,13 +10,17 @@
 #import "GCAccount.h"
 #import "GCAccountAlbum.h"
 #import "GCAccountAssets.h"
-#import "GCOptions.h"
 #import "PhotoPickerClient.h"
+#import "GCConfiguration.h"
+#import "NSDictionary+GCAccountAsset.h"
 
+#import <Chute-SDK/GCOAuth2Client.h>
 #import <Chute-SDK/NSString+QueryString.h>
 #import <Chute-SDK/GCResponse.h>
 #import <Chute-SDK/GCClient.h>
 #import <Chute-SDK/GCResponseStatus.h>
+#import <Chute-SDK/GCAsset.h>
+#import <AFNetworking/AFJSONRequestOperation.h>
 
 static NSString * const kGCAuth = @"Authorization";
 static NSString * const kClientGET = @"GET";
@@ -56,36 +60,46 @@ static NSString * const kClientGET = @"GET";
     } failure:failure];
 }
 
-#warning implement it when becomes live!
 + (void)postSelectedImages:(NSArray *)selectedImages success:(void(^)(GCResponseStatus *, NSArray *))success failure:(void(^)(NSError *))failure
 {
     GCClient *apiClient = [GCClient sharedClient];
+        
+    NSDictionary *oauthData = [[GCConfiguration configuration] oauthData];
+    NSString *clientID = [oauthData objectForKey:kGCClientID];
     
-    GCOptions *options;
-    
-    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"GCConfiguration" ofType:@"plist"];
-    NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
-    NSDictionary *oauth = [[NSDictionary alloc] initWithDictionary:[dict objectForKey:@"oauth"]];
-
-    [options setClientID:[oauth objectForKey:@"client_id"]];
     
     NSMutableArray *media = [[NSMutableArray alloc] initWithCapacity:[selectedImages count]];
     for(GCAccountAssets *asset in selectedImages)
     {
-        [media addObject:asset];
+        NSDictionary *dictFromAsset = [NSDictionary dictionaryFromGCAccountAssets:asset];
+        [media addObject:dictFromAsset];
     }
     
-    NSDictionary *param = @{@"options":options,
+    NSDictionary *param = @{@"options":@{kGCClientID:clientID},
                             @"media":media};
-    
-    NSString *path = [NSString stringWithFormat:@"widgets/native"];
+
+    NSString *path = @"widgets/native";
     
     NSMutableURLRequest *request = [apiClient requestWithMethod:kGCClientPOST path:path parameters:param];
-    [request setValue:[apiClient authorizationToken] forHTTPHeaderField:kGCAuth];
+//    [request setValue:[apiClient authorizationToken] forHTTPHeaderField:kGCAuth];
+
+//    [apiClient request:request factoryClass:[GCAccountAssets class] success:^(GCResponse *response) {
+//        success(response.response,response.data);
+//    } failure:failure];
     
-    [apiClient request:request factoryClass:[GCAccountAssets class] success:^(GCResponse *response) {
-        success(response.response,response.data);
-    } failure:failure];
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        NSDictionary *data = @{
+                               @"data":[[JSON objectForKey:@"data"] objectForKey:@"media"],
+                               @"response":[JSON objectForKey:@"response"]
+                               };
+        [apiClient parseJSON:data withFactoryClass:[GCAsset class] success:^(GCResponse *gcResponse) {
+            success(gcResponse.response, gcResponse.data);
+        }];
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+        failure(error);
+    }];
+    
+    [apiClient enqueueHTTPRequestOperation:operation];
 }
 
 @end

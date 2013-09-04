@@ -11,7 +11,7 @@
 @class PhotoPickerViewController;
 
 /**
- The `PhotoPickerViewControllerDelegate` defines the methods that are used when picking an asset. They actually return selected assets or cancel.
+ The `PhotoPickerViewControllerDelegate` defines the methods that are used when picking an asset. They actually return selected assets or cancel the action.
 */
 @protocol PhotoPickerViewControllerDelegate <NSObject>
 
@@ -32,8 +32,17 @@
 
 @interface PhotoPickerViewController : UINavigationController
 
+/**
+ The PhotoPickerViewController and UINavigationController delegate object.
+ 
+ @see PhotoPickerViewControllerDelegate
+ @see UINavigationControllerDelegate
+*/
 @property (weak, nonatomic) id<PhotoPickerViewControllerDelegate, UINavigationControllerDelegate>delegate;
-//@property (strong, nonatomic) GCOAuth2Client *oauth2Client;
+
+/**
+ BOOL value with which is determined if the user can select multiple assets (YES) or not (NO).
+ */
 @property (assign, nonatomic) BOOL isMultipleSelectionEnabled;
 
 @end

@@ -12,8 +12,20 @@
 
 @interface GCConfiguration : NSObject
 
+
+/**
+ Array used for storing services.
+*/
 @property (strong, nonatomic) NSArray           *services;
+
+/**
+ Dictionary containing all data needed for authentication.
+ */
 @property (strong, nonatomic) NSDictionary      *oauthData;
+
+/**
+ MutableArray used to store logged accounts.
+ */
 @property (strong, nonatomic) NSMutableArray    *accounts;
 
 ///--------------------------------

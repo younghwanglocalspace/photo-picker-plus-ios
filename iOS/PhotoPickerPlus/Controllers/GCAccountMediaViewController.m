@@ -114,6 +114,9 @@
         [self.albumViewController setSuccessBlock:self.successBlock];
         [self.albumViewController setCancelBlock:self.cancelBlock];
         
+        
+        [self.navigationItem setRightBarButtonItem:[self.albumViewController setCancelButton]];
+        
         [self.albumViewController.tableView reloadData];
         
     }

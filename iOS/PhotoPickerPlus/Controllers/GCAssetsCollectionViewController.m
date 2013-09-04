@@ -11,9 +11,11 @@
 #import "GCAccountAssets.h"
 #import "GCServiceAccount.h"
 #import "NSDictionary+ALAsset.h"
+#import "NSDictionary+GCAccountAsset.h"
 
 #import <MBProgressHUD.h>
 #import <AFNetworking.h>
+#import <Chute-SDK/GCAsset.h>
 
 @interface GCAssetsCollectionViewController ()
 
@@ -196,46 +198,58 @@
         
         __block id info;
         
-        MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
-        [self.navigationController.view addSubview:HUD];
-        [HUD showAnimated:YES whileExecutingBlock:^{
+        UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+        MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:window];
+        [window addSubview:HUD];
+        [HUD show:YES];
+        
+        if ([self isMultipleSelectionEnabled]) {
             
-            if ([self isMultipleSelectionEnabled]) {
-                
-                NSMutableArray *infoArray = [NSMutableArray array];
-                if(self.isItDevice){
-                    for (ALAsset *asset in self.selectedAssets) {
-                        [infoArray addObject:([NSDictionary infoFromALAsset:asset])];
-                    }
-                }
-                else
-                {
-                    // JUST AN ASSUMPTION!!!
-                    
-//                    [GCServiceAccount postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
-//                        for(GCAccountAssets *asset in self.selectedAssets){
-//                            [infoArray addObject:([NSDictionary infoFromGCAccountAsset:asset])];
-//                        }
-//                    } failure:^(NSError *error) {
-//                        NSLog(@"Failure posting data");
-//                    }];
-                    for(GCAccountAssets *asset in self.selectedAssets){
-                        [infoArray addObject:([NSDictionary infoFromGCAccountAsset:asset])];
-                    }
+            NSMutableArray *infoArray = [NSMutableArray array];
+            if(self.isItDevice){
+                for (ALAsset *asset in self.selectedAssets) {
+                    [infoArray addObject:([NSDictionary infoFromALAsset:asset])];
                 }
                 info = infoArray;
+                [HUD hide:YES];
+                [self successBlock](info);
             }
-            else {
-                if(self.isItDevice)
-                    info = [NSDictionary infoFromALAsset:[self.selectedAssets objectAtIndex:0]];
-                else
-                    info = [NSDictionary infoFromGCAccountAsset:[self.selectedAssets objectAtIndex:0]];
+            else
+            {
+                [GCServiceAccount postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
+                    for(GCAsset *asset in returnedArray){
+                        [infoArray addObject:([NSDictionary infoFromGCAsset:asset])];
+                    }
+                    info = infoArray;
+                    [HUD hide:YES];
+                    [self successBlock](info);
+                } failure:^(NSError *error) {
+                    [HUD hide:YES];
+                    NSLog(@"Failure posting data to server.");
+                }];
             }
             
-        } completionBlock:^{
-            [HUD removeFromSuperview];
-            [self successBlock](info);
-        }];
+        }
+        else {
+            if(self.isItDevice)
+            {
+                info = [NSDictionary infoFromALAsset:[self.selectedAssets objectAtIndex:0]];
+                [HUD hide:YES];
+                [self successBlock](info);
+            }
+            else
+            {
+                [GCServiceAccount postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
+                    info = [NSDictionary infoFromGCAsset:[returnedArray objectAtIndex:0]];
+                    [HUD hide:YES];
+                    [self successBlock](info);
+                } failure:^(NSError *error) {
+                    [HUD hide:YES];
+                    NSLog(@"Failure posting data to server.");
+                }];
+                
+            }
+        }
     }
 }
 

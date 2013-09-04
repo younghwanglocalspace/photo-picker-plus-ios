@@ -8,9 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class GCLinks;
+
 @interface GCAccountAlbum : NSObject
 
 @property (strong, nonatomic) NSNumber *id;
 @property (strong, nonatomic) NSString *name;
+@property (strong, nonatomic) GCLinks *links;
 
 @end

@@ -12,9 +12,11 @@
 @interface ViewController : UIViewController <PhotoPickerViewControllerDelegate, UINavigationControllerDelegate,UIScrollViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UIPageControl *pageControl;
 @property (strong, nonatomic) UIPopoverController   *popoverController;
 
 - (IBAction)pickPhotoSelected:(id)sender;
 - (IBAction)pickMultiplePhotosSelected:(id)sender;
+- (IBAction)changePage:(id)sender;
 
 @end

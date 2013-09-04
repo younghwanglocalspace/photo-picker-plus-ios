@@ -16,11 +16,12 @@
 
 @implementation ViewController
 
-@synthesize scrollView, popoverController;
+@synthesize scrollView, pageControl, popoverController;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.pageControl.numberOfPages = 1;
 }
 
 - (void)didReceiveMemoryWarning
@@ -75,18 +76,29 @@
     }
 }
 
+- (IBAction)changePage:(id)sender {
+    CGFloat x = self.pageControl.currentPage * self.scrollView.frame.size.width;
+    [self.scrollView setContentOffset:CGPointMake(x, 0) animated:YES];
+}
+
 #pragma mark - PhotoPickerViewController Delegate Methods
 
 - (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingArrayOfMediaWithInfo:(NSArray *)info
 {
 
+    [self.scrollView setDelegate:self];
+    [self.scrollView setPagingEnabled:YES];
+    [self.scrollView setContentOffset:CGPointZero];
+    [self.pageControl setCurrentPage:0];
+
+    
     for (UIView *v in [scrollView subviews]) {
         [v removeFromSuperview];
     }
     
-    CGRect workingFrame = scrollView.frame;
+    CGRect workingFrame = self.scrollView.frame;
     workingFrame.origin.x = 0;
-        
+    
     for(NSDictionary *dict in info) {
         
         UIImage *image = [dict objectForKey:UIImagePickerControllerOriginalImage];
@@ -95,13 +107,16 @@
         [imageView setContentMode:UIViewContentModeScaleAspectFit];
         imageView.frame = workingFrame;
         
-        [scrollView addSubview:imageView];
+        [self.scrollView addSubview:imageView];
         
         workingFrame.origin.x = workingFrame.origin.x + workingFrame.size.width;
     }
-    [scrollView setPagingEnabled:YES];
-    [scrollView setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];
     
+    [self.scrollView setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];
+    
+    self.pageControl.numberOfPages = self.scrollView.contentSize.width/self.scrollView.frame.size.width;
+    [self.pageControl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
+
     if (self.popoverController) {
         [self.popoverController dismissPopoverAnimated:YES];
     }
@@ -113,7 +128,9 @@
 - (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
 
-    for (UIView *v in [scrollView subviews]) {
+    [self.scrollView setDelegate:self];
+    
+    for (UIView *v in [self.scrollView subviews]) {
         [v removeFromSuperview];
     }
     
@@ -125,12 +142,14 @@
     [imageView setContentMode:UIViewContentModeScaleAspectFit];
     imageView.frame = workingFrame;
     
-    [scrollView addSubview:imageView];
+    [self.scrollView addSubview:imageView];
     
     workingFrame.origin.x = workingFrame.origin.x + workingFrame.size.width;
-    [scrollView setPagingEnabled:YES];
-    [scrollView setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];
     
+    self.pageControl.numberOfPages = self.scrollView.contentSize.width/self.scrollView.frame.size.width;
+    [self.pageControl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
+
     if (self.popoverController) {
         [self.popoverController dismissPopoverAnimated:YES];
     }
@@ -151,16 +170,27 @@
 
 }
 
+#pragma mark - ScrollView layout method
+
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    CGRect workingFrame = scrollView.frame;
+    CGRect workingFrame = self.scrollView.frame;
     workingFrame.origin.x = 0;
 
-    for (UIView *v in [scrollView subviews]) {
+    for (UIView *v in [self.scrollView subviews]) {
         v.frame = workingFrame;
         workingFrame.origin.x = workingFrame.origin.x + workingFrame.size.width;
     }
-    [scrollView setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];
+    CGFloat x = self.pageControl.currentPage * self.scrollView.frame.size.width;
+    [self.scrollView setContentOffset:CGPointMake(x, 0)];
+}
+
+#pragma mark - UIScrollView Delegate methods
+
+-(void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView  {
+    NSInteger pageNumber = roundf(self.scrollView.contentOffset.x / (self.scrollView.frame.size.width));
+    pageControl.currentPage = pageNumber;
 }
 
 @end

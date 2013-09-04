@@ -22,14 +22,5 @@
     return mediaInfo;
 }
 
-+ (NSDictionary *)infoFromGCAccountAsset:(GCAccountAssets *)asset
-{
-    NSMutableDictionary *mediaInfo = [NSMutableDictionary dictionary];
-    [mediaInfo setObject:@"ALAssetTypePhoto" forKey:UIImagePickerControllerMediaType];
-    [mediaInfo setObject:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[asset image_url]]]] forKey:UIImagePickerControllerOriginalImage];
-    [mediaInfo setObject:[NSURL URLWithString:[asset image_url]] forKey:UIImagePickerControllerReferenceURL];
-    
-    return mediaInfo;
 
-}
 @end

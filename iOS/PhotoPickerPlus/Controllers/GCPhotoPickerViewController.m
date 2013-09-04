@@ -269,7 +269,7 @@
         }];
     } failureBlock: ^(NSError *error) {
         // Typically you should handle an error more gracefully than this.
-        NSLog(@"No groups");
+        NSLog(@"No groups to be enumerated.");
     }];
 
 }

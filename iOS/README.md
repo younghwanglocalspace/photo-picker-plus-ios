@@ -10,7 +10,19 @@ This class allows you to pick a photo from any supported online source such as F
 
 Screenshots
 -----------
-
+![screen1](/screenshots/screen1.png)
+![screen2](/screenshots/screen2.png)
+![screen3](/screenshots/screen3.png)
+![screen4](/screenshots/screen4.png)
+![screen5](/screenshots/screen5.png)
+![screen6](/screenshots/screen6.png)
+![screen7](/screenshots/screen7.png)
+![screen8](/screenshots/screen8.png)
+![screen9](/screenshots/screen9.png)
+![screen10](/screenshots/screen10.png)
+![screen11](/screenshots/screen11.png)
+![screen12](/screenshots/screen12.png)
+![screen13](/screenshots/screen13.png)
 
 Initialization
 --------------
@@ -26,20 +38,46 @@ Implementation
 You will need to implement PhotoPickerPlus.h in your .h file. You will also need to put `<PhotoPickerViewControllerDelegate>`
 ```objective-c
 
+	- (void)imagePickerControllerDidCancel:(PhotoPickerViewController *)picker{
+    	if (self.popoverController) {
+        	[self.popoverController dismissPopoverAnimated:YES];
+    	}
+    	else {
+        	[self dismissViewControllerAnimated:YES completion:nil];
+    	}
+	}
+	
     ////////////////////////
     //	  Single Photo	  //
     ////////////////////////
     
     - (void)showPhotoPickerPlus {
     	PhotoPickerViewController *picker = [PhotoPickerViewController new];
-    	[picker setDelegate:self];
-    	[picker setIsMultipleSelectionEnabled:NO];
+    [picker setDelegate:self];
+    [picker setIsMultipleSelectionEnabled:NO];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (![[self popoverController] isPopoverVisible]) {
+            UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:picker];
+            [popover presentPopoverFromRect:[sender frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            self.popoverController = popover;
+        }
+        else {
+            [[self popoverController] dismissPopoverAnimated:YES];
+        }
+    }
+    else {
         [self presentViewController:picker animated:YES completion:nil];
+    }
 	}
 
 	- (void)imagePickerControllerDidCancel:(PhotoPickerViewController *)picker{
-    	//place code for when the user cancels here
-	    //such as removing the picker from the screen
+    	if (self.popoverController) {
+        	[self.popoverController dismissPopoverAnimated:YES];
+    	}
+    	else {
+        	[self dismissViewControllerAnimated:YES completion:nil];
+    	}
 	}
 	
 	- (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
@@ -55,15 +93,31 @@ You will need to implement PhotoPickerPlus.h in your .h file. You will also need
     	PhotoPickerViewController *picker = [PhotoPickerViewController new];
     	[picker setDelegate:self];
     	[picker setIsMultipleSelectionEnabled:YES];
-        [self presentViewController:picker animated:YES completion:nil];
-	}
-
-	- (void)imagePickerControllerDidCancel:(PhotoPickerViewController *)picker{
-    	//place code for when the user cancels here
-	    //such as removing the picker from the screen
+    	
+    	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        	if (![[self popoverController] isPopoverVisible]) {
+            	UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:picker];
+            	[popover presentPopoverFromRect:[sender frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            	self.popoverController = popover;
+        	}
+        	else {
+            	[[self popoverController] dismissPopoverAnimated:YES];
+        	}
+    	}
+    	else {
+        	[self presentViewController:picker animated:YES completion:nil];
+    	}
 	}
 	
 	- (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingArrayOfMediaWithInfo:(NSArray *)info{
 		//place code for when the user picks photos here and do any
 	    //additional work such as removing the picker from the screen
 	}
+```
+
+Tutorials
+---------
+
+[Adding PhotoPicker+ to an Existing Project](/AddToExisting.md)
+
+[Creating a PhotoPicker+ Sample Project](/ChuteStarterProject.md)
