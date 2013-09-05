@@ -1,6 +1,0 @@
-[submodule "iOS/PhotoPickerPlus/Chute-SDK"]
-	path = iOS/PhotoPickerPlus/Chute-SDK
-	url = https://github.com/chute/Chute-SDK.git
-[submodule "Chute-SDK"]
-	path = Chute-SDK
-	url = https://github.com/chute/Chute-SDK.git

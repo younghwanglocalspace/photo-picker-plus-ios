@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="4">
+            <objects>
+                <viewController id="2" customClass="ViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5">
+                        <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CCH-TF-8k8">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="320" id="yOh-fb-Vel"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Pick Photo">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="pickPhotoSelected:" destination="2" eventType="touchUpInside" id="wLL-0k-mfp"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qhm-mb-7US">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="320" id="VWi-B7-0PA"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Pick Multiple Photos">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="pickMultiplePhotosSelected:" destination="2" eventType="touchUpInside" id="NpE-PQ-4oe"/>
+                                </connections>
+                            </button>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJh-V3-VTL"/>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" hidesForSinglePage="YES" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="KFK-2f-2jg">
+                                <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="currentPageIndicatorTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="changePage:" destination="2" eventType="valueChanged" id="1Oj-PZ-8Hg"/>
+                                </connections>
+                            </pageControl>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="IJh-V3-VTL" firstAttribute="leading" secondItem="5" secondAttribute="leading" constant="20" symbolic="YES" type="user" id="4c8-Tt-ch3"/>
+                            <constraint firstItem="CCH-TF-8k8" firstAttribute="top" secondItem="IJh-V3-VTL" secondAttribute="bottom" constant="70" type="user" id="GoW-Jr-EuX"/>
+                            <constraint firstItem="IJh-V3-VTL" firstAttribute="top" secondItem="5" secondAttribute="top" constant="20" symbolic="YES" type="user" id="Kgj-Jm-grd"/>
+                            <constraint firstAttribute="trailing" secondItem="IJh-V3-VTL" secondAttribute="trailing" constant="20" symbolic="YES" type="user" id="LD1-AO-SKC"/>
+                            <constraint firstAttribute="bottom" secondItem="KFK-2f-2jg" secondAttribute="bottom" constant="140" type="user" id="Mdq-Ws-VxA"/>
+                            <constraint firstItem="KFK-2f-2jg" firstAttribute="centerX" secondItem="IJh-V3-VTL" secondAttribute="centerX" type="default" id="bkb-zC-dqv"/>
+                            <constraint firstItem="CCH-TF-8k8" firstAttribute="leading" secondItem="5" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="gJk-Mw-liO"/>
+                            <constraint firstItem="qhm-mb-7US" firstAttribute="baseline" secondItem="CCH-TF-8k8" secondAttribute="baseline" type="default" id="rpp-uj-wfo"/>
+                            <constraint firstAttribute="bottom" secondItem="CCH-TF-8k8" secondAttribute="bottom" constant="71" type="user" id="v1f-AD-rLD"/>
+                            <constraint firstAttribute="trailing" secondItem="qhm-mb-7US" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="vL2-QU-Uiu"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="pageControl" destination="KFK-2f-2jg" id="FD0-gB-DD9"/>
+                        <outlet property="scrollView" destination="IJh-V3-VTL" id="gbB-eM-5n5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <classes>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="ViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="changePage:"/>
+                <relationship kind="action" name="pickMultiplePhotosSelected:"/>
+                <relationship kind="action" name="pickPhotoSelected:"/>
+                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+    </classes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>
