@@ -118,6 +118,6 @@ You will need to implement PhotoPickerPlus.h in your .h file. You will also need
 Tutorials
 ---------
 
-[Adding PhotoPicker+ to an Existing Project](/AddToExisting.md)
+[Adding PhotoPicker+ to an Existing Project](AddToExisting.md)
 
-[Creating a PhotoPicker+ Sample Project](/ChuteStarterProject.md)
+[Creating a PhotoPicker+ Sample Project](ChuteStarterProject.md)
