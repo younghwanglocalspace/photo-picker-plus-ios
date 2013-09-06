@@ -19,6 +19,11 @@
 @property (strong, nonatomic) NSArray           *services;
 
 /**
+ Array used for storing local services.
+ */
+@property (strong, nonatomic) NSArray           *localFeatures;
+
+/**
  Dictionary containing all data needed for authentication.
  */
 @property (strong, nonatomic) NSDictionary      *oauthData;
