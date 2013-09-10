@@ -183,7 +183,7 @@ NSString * const kGCGrantTypeValue = @"authorization_code";
             return i;
         }
     }
-    return nil;
+    return -1;
 }
 
 + (NSString *)loginMethodForService:(GCService)service
@@ -200,7 +200,7 @@ NSString * const kGCGrantTypeValue = @"authorization_code";
             return i;
         }
     }
-    return nil;
+    return -1;
 }
 
 @end

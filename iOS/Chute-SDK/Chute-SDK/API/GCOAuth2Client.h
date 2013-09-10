@@ -19,7 +19,8 @@ typedef enum {
     GCServiceTwitter,
     GCServiceChute,
     GCServiceFoursquare,
-    GCServiceDropbox
+    GCServiceDropbox,
+    kGCServiceUndefined
 } GCService;
 
 @interface GCOAuth2Client : AFHTTPClient {

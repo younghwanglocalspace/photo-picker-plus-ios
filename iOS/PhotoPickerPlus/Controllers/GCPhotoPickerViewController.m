@@ -220,7 +220,6 @@
         GCService service = [GCOAuth2Client serviceForString:serviceName];
         [GCLoginView showOAuth2Client:self.oauth2Client service:service success:^{
             [GCServiceAccount getProfileInfoWithSuccess:^(GCResponseStatus *responseStatus, NSArray *accounts) {
-#warning Doesn't work with merges, this part must be changed in future!
                 GCAccount *account;
                 for (GCAccount *acc in accounts) {
                     if ([[GCOAuth2Client loginMethodForService:service] isEqualToString:acc.type])
