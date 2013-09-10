@@ -52,7 +52,6 @@ static NSString * const kClientGET = @"GET";
         path = [NSString stringWithFormat:@"%@/%@/folders/%@/files",serviceName,accountID,albumIDString];
     }
     
-    NSLog(@"path:%@",path);
     NSMutableURLRequest *request = [apiClient requestWithMethod:kClientGET path:path parameters:nil];
     
     [apiClient request:request success:^(GCResponseStatus *responseStatus, NSArray *folders, NSArray *files) {

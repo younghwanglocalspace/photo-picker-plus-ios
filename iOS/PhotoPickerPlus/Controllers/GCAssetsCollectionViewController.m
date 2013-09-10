@@ -225,8 +225,8 @@
                     [self successBlock](info);
                 } failure:^(NSError *error) {
                     [HUD hide:YES];
-                    NSLog(@"Failure posting data to server.");
-                }];
+                    [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+	                }];
             }
             
         }
@@ -245,7 +245,7 @@
                     [self successBlock](info);
                 } failure:^(NSError *error) {
                     [HUD hide:YES];
-                    NSLog(@"Failure posting data to server.");
+                    [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                 }];
                 
             }

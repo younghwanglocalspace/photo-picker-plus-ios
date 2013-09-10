@@ -112,8 +112,6 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
-    NSLog(@"\n\n Request: %@ \n \n", [request URL]);
-  
 // Gaurav's code
 
  if ([[[request URL] path] isEqualToString:@"/oauth/callback"]) {

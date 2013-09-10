@@ -96,7 +96,7 @@
 
     } failure:^(NSError *error) {
         [MBProgressHUD hideHUDForView:self.navigationController.view animated:NO];
-        [[[UIAlertView alloc] initWithTitle:@"Warning" message:@"Cannot Fetch Account Data!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
 }
 

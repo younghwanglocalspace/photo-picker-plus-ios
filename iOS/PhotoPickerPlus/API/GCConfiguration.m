@@ -12,12 +12,12 @@
 #import <DCKeyValueObjectMapping/DCKeyValueObjectMapping.h>
 
 static NSString * const kGCServices = @"services";
+static NSString * const kGCLocalFeatures = @"local_features";
 static NSString * const kGCOAuth = @"oauth";
 static NSString * const kGCAccounts = @"accounts";
 
 static NSString * const kGCConfiguration = @"GCConfiguration";
 static NSString * const kGCExtension = @"plist";
-//static NSString * const kGCConfigurationURL = @"http://s3.amazonaws.com/store.getchute.com/51eeae5e6e29310c9a000001";
 static NSString *const kGCConfigurationURL = @"https://dl.dropboxusercontent.com/u/23635319/ChuteAPI/config.json";
 
 static GCConfiguration *sharedData = nil;
@@ -25,7 +25,7 @@ static dispatch_queue_t serialQueue;
 
 @implementation GCConfiguration
 
-@synthesize services, oauthData, accounts;
+@synthesize services, localFeatures, oauthData, accounts;
 
 +(id)allocWithZone:(NSZone *)zone
 {
@@ -69,16 +69,16 @@ static dispatch_queue_t serialQueue;
             
             if (![fileManager fileExistsAtPath:path]) {
                 path = [[NSBundle mainBundle] pathForResource:kGCConfiguration ofType:kGCExtension];
-
+                
             }
-
+            
             NSDictionary *savedStock = [[NSDictionary alloc] initWithContentsOfFile: path];
             [self setConfiguration:savedStock];
-
+            
             [self update];
-            }
+        }
     });
-        
+    
     self = obj;
     return self;
 }
@@ -123,6 +123,10 @@ static dispatch_queue_t serialQueue;
         
         self.services = [configuration objectForKey:kGCServices];
     }
+    if ([configuration objectForKey:kGCLocalFeatures]){
+        
+        self.localFeatures = [configuration objectForKey:kGCLocalFeatures];
+    }
     if ([configuration objectForKey:kGCAccounts]) {
         
         DCKeyValueObjectMapping *mapping = [DCKeyValueObjectMapping mapperForClass:[GCAccount class]];
@@ -134,44 +138,43 @@ static dispatch_queue_t serialQueue;
 
 - (void)serialize
 {
-        NSError *error;
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        NSString *path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", kGCConfiguration, kGCExtension]];
-        
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        
-        if ([fileManager fileExistsAtPath: path])
+    NSError *error;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", kGCConfiguration, kGCExtension]];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    if ([fileManager fileExistsAtPath: path])
+    {
+        [fileManager removeItemAtPath:path error:&error];
+    }
+    if (![fileManager fileExistsAtPath: path])
+    {
+        NSMutableDictionary *stockToSave = [[NSMutableDictionary alloc] init];
+        if ([self services])
         {
-            NSLog(@"<KXLog> File: %@",path);
-            [fileManager removeItemAtPath:path error:&error];
+            [stockToSave setObject:services forKey:kGCServices];
         }
-        if (![fileManager fileExistsAtPath: path])
+        if ([self localFeatures])
         {
-            NSMutableDictionary *stockToSave = [[NSMutableDictionary alloc] init];
-            if ([self services])
-            {
-                [stockToSave setObject:services forKey:kGCServices];
-            }
-            if ([self oauthData])
-            {
-                [stockToSave setObject:oauthData forKey:kGCOAuth];
-            }
-            
-            if ([self accounts]) {
-                NSMutableArray *accountDictionaries = [NSMutableArray new];
-                for (GCAccount *account in [self accounts]) {
-                    [accountDictionaries addObject:[account dictionaryValue]];
-                }
-//                DCKeyValueObjectMapping *mapping = [DCKeyValueObjectMapping mapperForClass:[GCAccount class]];
-//                [stockToSave setObject:[mapping serializeObjectArray:self.accounts] forKey:kGCAccounts];
-                NSLog(@"Serialized object: %@", [accountDictionaries objectAtIndex:0]);
-                [stockToSave setObject:accountDictionaries forKey:kGCAccounts];
-            }
-                        
-            NSLog(@"<KXLog> StockToSave: %@", stockToSave);
-            [stockToSave writeToFile:path atomically:YES];
+            [stockToSave setObject:localFeatures forKey:kGCLocalFeatures];
         }
+        if ([self oauthData])
+        {
+            [stockToSave setObject:oauthData forKey:kGCOAuth];
+        }
+        
+        if ([self accounts]) {
+            NSMutableArray *accountDictionaries = [NSMutableArray new];
+            for (GCAccount *account in [self accounts]) {
+                [accountDictionaries addObject:[account dictionaryValue]];
+            }
+            [stockToSave setObject:accountDictionaries forKey:kGCAccounts];
+        }
+        
+        [stockToSave writeToFile:path atomically:YES];
+    }
 }
 
 @end

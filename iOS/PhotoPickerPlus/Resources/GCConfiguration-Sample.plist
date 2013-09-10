@@ -7,9 +7,9 @@
 		<key>scope</key>
 		<string>all_resources manage_resources profile resources</string>
 		<key>client_id</key>
-		<string>50d9c930018d1672df00002e</string>
+		<string>YOUR_CLIENT_ID</string>
 		<key>client_secret</key>
-		<string>ee9b33013c0592aa41d30d1f347ff62514b737e61e6ce9c64fb13a44d31917d9</string>
+		<string>YOUR_CLIENT_SECRET</string>
 		<key>grant_type</key>
 		<string>authorization_code</string>
 		<key>redirect_uri</key>
@@ -25,6 +25,12 @@
 		<string>flickr</string>
 		<string>instagram</string>
 		<string>foursquare</string>
+	</array>
+	<key>local_features</key>
+	<array>
+		<string>take_photo</string>
+		<string>last_taken_photo</string>
+		<string>camera_photos</string>
 	</array>
 </dict>
 </plist>
