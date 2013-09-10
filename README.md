@@ -14,15 +14,15 @@ PhotoPicker+ is a component that enables browsing albums and choosing photo(s) f
 PhotoPicker+ is available for both Android and iOS. For more information please refer to [Android README.md](/Android/ChutePhotoPicker+/README.md) or [iOS README.md](/iOS/README.md) files.
 
 ![nexus_screenshot1](/Android/ChutePhotoPicker+/screenshots/nexus_screenshot1.png)![nexus_screenshot2](/Android/ChutePhotoPicker+/screenshots/nexus_screenshot2.png)![nexus_screenshot3](/Android/ChutePhotoPicker+/screenshots/nexus_screenshot3.png)  
-![screen1](/iOS/screenshots/screen1.png)![screen3](/iOS/screenshots/screen3.png)![screen5](/iOS/screenshots/screen5.png)
+![screen14](/iOS/screenshots/screen14.png)![screen15](/iOS/screenshots/screen15.png)![screen16](/iOS/screenshots/screen16.png)
 
 
 # Changelog
 
 ### v2.0.0
 
-       - Implemented new UI design  
-       - Added support for Google+, GoolgeDrive, SkyDrive and Dropbox  
+       - Implemented new UI design.  
+       - Added support for Google+, GoolgeDrive, SkyDrive and Dropbox.  
        - Introduced configuration for both local and live photo sources.   
        - Enable posting social photos on Chute before returning the result.   
          

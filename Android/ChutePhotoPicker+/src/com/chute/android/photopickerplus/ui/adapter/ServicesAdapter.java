@@ -172,7 +172,7 @@ public class ServicesAdapter extends BaseAdapter {
       break;
     }
 
-    // Click listners
+    // Click listeners
     switch (type) {
     case ALL_PHOTOS:
       holder.imageView.setOnClickListener(new OnClickListener() {
@@ -259,8 +259,6 @@ public class ServicesAdapter extends BaseAdapter {
     case DROPBOX:
       holder.imageView.setBackgroundDrawable(context.getResources().getDrawable(
           R.drawable.dropbox));
-      break;
-    default:
       break;
     }
   }
