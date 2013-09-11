@@ -9,6 +9,7 @@
 #import "GCConfiguration.h"
 #import "GCAccount.h"
 #import "NSObject+GCDictionary.h"
+#import <Chute-SDK/GCOAuth2Client.h>
 #import <DCKeyValueObjectMapping/DCKeyValueObjectMapping.h>
 
 static NSString * const kGCServices = @"services";
@@ -18,10 +19,12 @@ static NSString * const kGCAccounts = @"accounts";
 
 static NSString * const kGCConfiguration = @"GCConfiguration";
 static NSString * const kGCExtension = @"plist";
-static NSString *const kGCConfigurationURL = @"https://dl.dropboxusercontent.com/u/23635319/ChuteAPI/config.json";
+static NSString * const kGCConfigurationURL = @"https://dl.dropboxusercontent.com/u/23635319/ChuteAPI/config.json";
 
 static GCConfiguration *sharedData = nil;
 static dispatch_queue_t serialQueue;
+
+static NSSet *_sLocalFeatures;
 
 @implementation GCConfiguration
 
@@ -60,6 +63,8 @@ static dispatch_queue_t serialQueue;
         obj = [super init];
         
         if (obj) {
+            
+            _sLocalFeatures = [NSSet setWithArray:@[@"take_photo", @"last_taken_photo", @"camera_photos"]];
             
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -121,11 +126,27 @@ static dispatch_queue_t serialQueue;
     }
     if ([configuration objectForKey:kGCServices]){
         
-        self.services = [configuration objectForKey:kGCServices];
+        NSMutableArray *tmpServices = [NSMutableArray array];
+        
+        [[configuration objectForKey:kGCServices] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            
+            if ([GCOAuth2Client serviceForString:obj] != -1) {
+                [tmpServices addObject:obj];
+            }
+        }];
+        self.services = [NSArray arrayWithArray:tmpServices];
     }
     if ([configuration objectForKey:kGCLocalFeatures]){
         
-        self.localFeatures = [configuration objectForKey:kGCLocalFeatures];
+        NSMutableArray *tmpLocalFeatures = [NSMutableArray array];
+        
+        [[configuration objectForKey:kGCLocalFeatures] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            
+            if ([_sLocalFeatures containsObject:obj]) {
+                [tmpLocalFeatures addObject:obj];
+            }
+        }];
+        self.localFeatures = [NSArray arrayWithArray:tmpLocalFeatures];
     }
     if ([configuration objectForKey:kGCAccounts]) {
         
