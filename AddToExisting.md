@@ -3,9 +3,9 @@ Adding Photo Picker+ To A Project
 
 Photo Picker Plus is a drop-in component that replaces the default photo picker in your app.  It allows you to take a photo as well as choose a photo from the device or from several online sources. It also supports multiple selection.  This tutorial will show you how to replace the default UIImagePicker in your application with Photo Picker Plus.  This tutorial was written using version 5.0 of the iOS SDK and version 4.2 of Xcode.  Some changes may need to be made for other software versions.
 
-![image1](https://github.com/chute/photo-picker-plus/raw/master/iOS/screenshots/screen1.png)
-![image2](https://github.com/chute/photo-picker-plus/raw/master/iOS/screenshots/screen2.png)
-![image3](https://github.com/chute/photo-picker-plus/raw/master/iOS/screenshots/screen3.png)
+![image1](/screenshots/screen1.png)
+![image2](/screenshots/screen2.png)
+![image3](/screenshots/screen3.png)
 
 Preparation
 -----------
@@ -14,8 +14,8 @@ Preparation
 	*  For the URL you can enter http://getchute.com/ if you don't have a site for your app
 	*  For the Callback URL you can use http://getchute.com/oauth/callback if you don't need callbacks for another purpose.
 
-![image4](https://github.com/chute/photo-picker-plus/raw/master/iOS/screenshots/1.png)
-![image5](https://github.com/chute/photo-picker-plus/raw/master/iOS/screenshots/2.png)
+![image4](/screenshots/1.png)
+![image5](/screenshots/2.png)
 
 Add The SDK And Component And Link Dependancies
 -----------------------------------------------
@@ -24,14 +24,14 @@ Add The SDK And Component And Link Dependancies
 3. Link the required libraries
      *  AssetsLibrary
 	 *  SenTestingKit
-![image6](https://github.com/chute/photo-picker-plus/raw/master/iOS/screenshots/3.png)
+![image6](/screenshots/3.png)
 
 
 Edit Your App ID And Secret
 ---------------------------
 The next step is to enter your chute app information in the GCConfiguration.plist file.  This file can be found in Resource directory in PhotoPickerPlus directory.  You will need to fill in your APP ID and APP secret from the summary tab of your admin panel.  If you used a custom Redirect URL when setting up your app on Chute you will also need to adjust the `redirect_uri` to match the callback url you set. If you used `http://getchute.com/oauth/callback` then you can leave these as they are.
 
-![image7](https://github.com/chute/photo-picker-plus/raw/master/iOS/screenshots/4.png)
+![image7](/screenshots/4.png)
 
 At this point you may want to try running the project to make sure that everything is added ok.  If it builds then everything should be correctly added and linked.
 
