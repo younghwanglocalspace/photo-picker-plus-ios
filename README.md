@@ -1,3 +1,21 @@
+Important
+==========
+
+There has been a complete rework of the PhotoPicker component. 
+
+If you are using the old legacy code you can find it in the pp-v1-legacy branch.
+Read the documentation and migrate to the new version of the Photo Picker. It contains the Library and a Sample Project which you can use as a reference.
+
+### Native Android Component
+
+
+The Android component has been moved into its own separate GitHub Repository.
+
+You can find it on the following link along with the sample project:
+https://github.com/chute/photo-picker-plus-android
+
+
+
 PhotoPickerPlus
 ==============
 
