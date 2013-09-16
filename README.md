@@ -73,31 +73,22 @@ You will need to implement PhotoPickerPlus.h in your .h file. You will also need
     
     - (void)showPhotoPickerPlus {
     	PhotoPickerViewController *picker = [PhotoPickerViewController new];
-    [picker setDelegate:self];
-    [picker setIsMultipleSelectionEnabled:NO];
+    	[picker setDelegate:self];
+    	[picker setIsMultipleSelectionEnabled:NO];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (![[self popoverController] isPopoverVisible]) {
-            UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:picker];
-            [popover presentPopoverFromRect:[sender frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-            self.popoverController = popover;
-        }
-        else {
-            [[self popoverController] dismissPopoverAnimated:YES];
-        }
-    }
-    else {
-        [self presentViewController:picker animated:YES completion:nil];
-    }
-	}
-
-	- (void)imagePickerControllerDidCancel:(PhotoPickerViewController *)picker{
-    	if (self.popoverController) {
-        	[self.popoverController dismissPopoverAnimated:YES];
+    	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        	if (![[self popoverController] isPopoverVisible]) {
+            	UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:picker];
+            	[popover presentPopoverFromRect:[sender frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+	            self.popoverController = popover;
+    	    }
+        	else {
+            	[[self popoverController] dismissPopoverAnimated:YES];
+	        }
     	}
-    	else {
-        	[self dismissViewControllerAnimated:YES completion:nil];
-    	}
+	    else {
+    	    [self presentViewController:picker animated:YES completion:nil];
+	    }
 	}
 	
 	- (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{

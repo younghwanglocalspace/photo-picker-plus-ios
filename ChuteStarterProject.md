@@ -15,7 +15,7 @@ Start by creating a new Xcode project.  A single view application will be easies
 
 Preparation
 -----------
-1.  Download the PhotoPickerPlus component and Chute SDK from https://github.com/chute/photo-picker-plus/tree/master/iOS/PhotoPickerPlus
+1.  Download the PhotoPickerPlus component and Chute SDK from https://github.com/chute/photo-picker-plus-ios
 2.  Create a Chute developer account and make a new app in Chute at http://apps.getchute.com/
 	*  For the URL you can enter http://getchute.com/ if you don't have a site for your app
 	*  For the Callback URL you can use http://getchute.com/oauth/callback if you don't need callbacks for another purpose.
@@ -45,7 +45,7 @@ Set ViewController As Delegate And Add Objects/Methods
 -----------------------------------------------
 In your viewController.h file import PhotoPickerViewController.h and set up the class as a `PhotoPickerViewControllerDelegate`.  Then add an object for the scrollView, pageControl and popOverController and a methods for changing value of the pageControl and pressing the pick photo button and pick multiple photos button.  This should look similar to this
 
-viewController.h
+ViewController.h
 
 ```objective-c
 	#import <UIKit/UIKit.h>
@@ -64,11 +64,11 @@ viewController.h
 	@end
 ```
 
-Synthesize ImageView And Write The Display Method
+Synthesize Objects And Write The Display Methods
 -------------------------------------------------
 In viewController.m you now need to synthesize your objects and write the methods to display the photo picker plus component.  The method will initialize the controller, set itself as the delegate, set single or multiple selection by setting isMultipleSelectionEnabled and present it. For the iPad version the component is presented as pop over.
 
-viewController.m
+ViewController.m
 
 ```objective-c
 	@synthesize scrollView, pageControl, popoverController;
@@ -118,7 +118,7 @@ Write The Delegate Methods
 --------------------------
 The PhotoPickerViewControllerDelegate methods are just as same as in UIImagePickerControllerDelegate, the only difference is the class type of the picker.  These work exactly the same as the UIImagePickerController delegate methods to make things easier.  You can refer to Apple's documentation on UIImagePickerControllerDelegate to see what the keys in the dictionary are.  The only one we are going to be concerned with is `UIImagePickerControllerOriginalImage`.  So our cancel method will just dismiss the picker and our success method will display the image in the scrollView and dismiss the picker.  The code for these methods is
 
-viewController.m
+ViewController.m
 
 ```objective-c
 	- (void)imagePickerControllerDidCancel:(PhotoPickerViewController *)picker
@@ -236,7 +236,7 @@ Create The UI
 -------------
 Open MainStoryboard_iPhone.storyboard and add an UIScrollView covering most of the view. Underneath place UIPageControl and two UIButton below it.  Hook the UIScrollView up to the scrollView object, the UIPageControl to the pageControl object, the pickPhotoSelected action to the touchUpInside event of the button, the pickMultiplePhotosSelected action to the touchUpInside event of the button and the changePage action to the valueChanged event of the page control.  You do this by right clicking on the view controller and dragging from the circle for the outlet or action that you want to it's corresponding object either in the object's list or in the view itself.  You can set the title for the buttons whatever you want by selecting it then changing it's title in the attribute inspector on the right side of the screen.  I called mine Pick Photo and Pick Multiple Photos.
 
-![image9](https://github.com/chute/photo-picker-plus/raw/master/iOS/screenshots/6.png)
+![image9](/screenshots/6.png)
 
 Conclusion
 ----------

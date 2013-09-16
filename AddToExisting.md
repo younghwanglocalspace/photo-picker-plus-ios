@@ -9,7 +9,7 @@ Photo Picker Plus is a drop-in component that replaces the default photo picker 
 
 Preparation
 -----------
-1.  Download the PhotoPickerPlus component and Chute SDK from https://github.com/chute/photo-picker-plus/tree/master/iOS/PhotoPickerPlus
+1.  Download the PhotoPickerPlus component and Chute SDK from https://github.com/chute/photo-picker-plus-ios
 2.  If you don't have a Chute developer account or an app created on chute for this project then create a Chute developer account and make a new app in Chute at http://apps.getchute.com/
 	*  For the URL you can enter http://getchute.com/ if you don't have a site for your app
 	*  For the Callback URL you can use http://getchute.com/oauth/callback if you don't need callbacks for another purpose.
@@ -52,10 +52,10 @@ In the header for the controller that will be using the component `#import "Phot
 
 Change The Delegate Methods
 ---------------------------
-In your class change UIImagePickerController delegate methods just change the class type of the picker from  `UIImagePickerController` to `PhotoPickerViewController`.  You can leave the code in these methods exactly the same as you had before because the return values are the same format.
+In your class, in UIImagePickerController delegate methods, just change the class type of the picker from  `UIImagePickerController` to `PhotoPickerViewController`.  You can leave the code in these methods exactly the same as you had before because the return values are the same format.
 
 ```objective-c
-	-(void) PhotoPickerPlusControllerDidCancel:(PhotoPickerPlus *)picker{
+	- (void)imagePickerControllerDidCancel:(PhotoPickerViewController *)picker{
 	    //cancel code
 	}
 	- (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

@@ -122,7 +122,9 @@
     else
     {
         NSString *serviceName = [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row];
-        GCService service = [GCOAuth2Client serviceForString:serviceName];
+//        GCService service = [GCOAuth2Client serviceForString:serviceName];
+        GCLoginType loginType = [[GCConfiguration configuration] loginTypeForString:serviceName];
+        NSString *loginTypeString = [[GCConfiguration configuration] loginTypeString:loginType];
         
         NSString *imageName = [NSString stringWithFormat:@"%@.png", serviceName];
         UIImage *temp = [UIImage imageNamed:imageName];
@@ -131,7 +133,8 @@
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 
         for (GCAccount *account in [[GCConfiguration configuration] accounts]) {
-            if ([account.type isEqualToString:[GCOAuth2Client loginMethodForService:service]]) {
+            if([account.type isEqualToString:loginTypeString]){
+//            if ([account.type isEqualToString:[GCOAuth2Client loginMethodForService:service]]) {
                 if (account.name) {
                     cellTitle = account.name;
                 }
@@ -199,37 +202,43 @@
         self.isItDevice = NO;
         
         NSString *serviceName = [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row];
+        GCLoginType loginType = [[GCConfiguration configuration] loginTypeForString:serviceName];
+        NSString *loginTypeString = [[GCConfiguration configuration] loginTypeString:loginType];
+        
         
         for (GCAccount *account in [[GCConfiguration configuration] accounts]) {
-            if ([account.type isEqualToString:serviceName]) {
-                
-                GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];
-                [amVC setIsItDevice:self.isItDevice];
-                [amVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-                [amVC setAccountID:account.id];
-                [amVC setServiceName:serviceName];
-                [amVC setSuccessBlock:[self successBlock]];
-                [amVC setCancelBlock:[self cancelBlock]];
-                
-                [self.navigationController pushViewController:amVC animated:YES];
-                [self.tableView reloadData];
-                return;
+            if(![account.type isEqualToString:@"google"])
+            {
+                if ([account.type isEqualToString:loginTypeString]) {
+                    
+                    GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];
+                    [amVC setIsItDevice:self.isItDevice];
+                    [amVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+                    [amVC setAccountID:account.id];
+                    [amVC setServiceName:serviceName];
+                    [amVC setSuccessBlock:[self successBlock]];
+                    [amVC setCancelBlock:[self cancelBlock]];
+                    
+                    [self.navigationController pushViewController:amVC animated:YES];
+                    [self.tableView reloadData];
+                    return;
+                }
             }
         }
+        //        GCService service = [GCOAuth2Client serviceForString:serviceName];
         
-        GCService service = [GCOAuth2Client serviceForString:serviceName];
-        [GCLoginView showOAuth2Client:self.oauth2Client service:service success:^{
+        [GCLoginView showOAuth2Client:self.oauth2Client withLoginType:loginType success:^{
             [GCServiceAccount getProfileInfoWithSuccess:^(GCResponseStatus *responseStatus, NSArray *accounts) {
                 GCAccount *account;
                 for (GCAccount *acc in accounts) {
-                    if ([[GCOAuth2Client loginMethodForService:service] isEqualToString:acc.type])
+                    if ([loginTypeString isEqualToString:acc.type])
                         account = acc;
                     
                     [[GCConfiguration configuration] addAccount:acc];
                 }
                 if (!account)
                     return;
-                                
+                
                 GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];
                 [amVC setIsItDevice:self.isItDevice];
                 [amVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
@@ -240,13 +249,42 @@
                 
                 [self.tableView reloadData];
                 [self.navigationController pushViewController:amVC animated:YES];
-                
             } failure:^(NSError *error) {
                 [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
             }];
         } failure:^(NSError *error) {
             NSLog(@"Failure - %@", [error localizedDescription]);
         }];
+        
+//        [GCLoginView showOAuth2Client:self.oauth2Client service:service success:^{
+//            [GCServiceAccount getProfileInfoWithSuccess:^(GCResponseStatus *responseStatus, NSArray *accounts) {
+//                GCAccount *account;
+//                for (GCAccount *acc in accounts) {
+//                    if ([[GCOAuth2Client loginMethodForService:service] isEqualToString:acc.type])
+//                        account = acc;
+//                    
+//                    [[GCConfiguration configuration] addAccount:acc];
+//                }
+//                if (!account)
+//                    return;
+//                                
+//                GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];
+//                [amVC setIsItDevice:self.isItDevice];
+//                [amVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+//                [amVC setAccountID:account.id];
+//                [amVC setServiceName:serviceName];
+//                [amVC setSuccessBlock:[self successBlock]];
+//                [amVC setCancelBlock:[self cancelBlock]];
+//                
+//                [self.tableView reloadData];
+//                [self.navigationController pushViewController:amVC animated:YES];
+//                
+//            } failure:^(NSError *error) {
+//                [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+//            }];
+//        } failure:^(NSError *error) {
+//            NSLog(@"Failure - %@", [error localizedDescription]);
+//        }];
 
     }
 }

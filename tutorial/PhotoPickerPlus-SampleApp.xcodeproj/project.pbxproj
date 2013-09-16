@@ -37,7 +37,6 @@
 		CCA4C50C17B5BDED00D203A9 /* PhotoPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA4C50B17B5BDEC00D203A9 /* PhotoPickerViewController.m */; };
 		CCC159FE17DE6E48008F03E1 /* GCConfiguration-Sample.plist in Resources */ = {isa = PBXBuildFile; fileRef = CCC159FD17DE6E48008F03E1 /* GCConfiguration-Sample.plist */; };
 		CCE8E20917C51D3E0058A203 /* GCAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE8E20717C51D3E0058A203 /* GCAlbumViewController.m */; };
-		E433D04B17B4E65F00D3D39B /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E46AA17A5C0FB00BEF5B8 /* SenTestingKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E43C535517BE72D000680283 /* gradient_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = E43C535417BE72CF00680283 /* gradient_blue.png */; };
 		E441096017C7C5C200FCAEBD /* album_default.png in Resources */ = {isa = PBXBuildFile; fileRef = E441095F17C7C5C200FCAEBD /* album_default.png */; };
 		E4464FBE17CCFABF00C83F14 /* dropbox.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FB617CCFABF00C83F14 /* dropbox.png */; };
@@ -182,7 +181,6 @@
 				CC7E468417A5C0FA00BEF5B8 /* UIKit.framework in Frameworks */,
 				CC7E468617A5C0FA00BEF5B8 /* Foundation.framework in Frameworks */,
 				CC7E468817A5C0FA00BEF5B8 /* CoreGraphics.framework in Frameworks */,
-				E433D04B17B4E65F00D3D39B /* SenTestingKit.framework in Frameworks */,
 				E5C227AF2E6B4E428ADAEC4B /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

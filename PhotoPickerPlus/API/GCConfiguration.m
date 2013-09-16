@@ -25,6 +25,7 @@ static GCConfiguration *sharedData = nil;
 static dispatch_queue_t serialQueue;
 
 static NSSet *_sLocalFeatures;
+static NSDictionary *_dServiceFeatures;
 
 @implementation GCConfiguration
 
@@ -65,7 +66,19 @@ static NSSet *_sLocalFeatures;
         if (obj) {
             
             _sLocalFeatures = [NSSet setWithArray:@[@"take_photo", @"last_taken_photo", @"camera_photos"]];
-            
+            _dServiceFeatures = @{@"facebook":@"facebook",
+                                  @"google": @"google",
+                                  @"googledrive": @"google",
+                                  @"instagram": @"instagram",
+                                  @"flickr": @"flickr",
+                                  @"picasa": @"google",
+                                  @"dropbox": @"dropbox",
+                                  @"skydrive": @"microsoft_account",
+                                  @"twitter":@"twitter",
+                                  @"chute":@"chute",
+                                  @"foursquare":@"foursquare"
+                                  };
+           
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *documentsDirectory = [paths objectAtIndex:0];
             NSString *path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", kGCConfiguration, kGCExtension]];
@@ -130,9 +143,17 @@ static NSSet *_sLocalFeatures;
         
         [[configuration objectForKey:kGCServices] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             
-            if ([GCOAuth2Client serviceForString:obj] != -1) {
+            if([[_dServiceFeatures allKeys] containsObject:obj]) {
+                
+//                NSString *loginTypeString = [_dServiceFeatures objectForKey:obj];
+//                GCLoginType *loginType = [self loginTypeForString:loginTypeString];
+                
                 [tmpServices addObject:obj];
             }
+//            
+//            if ([GCOAuth2Client serviceForString:obj] != -1) {
+//                [tmpServices addObject:obj];
+//            }
         }];
         self.services = [NSArray arrayWithArray:tmpServices];
     }
@@ -196,6 +217,25 @@ static NSSet *_sLocalFeatures;
         
         [stockToSave writeToFile:path atomically:YES];
     }
+}
+
+- (GCLoginType)loginTypeForString:(NSString *)serviceString
+{
+    __block NSString *loginType = [_dServiceFeatures objectForKey:serviceString];
+    
+    for (int i = 0; i <kGCLoginTypeCount; i++) {
+        if ([loginType isEqualToString:kGCLoginTypes[i]]){
+            return i;
+        }
+    }
+    return -1;
+}
+
+- (NSString *)loginTypeString:(GCLoginType)loginType
+{
+    if(loginType >= kGCLoginTypeCount)
+        return @"";
+    return kGCLoginTypes[loginType];
 }
 
 @end

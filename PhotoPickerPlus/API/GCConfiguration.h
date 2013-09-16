@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Chute-SDK/GCOAuth2Client.h>
 
 @class GCAccount;
 
@@ -55,5 +56,10 @@
 */
 
 - (void)addAccount:(GCAccount *)account;
+
+- (GCLoginType)loginTypeForString:(NSString *)serviceString;
+
+- (NSString *)loginTypeString:(GCLoginType)loginType;
+
 
 @end
