@@ -15,6 +15,7 @@
 		CC72FBCC17B6142B00E3981B /* GCAccountAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBC917B6142B00E3981B /* GCAccountAssets.m */; };
 		CC72FBCF17B6156600E3981B /* GCConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBCE17B6156600E3981B /* GCConfiguration.m */; };
 		CC72FBD217B63FCF00E3981B /* NSObject+GCDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBD117B63FCF00E3981B /* NSObject+GCDictionary.m */; };
+		CC75DDFC17EBC79700FE1405 /* GCConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = CC75DDFB17EBC79700FE1405 /* GCConfiguration.plist */; };
 		CC7E468417A5C0FA00BEF5B8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E468317A5C0FA00BEF5B8 /* UIKit.framework */; };
 		CC7E468617A5C0FA00BEF5B8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E468517A5C0FA00BEF5B8 /* Foundation.framework */; };
 		CC7E468817A5C0FA00BEF5B8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E468717A5C0FA00BEF5B8 /* CoreGraphics.framework */; };
@@ -68,7 +69,6 @@
 		E4BDB53D17B55C9C000D4034 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52917B55C9C000D4034 /* camera.png */; };
 		E4BDB53E17B55C9C000D4034 /* chute.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52A17B55C9C000D4034 /* chute.png */; };
 		E4BDB53F17B55C9C000D4034 /* defaultThumb.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52B17B55C9C000D4034 /* defaultThumb.png */; };
-		E4BDB54217B55C9C000D4034 /* GCConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52E17B55C9C000D4034 /* GCConfiguration.plist */; };
 		E5C227AF2E6B4E428ADAEC4B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAF8DED3820048119B12E914 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -97,6 +97,7 @@
 		CC72FBCE17B6156600E3981B /* GCConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCConfiguration.m; sourceTree = "<group>"; };
 		CC72FBD017B63FCF00E3981B /* NSObject+GCDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+GCDictionary.h"; sourceTree = "<group>"; };
 		CC72FBD117B63FCF00E3981B /* NSObject+GCDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+GCDictionary.m"; sourceTree = "<group>"; };
+		CC75DDFB17EBC79700FE1405 /* GCConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GCConfiguration.plist; sourceTree = "<group>"; };
 		CC7E468017A5C0FA00BEF5B8 /* PhotoPickerPlus-SampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PhotoPickerPlus-SampleApp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC7E468317A5C0FA00BEF5B8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CC7E468517A5C0FA00BEF5B8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -168,7 +169,6 @@
 		E4BDB52917B55C9C000D4034 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		E4BDB52A17B55C9C000D4034 /* chute.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chute.png; sourceTree = "<group>"; };
 		E4BDB52B17B55C9C000D4034 /* defaultThumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultThumb.png; sourceTree = "<group>"; };
-		E4BDB52E17B55C9C000D4034 /* GCConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GCConfiguration.plist; sourceTree = "<group>"; };
 		EAF8DED3820048119B12E914 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -398,8 +398,8 @@
 				E4464FCC17CCFCB800C83F14 /* flickr.png */,
 				E4464FCD17CCFCB800C83F14 /* picasa@2x.png */,
 				E4BDB52B17B55C9C000D4034 /* defaultThumb.png */,
-				E4BDB52E17B55C9C000D4034 /* GCConfiguration.plist */,
 				CCC159FD17DE6E48008F03E1 /* GCConfiguration-Sample.plist */,
+				CC75DDFB17EBC79700FE1405 /* GCConfiguration.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -478,6 +478,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC7E468E17A5C0FA00BEF5B8 /* InfoPlist.strings in Resources */,
+				CC75DDFC17EBC79700FE1405 /* GCConfiguration.plist in Resources */,
 				CC7E469617A5C0FA00BEF5B8 /* Default.png in Resources */,
 				CC7E469817A5C0FA00BEF5B8 /* Default@2x.png in Resources */,
 				CC7E469A17A5C0FA00BEF5B8 /* Default-568h@2x.png in Resources */,
@@ -486,7 +487,6 @@
 				E4BDB53D17B55C9C000D4034 /* camera.png in Resources */,
 				E4BDB53E17B55C9C000D4034 /* chute.png in Resources */,
 				E4BDB53F17B55C9C000D4034 /* defaultThumb.png in Resources */,
-				E4BDB54217B55C9C000D4034 /* GCConfiguration.plist in Resources */,
 				E4A0114F17BE3B1F0097D3BF /* overlay@2x.png in Resources */,
 				E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */,
 				E43C535517BE72D000680283 /* gradient_blue.png in Resources */,

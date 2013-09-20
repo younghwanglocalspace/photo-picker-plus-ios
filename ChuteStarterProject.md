@@ -33,11 +33,32 @@ Add The SDK And Component And Link Dependancies
 
 ![image7](/screenshots/3.png)
 
-Edit Your App ID And Secret
+Configure the PhotoPicker
 ---------------------------
-The next step is to enter your chute app information in the GCConfiguration.plist file.  This file can be found in Resource directory in PhotoPickerPlus directory.  You will need to fill in your APP ID and APP secret from the summary tab of your admin panel.  If you used a custom Redirect URL when setting up your app on Chute you will also need to adjust the `redirect_uri` to match the callback url you set. If you used `http://getchute.com/oauth/callback` then you can leave these as they are.
+The next step is to enter your chute app information in the GCConfiguration.plist file. This file can be found in Resource directory in PhotoPickerPlus directory.  You will need to fill in your APP ID and APP secret from the summary tab of your admin panel. 
 
 ![image8](/screenshots/4.png)
+
+Also in the configuration file 2 arrays, `services` for the web sources for the PP+ (Facebook, Instagram, etc.) and `local_features` for accessing the local assets. The items that will be listed in the `GCConfiguration.plist` are the ones that will be available in the PP+. This configuration is the initial configuration for the picker, but in `GCConfiguration.m` there's a constant defined as `kGCConfigurationURL`. That constant is for the remote configuration of the PP+, which consists of a JSON object with the listed services & local_features. That way it's possible for the PP+ to be remotely configured in future.
+    {
+    	"services":[
+    		"facebook", 
+    		"google", 
+    		"googledrive", 
+    		"instagram", 
+    		"flickr", 
+    		"picasa", 
+    		"dropbox", 
+    		"skydrive",
+    		"test" 
+    	],
+    	"local_features":[
+    		"take_photo",
+    		"last_taken_photo",
+    		"camera_photos",
+    		"test"
+    	]
+    }
 
 At this point you may want to try running the project to make sure that everything is added ok.  If it builds then everything should be correctly added and linked.
 

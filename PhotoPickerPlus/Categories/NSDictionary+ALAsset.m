@@ -20,6 +20,10 @@
     [mediaInfo setObject:[[asset valueForProperty:ALAssetPropertyURLs] valueForKey:[[[asset valueForProperty:ALAssetPropertyURLs] allKeys] objectAtIndex:0]] forKey:UIImagePickerControllerReferenceURL];
 
     return mediaInfo;
+    
+    void (^animations)() = ^(){
+        //Your animation code
+    };
 }
 
 
