@@ -40,25 +40,28 @@ The next step is to enter your chute app information in the GCConfiguration.plis
 ![image8](/screenshots/4.png)
 
 Also in the configuration file 2 arrays, `services` for the web sources for the PP+ (Facebook, Instagram, etc.) and `local_features` for accessing the local assets. The items that will be listed in the `GCConfiguration.plist` are the ones that will be available in the PP+. This configuration is the initial configuration for the picker, but in `GCConfiguration.m` there's a constant defined as `kGCConfigurationURL`. That constant is for the remote configuration of the PP+, which consists of a JSON object with the listed services & local_features. That way it's possible for the PP+ to be remotely configured in future.
-        {
-        	"services":[
-        		"facebook", 
-        		"google", 
-        		"googledrive", 
-        		"instagram", 
-        		"flickr", 
-        		"picasa", 
-        		"dropbox", 
-        		"skydrive",
-        		"test" 
-        	],
-        	"local_features":[
-        		"take_photo",
-        		"last_taken_photo",
-        		"camera_photos",
-        		"test"
-        	]
-        }
+
+```
+{
+	"services":[
+		"facebook", 
+		"google", 
+		"googledrive", 
+		"instagram", 
+		"flickr", 
+		"picasa", 
+		"dropbox", 
+		"skydrive",
+		"test" 
+	],
+	"local_features":[
+		"take_photo",
+		"last_taken_photo",
+		"camera_photos",
+		"test"
+	]
+}
+```
 
 At this point you may want to try running the project to make sure that everything is added ok.  If it builds then everything should be correctly added and linked.
 
