@@ -52,13 +52,11 @@ Also in the configuration file 2 arrays, `services` for the web sources for the 
 		"picasa", 
 		"dropbox", 
 		"skydrive",
-		"test" 
 	],
 	"local_features":[
 		"take_photo",
 		"last_taken_photo",
 		"camera_photos",
-		"test"
 	]
 }
 ```
