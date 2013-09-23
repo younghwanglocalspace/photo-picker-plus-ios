@@ -1,1 +1,1 @@
-../../../../Chute-SDK/Chute-SDK/Models/GCAlbum.h
+../../Chute-SDK/Chute-SDK/Models/GCAlbum.h

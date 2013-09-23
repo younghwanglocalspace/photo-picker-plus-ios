@@ -1,1 +1,1 @@
-../../../../Chute-SDK/Chute-SDK/Models/GCUser.h
+../../Chute-SDK/Chute-SDK/Models/GCUser.h

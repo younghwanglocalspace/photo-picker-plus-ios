@@ -1,1 +1,1 @@
-../../../../Chute-SDK/Chute-SDK/API/Services/GCServiceComment.h
+../../Chute-SDK/Chute-SDK/API/Services/GCServiceComment.h

@@ -1,1 +1,1 @@
-../../../../Chute-SDK/Chute-SDK/Models/GCVoteCount.h
+../../Chute-SDK/Chute-SDK/Models/GCVoteCount.h

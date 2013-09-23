@@ -14,13 +14,13 @@
 #import "GCConfiguration.h"
 #import "NSDictionary+GCAccountAsset.h"
 
-#import <Chute-SDK/GCOAuth2Client.h>
-#import <Chute-SDK/NSString+QueryString.h>
-#import <Chute-SDK/GCResponse.h>
-#import <Chute-SDK/GCClient.h>
-#import <Chute-SDK/GCResponseStatus.h>
-#import <Chute-SDK/GCAsset.h>
-#import <AFNetworking/AFJSONRequestOperation.h>
+#import "GCOAuth2Client.h"
+#import "NSString+QueryString.h"
+#import "GCResponse.h"
+#import "GCClient.h"
+#import "GCResponseStatus.h"
+#import "GetChute.h"
+#import "AFJSONRequestOperation.h"
 
 static NSString * const kGCAuth = @"Authorization";
 static NSString * const kClientGET = @"GET";

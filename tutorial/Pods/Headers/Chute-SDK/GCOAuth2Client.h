@@ -1,1 +1,1 @@
-../../../../Chute-SDK/Chute-SDK/API/GCOAuth2Client.h
+../../Chute-SDK/Chute-SDK/API/GCOAuth2Client.h

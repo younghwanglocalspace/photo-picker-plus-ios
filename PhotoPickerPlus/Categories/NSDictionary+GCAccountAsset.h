@@ -45,7 +45,7 @@
  
  @return `NSDictionary`
  
- @warning This method requires `GCAsset` class. Add an `#import <Chute-SDK/GCAsset.h>` to your header file.
+ @warning This method requires `GCAsset` class. Add an `#import "GCAsset.h"` to your header file.
  */
 + (NSDictionary *)infoFromGCAsset:(GCAsset *)asset;
 

@@ -1,1 +1,1 @@
-../../../../Chute-SDK/Chute-SDK/Models/GCUploadingAsset.h
+../../Chute-SDK/Chute-SDK/Models/GCUploadingAsset.h

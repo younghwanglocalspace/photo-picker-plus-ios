@@ -11,7 +11,7 @@
 #import "GCAssetsCollectionViewController.h"
 #import "GCServiceAccount.h"
 
-#import <MBProgressHUD/MBProgressHUD.h>
+#import "MBProgressHUD.h"
 
 @interface GCAccountMediaViewController ()
 

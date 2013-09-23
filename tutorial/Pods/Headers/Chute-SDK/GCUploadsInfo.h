@@ -1,1 +1,1 @@
-../../../../Chute-SDK/Chute-SDK/Models/GCUploadsInfo.h
+../../Chute-SDK/Chute-SDK/Models/GCUploadsInfo.h

@@ -9,8 +9,7 @@
 #import "GCConfiguration.h"
 #import "GCAccount.h"
 #import "NSObject+GCDictionary.h"
-#import <Chute-SDK/GCOAuth2Client.h>
-#import <DCKeyValueObjectMapping/DCKeyValueObjectMapping.h>
+#import "DCKeyValueObjectMapping.h"
 
 static NSString * const kGCServices = @"services";
 static NSString * const kGCLocalFeatures = @"local_features";

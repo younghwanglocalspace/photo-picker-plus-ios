@@ -7,14 +7,14 @@
 //
 
 #import "PhotoPickerClient.h"
-#import <AFJSONRequestOperation.h>
+#import "AFJSONRequestOperation.h"
 #import "GCAccountAlbum.h"
 #import "GCAccountAssets.h"
 
-#import <Chute-SDK/GCResponse.h>
-#import <Chute-SDK/GCResponseStatus.h>
-#import <Chute-SDK/GCPagination.h>
-#import <DCKeyValueObjectMapping.h>
+#import "GCResponse.h"
+#import "GCResponseStatus.h"
+#import "GCPagination.h"
+#import "DCKeyValueObjectMapping.h"
 
 static NSString * const kBaseURLString = @"http://accounts.getchute.com/v2/";
 //static NSString * const kBaseURLString = @"https://dl.dropboxusercontent.com/u/23635319/ChuteAPI/files.json";

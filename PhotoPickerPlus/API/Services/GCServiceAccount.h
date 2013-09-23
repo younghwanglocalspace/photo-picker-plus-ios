@@ -23,7 +23,7 @@
  
  @param failure A block object to be executed when the operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes one argument: `NSError` object describing the network or parsing error that occurred.
  
- @warning This method require `GCResponseStatus` class. Add an `#import <Chute-SDK/GCResponseStatus.h>` in your header/implementation file.
+ @warning This method require `GCResponseStatus` class. Add an `#import "GCResponseStatus.h"` in your header/implementation file.
 */
 + (void)getProfileInfoWithSuccess:(void(^)(GCResponseStatus *responseStatus,NSArray *accounts))success failure:(void (^)(NSError *error))failure;
 
@@ -40,7 +40,7 @@
  
  @param failure A block object to be executed when the operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes one argument: `NSError` object describing the network or parsing error that occurred.
  
- @warning This method require `GCResponseStatus` class. Add an `#import <Chute-SDK/GCResponseStatus.h>` in your header/implementation file.
+ @warning This method require `GCResponseStatus` class. Add an `#import "GCResponseStatus.h"` in your header/implementation file.
 */
 + (void)getDataForServiceWithName:(NSString *)serviceName forAccountWithID:(NSNumber *)accountID forAlbumWithID:(NSNumber *)albumID success:(void(^)(GCResponseStatus *responseStatus,NSArray *folders, NSArray *files))success failure:(void(^)(NSError *error))failure;
 
@@ -53,7 +53,7 @@
  
  @param failure A block object to be executed when the operation finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes one argument: `NSError` object describing the network or parsing error that occurred.
  
- @warning This method require `GCResponseStatus` class. Add an `#import <Chute-SDK/GCResponseStatus.h>` in your header/implementation file.
+ @warning This method require `GCResponseStatus` class. Add an `#import "GCResponseStatus.h"` in your header/implementation file.
 */
 + (void)postSelectedImages:(NSArray *)selectedImages success:(void(^)(GCResponseStatus *responseStatus, NSArray *returnedArray))success failure:(void(^)(NSError *error))failure;
 

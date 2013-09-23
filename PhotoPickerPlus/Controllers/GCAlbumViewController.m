@@ -12,7 +12,7 @@
 #import "GCAccountAlbum.h"
 #import "PhotoPickerCell.h"
 
-#import <MBProgressHUD.h>
+#import "MBProgressHUD.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 
 

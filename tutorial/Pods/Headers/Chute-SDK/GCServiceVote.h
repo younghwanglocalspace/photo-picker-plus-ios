@@ -1,1 +1,1 @@
-../../../../Chute-SDK/Chute-SDK/API/Services/GCServiceVote.h
+../../Chute-SDK/Chute-SDK/API/Services/GCServiceVote.h

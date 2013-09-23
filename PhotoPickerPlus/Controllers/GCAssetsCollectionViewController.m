@@ -13,9 +13,9 @@
 #import "NSDictionary+ALAsset.h"
 #import "NSDictionary+GCAccountAsset.h"
 
-#import <MBProgressHUD.h>
-#import <AFNetworking.h>
-#import <Chute-SDK/GCAsset.h>
+#import "MBProgressHUD.h"
+#import "AFNetworking.h"
+#import "GCAsset.h"
 
 @interface GCAssetsCollectionViewController ()
 

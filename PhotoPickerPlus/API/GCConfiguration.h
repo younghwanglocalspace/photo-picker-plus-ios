@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Chute-SDK/GCOAuth2Client.h>
+#import "GCOAuth2Client.h"
 
 @class GCAccount;
 

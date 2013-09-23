@@ -1,1 +1,1 @@
-../../../../Chute-SDK/Chute-SDK/Views/GCPopupView.h
+../../Chute-SDK/Chute-SDK/Views/GCPopupView.h

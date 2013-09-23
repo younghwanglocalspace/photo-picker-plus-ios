@@ -17,10 +17,8 @@
 #import "GCAccount.h"
 #import "GCConfiguration.h"
 
-#import <Chute-SDK/GCOAuth2Client.h>
-#import <Chute-SDK/GCLoginView.h>
-#import <MBProgressHUD/MBProgressHUD.h>
-
+#import "GetChute.h"
+#import "MBProgressHUD.h"
 
 @interface GCPhotoPickerViewController ()
 

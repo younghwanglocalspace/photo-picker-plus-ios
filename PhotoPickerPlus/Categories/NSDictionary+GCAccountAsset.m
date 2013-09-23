@@ -8,7 +8,7 @@
 
 #import "NSDictionary+GCAccountAsset.h"
 #import "GCAccountAssets.h"
-#import <Chute-SDK/GCAsset.h>
+#import "GCAsset.h"
 
 @implementation NSDictionary (GCAccountAsset)
 

@@ -8,7 +8,7 @@
 
 #import "PhotoPickerViewController.h"
 #import "GCPhotoPickerViewController.h"
-#import <Chute-SDK/GCOAuth2Client.h>
+#import "GCOAuth2Client.h"
 #import "GCConfiguration.h"
 
 @interface PhotoPickerViewController ()
