@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "PhotoPickerPlus"
-  s.version      = "2.0.2"
+  s.version      = "2.0.0"
   s.summary      = "iOS component for picking photos from the iDevice & web using the Chute Platform."
   s.homepage     = "http://getchute.com"
   s.license      = {:type => 'MIT'}
