@@ -19,7 +19,7 @@ https://github.com/chute/photo-picker-plus-android
 PhotoPickerPlus
 ==============
 
-no external dependancies beyond Chute SDK which you can also find here:
+No external dependancies beyond Chute SDK which you can also find here:
 
 https://github.com/chute/Chute-SDK-v2-iOS
 
