@@ -130,6 +130,12 @@ static NSDictionary *sGCServiceFeatures;
     [self serialize];
 }
 
+- (void)removeAllAccounts
+{
+    [self.accounts removeAllObjects];
+    [self serialize];
+}
+
 - (void)setConfiguration:(NSDictionary *)configuration
 {
     if ([configuration objectForKey:kGCOAuth]){

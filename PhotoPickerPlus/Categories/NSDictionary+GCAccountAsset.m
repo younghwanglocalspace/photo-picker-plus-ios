@@ -67,10 +67,10 @@
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     if (data && !error) {
-        NSLog(@"Error loading image from web. %@", [error localizedDescription]);
         return [UIImage imageWithData:data];
     }
     else {
+        NSLog(@"Error loading image from web. %@", [error localizedDescription]);
         return nil;
     }
 }

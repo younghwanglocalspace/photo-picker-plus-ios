@@ -49,7 +49,7 @@
     [super viewDidLoad];
     self.navigationItem.title = @"Photo Picker";
     
-    [self setCancelButton];
+    [self setNavBarItems];
     [self.tableView registerClass:[PhotoPickerCell class] forCellReuseIdentifier:@"GroupCell"];
 
     if( [[[GCConfiguration configuration] localFeatures] count] > 0)
@@ -318,11 +318,24 @@
 
 }
 
-- (void)setCancelButton
+- (void)setNavBarItems
 {
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logout)];
+    
+    [self.navigationItem setRightBarButtonItem:logoutButton];
     [self.navigationItem setLeftBarButtonItem:cancelButton];
 }
+
+- (void)logout
+{
+    GCClient *apiClient = [GCClient sharedClient];
+    [apiClient logoutFromChute];
+    
+    [[GCConfiguration configuration] removeAllAccounts];
+    [self.tableView reloadData];
+}
+
 
 - (void)cancel
 {

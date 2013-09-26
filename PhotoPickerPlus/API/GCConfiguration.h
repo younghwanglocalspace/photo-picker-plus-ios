@@ -57,10 +57,12 @@
  
  @param account The account that needs to be added to logged accounts.
  
- @warning This method requires `GCAccount` class. Add am  
+ @warning This method requires `GCAccount` class. Add an `#import "GCAccount.h"` in your header/implementation file.  
 */
 
 - (void)addAccount:(GCAccount *)account;
+
+- (void)removeAllAccounts;
 
 - (GCLoginType)loginTypeForString:(NSString *)serviceString;
 
