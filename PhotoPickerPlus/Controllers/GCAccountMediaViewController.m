@@ -38,17 +38,6 @@
 
 - (void)viewDidLoad
 {
-
-    self.albumViewController = [GCAlbumViewController new];
-    [self addChildViewController:self.albumViewController];
-    [self.albumViewController didMoveToParentViewController:self];
-    
-    self.assetViewController = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:[GCAssetsCollectionViewController setupLayout]];
-    
-    
-    [self addChildViewController:self.assetViewController];
-    [self.assetViewController didMoveToParentViewController:self];
-
     [super viewDidLoad];
 
     [self.view setBackgroundColor:[UIColor whiteColor]];
@@ -62,11 +51,7 @@
     [self.assetViewController.collectionView setFrame:CGRectZero];
     [self.assetViewController.collectionView setBackgroundColor:[UIColor whiteColor]];
     
-    [self.scrollView addSubview:self.albumViewController.tableView];
-    [self.scrollView addSubview:self.assetViewController.collectionView];
-
     [self getDataFromAccount];
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -105,7 +90,11 @@
     
     if(self.folders != nil)
     {
-               
+        self.albumViewController = [GCAlbumViewController new];
+        [self addChildViewController:self.albumViewController];
+        [self.scrollView addSubview:self.albumViewController.tableView];
+        [self.albumViewController didMoveToParentViewController:self];
+        
         [self.albumViewController setServiceName:self.serviceName];
         [self.albumViewController setAccountID:self.accountID];
         [self.albumViewController setAlbums:self.folders];
@@ -118,17 +107,15 @@
         [self.navigationItem setRightBarButtonItem:[self.albumViewController setCancelButton]];
         
         [self.albumViewController.tableView reloadData];
-        
     }
-    else if (self.albumViewController) {
-        [self.albumViewController.tableView removeFromSuperview];
-        [self.albumViewController removeFromParentViewController];
-        self.albumViewController = nil;
-    }
-    
     
     if(self.files != nil)
-    {        
+    {
+        self.assetViewController = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:[GCAssetsCollectionViewController setupLayout]];
+        [self addChildViewController:self.assetViewController];
+        [self.scrollView addSubview:self.assetViewController.collectionView];
+        [self.assetViewController didMoveToParentViewController:self];
+        
         [self.assetViewController setAssets:self.files];
         [self.assetViewController setSuccessBlock:[self successBlock]];
         [self.assetViewController setCancelBlock:[self cancelBlock]];
@@ -137,7 +124,7 @@
         
         [self.assetViewController.collectionView reloadData];
         
-
+        
         if ([self isMultipleSelectionEnabled]) {
             [self.navigationItem setRightBarButtonItems:[self.assetViewController doneAndCancelButtons]];
         }
@@ -145,11 +132,6 @@
             [self.navigationItem setRightBarButtonItem:[self.assetViewController cancelButton]];
         }
         
-    }
-    else if (self.assetViewController) {
-        [self.assetViewController.collectionView removeFromSuperview];
-        [self.assetViewController removeFromParentViewController];
-        self.assetViewController = nil;
     }
     
     [self setScrollViewContentSize];
