@@ -15,6 +15,7 @@ static NSString * const kGCServices = @"services";
 static NSString * const kGCLocalFeatures = @"local_features";
 static NSString * const kGCOAuth = @"oauth";
 static NSString * const kGCAccounts = @"accounts";
+static NSString * const kGCLoadAssetsFromWeb = @"load_assets_from_web";
 
 static NSString * const kGCConfiguration = @"GCConfiguration";
 static NSString * const kGCExtension = @"plist";
@@ -23,8 +24,8 @@ static NSString * const kGCConfigurationURL = @"https://dl.dropboxusercontent.co
 static GCConfiguration *sharedData = nil;
 static dispatch_queue_t serialQueue;
 
-static NSSet *_sLocalFeatures;
-static NSDictionary *_dServiceFeatures;
+static NSSet *sGCLocalFeatures;
+static NSDictionary *sGCServiceFeatures;
 
 @implementation GCConfiguration
 
@@ -64,8 +65,8 @@ static NSDictionary *_dServiceFeatures;
         
         if (obj) {
             
-            _sLocalFeatures = [NSSet setWithArray:@[@"take_photo", @"last_taken_photo", @"camera_photos"]];
-            _dServiceFeatures = @{@"facebook":@"facebook",
+            sGCLocalFeatures = [NSSet setWithArray:@[@"take_photo", @"last_taken_photo", @"camera_photos"]];
+            sGCServiceFeatures = @{@"facebook":@"facebook",
                                   @"google": @"google",
                                   @"googledrive": @"google",
                                   @"instagram": @"instagram",
@@ -86,7 +87,6 @@ static NSDictionary *_dServiceFeatures;
             
             if (![fileManager fileExistsAtPath:path]) {
                 path = [[NSBundle mainBundle] pathForResource:kGCConfiguration ofType:kGCExtension];
-                
             }
             
             NSDictionary *savedStock = [[NSDictionary alloc] initWithContentsOfFile: path];
@@ -142,7 +142,7 @@ static NSDictionary *_dServiceFeatures;
         
         [[configuration objectForKey:kGCServices] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             
-            if([[_dServiceFeatures allKeys] containsObject:obj]) {
+            if([[sGCServiceFeatures allKeys] containsObject:obj]) {
                 
 //                NSString *loginTypeString = [_dServiceFeatures objectForKey:obj];
 //                GCLoginType *loginType = [self loginTypeForString:loginTypeString];
@@ -162,7 +162,7 @@ static NSDictionary *_dServiceFeatures;
         
         [[configuration objectForKey:kGCLocalFeatures] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             
-            if ([_sLocalFeatures containsObject:obj]) {
+            if ([sGCLocalFeatures containsObject:obj]) {
                 [tmpLocalFeatures addObject:obj];
             }
         }];
@@ -172,6 +172,13 @@ static NSDictionary *_dServiceFeatures;
         
         DCKeyValueObjectMapping *mapping = [DCKeyValueObjectMapping mapperForClass:[GCAccount class]];
         self.accounts = [NSMutableArray arrayWithArray:[mapping parseArray:[configuration objectForKey:kGCAccounts]]];
+    }
+    
+    if ([configuration objectForKey:kGCLoadAssetsFromWeb]) {
+        self.loadAssetsFromWeb = [[configuration objectForKey:kGCLoadAssetsFromWeb] boolValue];
+    }
+    else {
+        self.loadAssetsFromWeb = YES;
     }
     
     [self serialize];
@@ -220,7 +227,7 @@ static NSDictionary *_dServiceFeatures;
 
 - (GCLoginType)loginTypeForString:(NSString *)serviceString
 {
-    __block NSString *loginType = [_dServiceFeatures objectForKey:serviceString];
+    __block NSString *loginType = [sGCServiceFeatures objectForKey:serviceString];
     
     for (int i = 0; i <kGCLoginTypeCount; i++) {
         if ([loginType isEqualToString:kGCLoginTypes[i]]){

@@ -15,7 +15,7 @@
 		CC72FBCC17B6142B00E3981B /* GCAccountAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBC917B6142B00E3981B /* GCAccountAssets.m */; };
 		CC72FBCF17B6156600E3981B /* GCConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBCE17B6156600E3981B /* GCConfiguration.m */; };
 		CC72FBD217B63FCF00E3981B /* NSObject+GCDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBD117B63FCF00E3981B /* NSObject+GCDictionary.m */; };
-		CC75DDFC17EBC79700FE1405 /* GCConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = CC75DDFB17EBC79700FE1405 /* GCConfiguration.plist */; };
+		CC766B9A17F3A80300C8EE00 /* GCConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = CC766B9917F3A80300C8EE00 /* GCConfiguration.plist */; };
 		CC7E468417A5C0FA00BEF5B8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E468317A5C0FA00BEF5B8 /* UIKit.framework */; };
 		CC7E468617A5C0FA00BEF5B8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E468517A5C0FA00BEF5B8 /* Foundation.framework */; };
 		CC7E468817A5C0FA00BEF5B8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E468717A5C0FA00BEF5B8 /* CoreGraphics.framework */; };
@@ -97,7 +97,7 @@
 		CC72FBCE17B6156600E3981B /* GCConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCConfiguration.m; sourceTree = "<group>"; };
 		CC72FBD017B63FCF00E3981B /* NSObject+GCDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+GCDictionary.h"; sourceTree = "<group>"; };
 		CC72FBD117B63FCF00E3981B /* NSObject+GCDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+GCDictionary.m"; sourceTree = "<group>"; };
-		CC75DDFB17EBC79700FE1405 /* GCConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GCConfiguration.plist; sourceTree = "<group>"; };
+		CC766B9917F3A80300C8EE00 /* GCConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GCConfiguration.plist; sourceTree = "<group>"; };
 		CC7E468017A5C0FA00BEF5B8 /* PhotoPickerPlus-SampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PhotoPickerPlus-SampleApp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC7E468317A5C0FA00BEF5B8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CC7E468517A5C0FA00BEF5B8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -399,7 +399,7 @@
 				E4464FCD17CCFCB800C83F14 /* picasa@2x.png */,
 				E4BDB52B17B55C9C000D4034 /* defaultThumb.png */,
 				CCC159FD17DE6E48008F03E1 /* GCConfiguration-Sample.plist */,
-				CC75DDFB17EBC79700FE1405 /* GCConfiguration.plist */,
+				CC766B9917F3A80300C8EE00 /* GCConfiguration.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -478,7 +478,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC7E468E17A5C0FA00BEF5B8 /* InfoPlist.strings in Resources */,
-				CC75DDFC17EBC79700FE1405 /* GCConfiguration.plist in Resources */,
+				CC766B9A17F3A80300C8EE00 /* GCConfiguration.plist in Resources */,
 				CC7E469617A5C0FA00BEF5B8 /* Default.png in Resources */,
 				CC7E469817A5C0FA00BEF5B8 /* Default@2x.png in Resources */,
 				CC7E469A17A5C0FA00BEF5B8 /* Default-568h@2x.png in Resources */,

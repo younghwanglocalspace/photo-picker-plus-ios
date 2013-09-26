@@ -27,7 +27,7 @@
 /**
  The view controller that will be initialized if there are assets.
  
- @see GCAssetsCollectionViewController
+ @see GCAssetsCollectionViewController  
  */
 @property (strong, nonatomic) GCAssetsCollectionViewController  *assetViewController;
 

@@ -9,6 +9,8 @@
 #import "NSDictionary+GCAccountAsset.h"
 #import "GCAccountAssets.h"
 #import "GCAsset.h"
+#import "GCConfiguration.h"
+#import <AssetsLibrary/AssetsLibrary.h>
 
 @implementation NSDictionary (GCAccountAsset)
 
@@ -28,22 +30,49 @@
 + (NSDictionary *)infoFromGCAccountAsset:(GCAccountAssets *)asset
 {
     NSMutableDictionary *mediaInfo = [NSMutableDictionary dictionary];
-    [mediaInfo setObject:@"ALAssetTypePhoto" forKey:UIImagePickerControllerMediaType];
-    [mediaInfo setObject:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[asset image_url]]]] forKey:UIImagePickerControllerOriginalImage];
+    UIImage *image = [self loadImageWithURL:[NSURL URLWithString:[asset image_url]]];
+    
+    [mediaInfo setObject:ALAssetTypePhoto forKey:UIImagePickerControllerMediaType];
     [mediaInfo setObject:[NSURL URLWithString:[asset image_url]] forKey:UIImagePickerControllerReferenceURL];
+    if (image) {
+        [mediaInfo setObject:image forKey:UIImagePickerControllerOriginalImage];
+    }
     
     return mediaInfo;
-    
 }
 
 + (NSDictionary *)infoFromGCAsset:(GCAsset *)asset
 {
     NSMutableDictionary *mediaInfo = [NSMutableDictionary dictionary];
-    [mediaInfo setObject:@"ALAssetTypePhoto" forKey:UIImagePickerControllerMediaType];
-    [mediaInfo setObject:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[asset url]]]] forKey:UIImagePickerControllerOriginalImage];
+    UIImage *image = [self loadImageWithURL:[NSURL URLWithString:[asset url]]];
+    
+    [mediaInfo setObject:ALAssetTypePhoto forKey:UIImagePickerControllerMediaType];
     [mediaInfo setObject:[NSURL URLWithString:[asset url]] forKey:UIImagePickerControllerReferenceURL];
+    if (image) {
+        [mediaInfo setObject:image forKey:UIImagePickerControllerOriginalImage];
+    }
     
     return mediaInfo;
-    
 }
+
++ (UIImage *)loadImageWithURL:(NSURL *)url
+{
+    if ([[GCConfiguration configuration] loadAssetsFromWeb] == NO){
+        return nil;
+    }
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLCacheStorageAllowed timeoutInterval:20.0];
+    NSURLResponse *response;
+    NSError *error;
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    
+    if (data && !error) {
+        NSLog(@"Error loading image from web. %@", [error localizedDescription]);
+        return [UIImage imageWithData:data];
+    }
+    else {
+        return nil;
+    }
+}
+
 @end

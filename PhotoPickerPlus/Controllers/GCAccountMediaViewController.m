@@ -23,7 +23,7 @@
 @implementation GCAccountMediaViewController
 
 @synthesize scrollView;
-@synthesize albumViewController,assetViewController;
+@synthesize albumViewController, assetViewController;
 @synthesize accountID, albumID, serviceName, isItDevice, isMultipleSelectionEnabled;
 @synthesize successBlock, cancelBlock;
 
@@ -120,7 +120,7 @@
         [self.albumViewController.tableView reloadData];
         
     }
-    else {
+    else if (self.albumViewController) {
         [self.albumViewController.tableView removeFromSuperview];
         [self.albumViewController removeFromParentViewController];
         self.albumViewController = nil;
@@ -146,7 +146,7 @@
         }
         
     }
-    else {
+    else if (self.assetViewController) {
         [self.assetViewController.collectionView removeFromSuperview];
         [self.assetViewController removeFromParentViewController];
         self.assetViewController = nil;

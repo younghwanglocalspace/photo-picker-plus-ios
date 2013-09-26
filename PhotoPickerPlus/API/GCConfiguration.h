@@ -34,6 +34,11 @@
  */
 @property (strong, nonatomic) NSMutableArray    *accounts;
 
+/**
+ Setting for loading UIImagePickerControllerOriginalImage for assets from web.
+ */
+@property (assign, nonatomic) BOOL              loadAssetsFromWeb;
+
 ///--------------------------------
 /// @name Creating Singleton object
 ///--------------------------------
