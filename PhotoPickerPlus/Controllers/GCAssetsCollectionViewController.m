@@ -54,12 +54,13 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.collectionView setBackgroundColor:[UIColor whiteColor]];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.navigationItem.title = @"Assets";
+    [self.collectionView setBackgroundColor:[UIColor whiteColor]];
+
     if(self.isMultipleSelectionEnabled)
         [self.navigationItem setRightBarButtonItems:[self doneAndCancelButtons]];
     else
