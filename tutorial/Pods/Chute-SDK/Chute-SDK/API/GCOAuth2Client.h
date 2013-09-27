@@ -29,8 +29,10 @@ typedef enum {
 
 extern NSString * const kGCClientID;
 extern NSString * const kGCClientSecret;
-extern NSString * const kGCLoginTypes[];
 extern int const kGCLoginTypeCount;
+extern NSString * const kGCLoginTypes[];
+
+@property (strong, nonatomic) NSArray *gcServices;
 
 + (instancetype)clientWithClientID:(NSString *)_clientID clientSecret:(NSString *)_clientSecret;
 + (instancetype)clientWithClientID:(NSString *)_clientID clientSecret:(NSString *)_clientSecret redirectURI:(NSString *)_redirectURI;

@@ -24,7 +24,6 @@ static NSString * const kGCRedirectURIDefaultValue = @"http://getchute.com/oauth
 
 static NSString * const kGCOAuth = @"oauth";
 
-
 NSString * const kGCLoginTypes[] = {
     @"facebook",
     @"instagram",
@@ -86,6 +85,13 @@ NSString * const kGCGrantTypeValue = @"authorization_code";
     redirectURI = _redirectURI;
     scope = _scope;
     
+//    [self setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+//        if (status == AFNetworkReachabilityStatusNotReachable) {
+//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"No Internet connection detected." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//            [alertView show];
+//        }
+//    }];
+    
     [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
     
     [self setDefaultHeader:@"Content-Type" value:@"application/x-www-form-urlencoded"];
@@ -130,11 +136,13 @@ NSString * const kGCGrantTypeValue = @"authorization_code";
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://getchute.com/v2/oauth/%@/authorize?%@",
                                                                                kGCLoginTypes[loginType],
                                                                                [params stringWithFormEncodedComponents]]]];
-    [self clearCookiesForLoginType:loginType];
+//    [self clearCookiesForLoginType:loginType];
     NSLog(@"Request description:%@",[request description]);
     return request;
 }
 
+/* This method clears cookies for specific loginType. It can and should be used in applications with logout option. In that
+ way you give option to a user to login on same service (of the same type) with a different account.*/
 - (void)clearCookiesForLoginType:(GCLoginType)loginType {
     NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     [[storage cookies] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

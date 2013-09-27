@@ -330,7 +330,7 @@
 - (void)logout
 {
     GCClient *apiClient = [GCClient sharedClient];
-    [apiClient logoutFromChute];
+    [apiClient clearCookiesForChute];
     
     [[GCConfiguration configuration] removeAllAccounts];
     [self.tableView reloadData];

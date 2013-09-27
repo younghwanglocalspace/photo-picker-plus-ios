@@ -11,6 +11,5 @@
 @interface PhotoPickerCell : UITableViewCell
 
 @property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UILabel *countLabel;
 
 @end

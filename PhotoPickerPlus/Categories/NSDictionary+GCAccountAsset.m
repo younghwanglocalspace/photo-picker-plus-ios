@@ -27,20 +27,6 @@
     return dictionary;
 }
 
-+ (NSDictionary *)infoFromGCAccountAsset:(GCAccountAssets *)asset
-{
-    NSMutableDictionary *mediaInfo = [NSMutableDictionary dictionary];
-    UIImage *image = [self loadImageWithURL:[NSURL URLWithString:[asset image_url]]];
-    
-    [mediaInfo setObject:ALAssetTypePhoto forKey:UIImagePickerControllerMediaType];
-    [mediaInfo setObject:[NSURL URLWithString:[asset image_url]] forKey:UIImagePickerControllerReferenceURL];
-    if (image) {
-        [mediaInfo setObject:image forKey:UIImagePickerControllerOriginalImage];
-    }
-    
-    return mediaInfo;
-}
-
 + (NSDictionary *)infoFromGCAsset:(GCAsset *)asset
 {
     NSMutableDictionary *mediaInfo = [NSMutableDictionary dictionary];
