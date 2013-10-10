@@ -26,6 +26,7 @@
 
 @property (nonatomic) BOOL hasLocal;
 @property (nonatomic) BOOL hasOnline;
+@property (nonatomic, strong) UIBarButtonItem *logoutButton;
 
 @end
 
@@ -50,6 +51,14 @@
     self.navigationItem.title = @"Photo Picker";
     
     [self setNavBarItems];
+
+    GCClient *apiClient = [GCClient sharedClient];
+
+    if([apiClient isLoggedIn] == NO)
+        [self setLogoutNavBarButton:NO];
+    else
+        [self setLogoutNavBarButton:YES];
+    
     [self.tableView registerClass:[PhotoPickerCell class] forCellReuseIdentifier:@"GroupCell"];
 
     if( [[[GCConfiguration configuration] localFeatures] count] > 0)
@@ -120,7 +129,6 @@
     else
     {
         NSString *serviceName = [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row];
-//        GCService service = [GCOAuth2Client serviceForString:serviceName];
         GCLoginType loginType = [[GCConfiguration configuration] loginTypeForString:serviceName];
         NSString *loginTypeString = [[GCConfiguration configuration] loginTypeString:loginType];
         
@@ -132,7 +140,6 @@
 
         for (GCAccount *account in [[GCConfiguration configuration] accounts]) {
             if([account.type isEqualToString:loginTypeString]){
-//            if ([account.type isEqualToString:[GCOAuth2Client loginMethodForService:service]]) {
                 if (account.name) {
                     cellTitle = account.name;
                 }
@@ -223,7 +230,6 @@
                 }
             }
         }
-        //        GCService service = [GCOAuth2Client serviceForString:serviceName];
         
         [GCLoginView showOAuth2Client:self.oauth2Client withLoginType:loginType success:^{
             [GCServiceAccount getProfileInfoWithSuccess:^(GCResponseStatus *responseStatus, NSArray *accounts) {
@@ -245,6 +251,7 @@
                 [amVC setSuccessBlock:[self successBlock]];
                 [amVC setCancelBlock:[self cancelBlock]];
                 
+                [self setLogoutNavBarButton:YES];
                 [self.tableView reloadData];
                 [self.navigationController pushViewController:amVC animated:YES];
             } failure:^(NSError *error) {
@@ -253,37 +260,6 @@
         } failure:^(NSError *error) {
             NSLog(@"Failure - %@", [error localizedDescription]);
         }];
-        
-//        [GCLoginView showOAuth2Client:self.oauth2Client service:service success:^{
-//            [GCServiceAccount getProfileInfoWithSuccess:^(GCResponseStatus *responseStatus, NSArray *accounts) {
-//                GCAccount *account;
-//                for (GCAccount *acc in accounts) {
-//                    if ([[GCOAuth2Client loginMethodForService:service] isEqualToString:acc.type])
-//                        account = acc;
-//                    
-//                    [[GCConfiguration configuration] addAccount:acc];
-//                }
-//                if (!account)
-//                    return;
-//                                
-//                GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];
-//                [amVC setIsItDevice:self.isItDevice];
-//                [amVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-//                [amVC setAccountID:account.id];
-//                [amVC setServiceName:serviceName];
-//                [amVC setSuccessBlock:[self successBlock]];
-//                [amVC setCancelBlock:[self cancelBlock]];
-//                
-//                [self.tableView reloadData];
-//                [self.navigationController pushViewController:amVC animated:YES];
-//                
-//            } failure:^(NSError *error) {
-//                [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-//            }];
-//        } failure:^(NSError *error) {
-//            NSLog(@"Failure - %@", [error localizedDescription]);
-//        }];
-
     }
 }
 
@@ -321,18 +297,27 @@
 - (void)setNavBarItems
 {
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
-    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logout)];
+    self.logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logout)];
     
-    [self.navigationItem setRightBarButtonItem:logoutButton];
     [self.navigationItem setLeftBarButtonItem:cancelButton];
+}
+
+- (void)setLogoutNavBarButton:(BOOL)toBeAdded
+{
+    if(toBeAdded == YES)
+        [self.navigationItem setRightBarButtonItem:self.logoutButton];
+    else
+        [self.navigationItem setRightBarButtonItem:nil];
 }
 
 - (void)logout
 {
     GCClient *apiClient = [GCClient sharedClient];
     [apiClient clearCookiesForChute];
-    
+    [apiClient clearAuthorizationHeader];
     [[GCConfiguration configuration] removeAllAccounts];
+    
+    [self setLogoutNavBarButton:NO];
     [self.tableView reloadData];
 }
 
