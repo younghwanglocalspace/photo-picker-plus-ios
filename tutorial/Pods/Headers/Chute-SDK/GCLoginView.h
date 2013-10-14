@@ -1,1 +1,1 @@
-../../Chute-SDK/Chute-SDK/Views/GCLoginView.h
+../../../../../Chute-SDK-v2-iOS/Chute-SDK/Views/GCLoginView.h

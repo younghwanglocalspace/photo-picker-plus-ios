@@ -10,7 +10,11 @@ PODS:
   - MBProgressHUD (0.8)
 
 DEPENDENCIES:
-  - Chute-SDK
+  - Chute-SDK (from `../../Chute-SDK-v2-iOS/`)
+
+EXTERNAL SOURCES:
+  Chute-SDK:
+    :path: ../../Chute-SDK-v2-iOS/
 
 SPEC CHECKSUMS:
   AFNetworking: 0700ec7a58c36ad217173e167f6e4df7270df66b
@@ -19,4 +23,4 @@ SPEC CHECKSUMS:
   Lockbox: 1bcfd564f034b83456fcad5bdd49470a80a38d2b
   MBProgressHUD: 2bbc6f470111daf7f3eaa4eb12b8cbf01c4c0622
 
-COCOAPODS: 0.20.2
+COCOAPODS: 0.25.0

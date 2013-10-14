@@ -1,1 +1,1 @@
-../../Chute-SDK/Chute-SDK/Models/GCURL.h
+../../../../../Chute-SDK-v2-iOS/Chute-SDK/Models/GCURL.h

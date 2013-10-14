@@ -1,1 +1,1 @@
-../../Chute-SDK/Chute-SDK/Util/KXDataEncoder.h
+../../../../../Chute-SDK-v2-iOS/Chute-SDK/Util/KXDataEncoder.h

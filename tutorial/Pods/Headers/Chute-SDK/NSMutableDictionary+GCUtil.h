@@ -1,1 +1,1 @@
-../../Chute-SDK/Chute-SDK/Util/NSMutableDictionary+GCUtil.h
+../../../../../Chute-SDK-v2-iOS/Chute-SDK/Util/NSMutableDictionary+GCUtil.h

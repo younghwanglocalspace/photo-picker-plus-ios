@@ -1,1 +1,1 @@
-../../Chute-SDK/Chute-SDK/Util/GCFileManager.h
+../../../../../Chute-SDK-v2-iOS/Chute-SDK/Util/GCFileManager.h
