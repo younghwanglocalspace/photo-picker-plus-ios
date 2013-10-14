@@ -32,7 +32,7 @@
  
  @param serviceName The name of the service for which we would like to receive media data. This argument must not be `nil`.
  
- @param accountID The ID of the account for which we would like to receive media data. This argument must not be `nil`.
+ @param accountID The shortcut of the account for which we would like to receive media data. This argument must not be `nil`.
  
  @param albumID The ID of the album from which we would like to pull media data. 
  
@@ -42,7 +42,7 @@
  
  @warning This method require `GCResponseStatus` class. Add an `#import "GCResponseStatus.h"` in your header/implementation file.
 */
-+ (void)getDataForServiceWithName:(NSString *)serviceName forAccountWithID:(NSNumber *)accountID forAlbumWithID:(NSNumber *)albumID success:(void(^)(GCResponseStatus *responseStatus,NSArray *folders, NSArray *files))success failure:(void(^)(NSError *error))failure;
++ (void)getDataForServiceWithName:(NSString *)serviceName forAccountWithID:(NSString *)accountID forAlbumWithID:(NSNumber *)albumID success:(void(^)(GCResponseStatus *responseStatus,NSArray *folders, NSArray *files))success failure:(void(^)(NSError *error))failure;
 
 /**
  Sending a post request for chosen assets, to be saved on server

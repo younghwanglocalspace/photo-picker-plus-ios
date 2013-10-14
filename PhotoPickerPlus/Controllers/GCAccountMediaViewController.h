@@ -43,9 +43,9 @@
 @property (assign, nonatomic) BOOL                              isItDevice;
 
 /**
- Number used to specify for which account it should ask for media data.
+ Shortcut used to specify for which account it should ask for media data.
  */
-@property (strong, nonatomic) NSNumber                          *accountID;
+@property (strong, nonatomic) NSString                          *accountID;
 
 /**
   Number used to specify for which album it should ask for media data.

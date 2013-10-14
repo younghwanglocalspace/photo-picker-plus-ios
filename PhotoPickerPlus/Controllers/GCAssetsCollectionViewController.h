@@ -30,9 +30,9 @@
 @property (strong, nonatomic) NSString *serviceName;
 
 /**
- Number used to specify for which account it should ask for media data.
+ The shortcut used to specify for which account it should ask for media data.
  */
-@property (strong, nonatomic) NSNumber *accountID;
+@property (strong, nonatomic) NSString *accountID;
 
 /**
  Number used to specify for which album it should ask for media data.

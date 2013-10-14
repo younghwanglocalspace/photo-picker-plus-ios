@@ -212,7 +212,7 @@
                     GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];
                     [amVC setIsItDevice:self.isItDevice];
                     [amVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-                    [amVC setAccountID:account.id];
+                    [amVC setAccountID:account.shortcut];
                     [amVC setServiceName:serviceName];
                     [amVC setSuccessBlock:[self successBlock]];
                     [amVC setCancelBlock:[self cancelBlock]];
@@ -240,7 +240,7 @@
                 GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];
                 [amVC setIsItDevice:self.isItDevice];
                 [amVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-                [amVC setAccountID:account.id];
+                [amVC setAccountID:account.shortcut];
                 [amVC setServiceName:serviceName];
                 [amVC setSuccessBlock:[self successBlock]];
                 [amVC setCancelBlock:[self cancelBlock]];

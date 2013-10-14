@@ -148,7 +148,6 @@
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 //    [MBProgressHUD hideHUDForView:contentView animated:YES];
-    
     if (error.code == NSURLErrorCancelled) return;
     
     if (![[error localizedDescription] isEqualToString:@"Frame load interrupted"]) {

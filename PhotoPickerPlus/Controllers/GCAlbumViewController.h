@@ -22,9 +22,9 @@
 
 
 /**
- Number used to specify for which account it should ask for media data.
+ The shortcut used to specify for which account it should ask for media data.
  */
-@property (strong, nonatomic) NSNumber *accountID;
+@property (strong, nonatomic) NSString *accountID;
 
 /**
  String used to specify for which service it should ask for media data.

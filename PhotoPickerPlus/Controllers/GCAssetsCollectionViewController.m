@@ -274,9 +274,9 @@
         _isItDevice = isItDevice;
 }
 
-- (void)setAccountID:(NSNumber *)accountID
+- (void)setAccountID:(NSString *)accountID
 {
-    if(_accountID != accountID)
+    if(![_accountID isEqualToString:accountID])
         _accountID = accountID;
 }
 
