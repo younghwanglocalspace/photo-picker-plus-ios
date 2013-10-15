@@ -212,7 +212,7 @@
         
         
         for (GCAccount *account in [[GCConfiguration configuration] accounts]) {
-            if(![account.type isEqualToString:@"google"])
+            if(!([account.type isEqualToString:@"google"] || [account.type isEqualToString:@"microsoft_account"]))
             {
                 if ([account.type isEqualToString:loginTypeString]) {
                     

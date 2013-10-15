@@ -17,7 +17,6 @@
 #import "DCKeyValueObjectMapping.h"
 
 static NSString * const kBaseURLString = @"http://accounts.getchute.com/v2/";
-//static NSString * const kBaseURLString = @"https://dl.dropboxusercontent.com/u/23635319/ChuteAPI/files.json";
 static dispatch_queue_t serialQueue;
 
 static NSString * const kResponse = @"response";
