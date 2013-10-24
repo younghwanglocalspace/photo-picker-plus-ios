@@ -12,6 +12,8 @@
 #import "GCAccountAlbum.h"
 #import "PhotoPickerCell.h"
 
+#import "GetChute.h"
+
 #import "MBProgressHUD.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 
@@ -158,7 +160,7 @@
     };
     
     [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:listGroupBlock failureBlock:^(NSError *error) {
-        NSLog(@"Failure");
+        GCLogError([error localizedDescription]);
     }];
     
 }

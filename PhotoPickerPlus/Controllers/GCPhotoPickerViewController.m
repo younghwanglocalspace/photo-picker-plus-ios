@@ -255,10 +255,11 @@
                 [self.tableView reloadData];
                 [self.navigationController pushViewController:amVC animated:YES];
             } failure:^(NSError *error) {
+                GCLogError([error localizedDescription]);
                 [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
             }];
         } failure:^(NSError *error) {
-            NSLog(@"Failure - %@", [error localizedDescription]);
+            GCLogError([error localizedDescription]);
         }];
     }
 }

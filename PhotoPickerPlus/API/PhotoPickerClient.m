@@ -11,6 +11,8 @@
 #import "GCAccountAlbum.h"
 #import "GCAccountAssets.h"
 
+#import "GetChute.h"
+
 #import "GCResponse.h"
 #import "GCResponseStatus.h"
 #import "GCPagination.h"
@@ -59,11 +61,12 @@ static NSString *const kFiles = @"files";
 {
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         
+        GCLogVerbose([[request URL] absoluteString]);
         [self parseJSON:JSON success:success];
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"Failure: %@", JSON);
         
+        GCLogWarning(@"Failure: %@", JSON);
         failure(error);
     }];
     

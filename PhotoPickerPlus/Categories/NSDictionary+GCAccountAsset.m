@@ -11,6 +11,7 @@
 #import "GCAsset.h"
 #import "GCConfiguration.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "GetChute.h"
 
 @implementation NSDictionary (GCAccountAsset)
 
@@ -56,7 +57,7 @@
         return [UIImage imageWithData:data];
     }
     else {
-        NSLog(@"Error loading image from web. %@", [error localizedDescription]);
+        GCLogWarning(@"Error loading image from web. %@", [error localizedDescription]);
         return nil;
     }
 }
