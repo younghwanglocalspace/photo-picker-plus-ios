@@ -15,7 +15,7 @@
 #import "NSDictionary+ALAsset.h"
 #import "GCServiceAccount.h"
 #import "GCAccount.h"
-#import "GCConfiguration.h"
+#import "GCPhotoPickerConfiguration.h"
 
 #import "GetChute.h"
 #import "MBProgressHUD.h"
@@ -61,12 +61,12 @@
     
     [self.tableView registerClass:[PhotoPickerCell class] forCellReuseIdentifier:@"GroupCell"];
 
-    if( [[[GCConfiguration configuration] localFeatures] count] > 0)
+    if( [[[GCPhotoPickerConfiguration configuration] localFeatures] count] > 0)
         self.hasLocal = YES;
     else
         self.hasLocal = NO;
     
-    if( [[[GCConfiguration configuration] services] count] > 0)
+    if( [[[GCPhotoPickerConfiguration configuration] services] count] > 0)
         self.hasOnline = YES;
     else
         self.hasOnline = NO;
@@ -95,8 +95,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(section == 0 && self.hasLocal)
-        return [[[GCConfiguration configuration] localFeatures] count];
-    return [[[GCConfiguration configuration] services] count];
+        return [[[GCPhotoPickerConfiguration configuration] localFeatures] count];
+    return [[[GCPhotoPickerConfiguration configuration] services] count];
 }
 
 - (PhotoPickerCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -109,7 +109,7 @@
     
     if(indexPath.section == 0 && self.hasLocal){
         
-        NSString *serviceName = [[[GCConfiguration configuration] localFeatures] objectAtIndex:indexPath.row];
+        NSString *serviceName = [[[GCPhotoPickerConfiguration configuration] localFeatures] objectAtIndex:indexPath.row];
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         
         if ([cellTitle isEqualToString:@"Camera Photos"]) {
@@ -128,9 +128,9 @@
     }
     else
     {
-        NSString *serviceName = [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row];
-        GCLoginType loginType = [[GCConfiguration configuration] loginTypeForString:serviceName];
-        NSString *loginTypeString = [[GCConfiguration configuration] loginTypeString:loginType];
+        NSString *serviceName = [[[GCPhotoPickerConfiguration configuration] services] objectAtIndex:indexPath.row];
+        GCLoginType loginType = [[GCPhotoPickerConfiguration configuration] loginTypeForString:serviceName];
+        NSString *loginTypeString = [[GCPhotoPickerConfiguration configuration] loginTypeString:loginType];
         
         NSString *imageName = [NSString stringWithFormat:@"%@.png", serviceName];
         UIImage *temp = [UIImage imageNamed:imageName];
@@ -138,7 +138,7 @@
         
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 
-        for (GCAccount *account in [[GCConfiguration configuration] accounts]) {
+        for (GCAccount *account in [[GCPhotoPickerConfiguration configuration] accounts]) {
             if([account.type isEqualToString:loginTypeString]){
                 if (account.name) {
                     cellTitle = account.name;
@@ -165,7 +165,7 @@
     if(indexPath.section == 0 && self.hasLocal){
         
         
-        NSString *serviceName = [[[GCConfiguration configuration] localFeatures] objectAtIndex:indexPath.row];
+        NSString *serviceName = [[[GCPhotoPickerConfiguration configuration] localFeatures] objectAtIndex:indexPath.row];
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 
         if ([cellTitle isEqualToString:@"Take Photo"]) {
@@ -206,12 +206,12 @@
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         self.isItDevice = NO;
         
-        NSString *serviceName = [[[GCConfiguration configuration] services] objectAtIndex:indexPath.row];
-        GCLoginType loginType = [[GCConfiguration configuration] loginTypeForString:serviceName];
-        NSString *loginTypeString = [[GCConfiguration configuration] loginTypeString:loginType];
+        NSString *serviceName = [[[GCPhotoPickerConfiguration configuration] services] objectAtIndex:indexPath.row];
+        GCLoginType loginType = [[GCPhotoPickerConfiguration configuration] loginTypeForString:serviceName];
+        NSString *loginTypeString = [[GCPhotoPickerConfiguration configuration] loginTypeString:loginType];
         
         
-        for (GCAccount *account in [[GCConfiguration configuration] accounts]) {
+        for (GCAccount *account in [[GCPhotoPickerConfiguration configuration] accounts]) {
             if(!([account.type isEqualToString:@"google"] || [account.type isEqualToString:@"microsoft_account"]))
             {
                 if ([account.type isEqualToString:loginTypeString]) {
@@ -238,7 +238,7 @@
                     if ([loginTypeString isEqualToString:acc.type])
                         account = acc;
                     
-                    [[GCConfiguration configuration] addAccount:acc];
+                    [[GCPhotoPickerConfiguration configuration] addAccount:acc];
                 }
                 if (!account)
                     return;
@@ -316,7 +316,7 @@
     GCClient *apiClient = [GCClient sharedClient];
     [apiClient clearCookiesForChute];
     [apiClient clearAuthorizationHeader];
-    [[GCConfiguration configuration] removeAllAccounts];
+    [[GCPhotoPickerConfiguration configuration] removeAllAccounts];
     
     [self setLogoutNavBarButton:NO];
     [self.tableView reloadData];

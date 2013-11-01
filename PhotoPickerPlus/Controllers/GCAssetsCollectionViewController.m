@@ -9,7 +9,7 @@
 #import "GCAssetsCollectionViewController.h"
 #import "PhotoCell.h"
 #import "GCAccountAssets.h"
-#import "GCServiceAccount.h"
+#import "GCServicePicker.h"
 #import "NSDictionary+ALAsset.h"
 #import "NSDictionary+GCAccountAsset.h"
 
@@ -217,7 +217,7 @@
             }
             else
             {
-                [GCServiceAccount postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
+                [GCServicePicker postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
                     for(GCAsset *asset in returnedArray){
                         [infoArray addObject:([NSDictionary infoFromGCAsset:asset])];
                     }
@@ -240,7 +240,7 @@
             }
             else
             {
-                [GCServiceAccount postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
+                [GCServicePicker postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
                     info = [NSDictionary infoFromGCAsset:[returnedArray objectAtIndex:0]];
                     [HUD hide:YES];
                     [self successBlock](info);
