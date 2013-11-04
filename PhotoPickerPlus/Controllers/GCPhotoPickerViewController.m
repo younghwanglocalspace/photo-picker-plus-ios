@@ -35,7 +35,6 @@
 @implementation GCPhotoPickerViewController
 
 @synthesize delegate, isMultipleSelectionEnabled = _isMultipleSelectionEnabled;
-@synthesize oauth2Client;
 @synthesize isItDevice;
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -236,7 +235,7 @@
             }
         }
         
-        [GCLoginView showOAuth2Client:self.oauth2Client withLoginType:loginType success:^{
+        [GCLoginView showLoginType:loginType success:^{
             [GCServiceAccount getProfileInfoWithSuccess:^(GCResponseStatus *responseStatus, NSArray *accounts) {
                 GCAccount *account;
                 for (GCAccount *acc in accounts) {
