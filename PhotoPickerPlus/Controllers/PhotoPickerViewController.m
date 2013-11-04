@@ -27,7 +27,8 @@
     if (self) {
         
         self.photoPickerViewController = [GCPhotoPickerViewController new];
-        [self.photoPickerViewController setOauth2Client:[GCOAuth2Client clientWithClientID:[[GCConfiguration configuration] appId] clientSecret:[[GCConfiguration configuration] appId]]];
+        [self.photoPickerViewController setOauth2Client:[GCOAuth2Client clientWithClientID:[[GCConfiguration configuration] appId] clientSecret:[[GCConfiguration configuration] appSecret]]];
+        
         
 //        UIImage *navBarImage = [UIImage imageNamed:@"gradient_blue.png"];
 //        [self.navigationBar setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];

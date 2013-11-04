@@ -24,8 +24,10 @@
 
 @property (nonatomic) BOOL isItDevice;
 
-@property (nonatomic) BOOL hasLocal;
-@property (nonatomic) BOOL hasOnline;
+@property (assign, nonatomic) BOOL hasLocal;
+@property (strong, nonatomic) NSArray *localFeatures;
+@property (assign, nonatomic) BOOL hasOnline;
+@property (strong, nonatomic) NSArray *services;
 @property (nonatomic, strong) UIBarButtonItem *logoutButton;
 
 @end
@@ -61,12 +63,15 @@
     
     [self.tableView registerClass:[PhotoPickerCell class] forCellReuseIdentifier:@"GroupCell"];
 
-    if( [[[GCPhotoPickerConfiguration configuration] localFeatures] count] > 0)
+    [self setLocalFeatures:[[GCPhotoPickerConfiguration configuration] localFeatures]];
+    [self setServices:[[GCPhotoPickerConfiguration configuration] services]];
+    
+    if([self.localFeatures count] > 0)
         self.hasLocal = YES;
     else
         self.hasLocal = NO;
     
-    if( [[[GCPhotoPickerConfiguration configuration] services] count] > 0)
+    if( [self.services count] > 0)
         self.hasOnline = YES;
     else
         self.hasOnline = NO;
@@ -95,8 +100,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(section == 0 && self.hasLocal)
-        return [[[GCPhotoPickerConfiguration configuration] localFeatures] count];
-    return [[[GCPhotoPickerConfiguration configuration] services] count];
+        return [self.localFeatures count];
+    return [self.services count];
 }
 
 - (PhotoPickerCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -109,7 +114,7 @@
     
     if(indexPath.section == 0 && self.hasLocal){
         
-        NSString *serviceName = [[[GCPhotoPickerConfiguration configuration] localFeatures] objectAtIndex:indexPath.row];
+        NSString *serviceName = [self.localFeatures objectAtIndex:indexPath.row];
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         
         if ([cellTitle isEqualToString:@"Camera Photos"]) {
@@ -128,7 +133,7 @@
     }
     else
     {
-        NSString *serviceName = [[[GCPhotoPickerConfiguration configuration] services] objectAtIndex:indexPath.row];
+        NSString *serviceName = [self.services objectAtIndex:indexPath.row];
         GCLoginType loginType = [[GCPhotoPickerConfiguration configuration] loginTypeForString:serviceName];
         NSString *loginTypeString = [[GCPhotoPickerConfiguration configuration] loginTypeString:loginType];
         
@@ -165,7 +170,7 @@
     if(indexPath.section == 0 && self.hasLocal){
         
         
-        NSString *serviceName = [[[GCPhotoPickerConfiguration configuration] localFeatures] objectAtIndex:indexPath.row];
+        NSString *serviceName = [self.localFeatures objectAtIndex:indexPath.row];
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 
         if ([cellTitle isEqualToString:@"Take Photo"]) {
@@ -206,7 +211,7 @@
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         self.isItDevice = NO;
         
-        NSString *serviceName = [[[GCPhotoPickerConfiguration configuration] services] objectAtIndex:indexPath.row];
+        NSString *serviceName = [self.services objectAtIndex:indexPath.row];
         GCLoginType loginType = [[GCPhotoPickerConfiguration configuration] loginTypeForString:serviceName];
         NSString *loginTypeString = [[GCPhotoPickerConfiguration configuration] loginTypeString:loginType];
         

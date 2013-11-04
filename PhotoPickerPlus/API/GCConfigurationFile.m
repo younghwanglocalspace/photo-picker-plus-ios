@@ -32,7 +32,7 @@ static NSDictionary *sGCServiceFeatures;
         NSData *stockData = [[NSData alloc] initWithContentsOfFile:bundlePath];
         [stockData writeToFile:path atomically:YES];
     }
-    GCLogVerbose(@"Configuration Path: %@", path);
+    GCLogVerbose(@"Read configuration Path: %@", path);
     return [[NSDictionary alloc] initWithContentsOfFile:path];
 }
 
@@ -49,18 +49,19 @@ static NSDictionary *sGCServiceFeatures;
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
-    if ([fileManager fileExistsAtPath: path])
+    if (![fileManager fileExistsAtPath: path])
     {
         path = [[NSBundle mainBundle] pathForResource:kGCConfiguration ofType:kGCExtension];
-        
         stockToSave = [[NSMutableDictionary alloc] initWithContentsOfFile: path];
-        
-        [fileManager removeItemAtPath:path error:&error];
+    }
+    else {
+        stockToSave = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
     }
     
         [stockToSave setObject:[configuration serialized] forKey:[configuration section]];
         
         [stockToSave writeToFile:path atomically:YES];
+        GCLogVerbose(@"Write Configuration at path: %@", path);
 }
 
 @end

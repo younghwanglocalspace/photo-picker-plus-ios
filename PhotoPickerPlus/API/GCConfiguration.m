@@ -80,7 +80,7 @@ static NSString * const kGCAppSecret = @"app_secret";
     }
     if ([self appSecret])
     {
-        [stockToSave setObject:appSecret forKey:kGCAppSecret];
+        [stockToSave setObject:self.appSecret forKey:kGCAppSecret];
     }
     
     return stockToSave;
@@ -96,10 +96,10 @@ static NSString * const kGCAppSecret = @"app_secret";
     }
     
     if ([configuration objectForKey:kGCAppSecret]) {
-        self.appId = [configuration objectForKey:kGCAppSecret];
+        self.appSecret = [configuration objectForKey:kGCAppSecret];
     }
     else {
-        self.appId = nil;
+        self.appSecret = nil;
     }
     
     [GCConfigurationFile write:self];

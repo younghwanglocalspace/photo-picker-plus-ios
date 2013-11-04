@@ -109,7 +109,7 @@ static NSString * const kGCLoadAssetsFromWeb = @"load_assets_from_web";
 - (void)populate:(NSDictionary *)configuration
 {
     if ([configuration objectForKey:kGCConfigurationURL]) {
-        self.configurationURL = [NSURL URLWithString:[configuration objectForKey:kGCConfigurationURL]];
+        self.configurationURL =  [NSURL URLWithString:[configuration objectForKey:kGCConfigurationURL]];
     }
     else {
         self.configurationURL = nil;
@@ -231,7 +231,7 @@ static NSDictionary *_sGCServices;
 
 - (void)update
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:kGCConfigurationURL]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[self configurationURL]];
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
         
         if (!error) {

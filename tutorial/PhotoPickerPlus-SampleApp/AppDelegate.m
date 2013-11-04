@@ -14,7 +14,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [GCPhotoPickerConfiguration configuration];
     [GCLog setLogLevel:LOG_LEVEL_VERBOSE];
     
     return YES;
