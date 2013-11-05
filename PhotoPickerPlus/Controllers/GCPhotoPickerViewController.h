@@ -23,14 +23,6 @@
 @property (weak, nonatomic) id<PhotoPickerViewControllerDelegate, UINavigationControllerDelegate>delegate;
 
 /**
- OAuth2Client used for authentication methods
- 
- @warning This property requires `GCOAuth2Client` class. Add an `#import <Chute-SDK/GCOAuth2Client.h>` in your header/implementation file.
-*/
-@property (strong, nonatomic) GCOAuth2Client *oauth2Client;
-
-
-/**
  BOOL value with which is determined if the user can select multiple assets (YES) or not (NO).
  */
 @property (assign, nonatomic) BOOL isMultipleSelectionEnabled;

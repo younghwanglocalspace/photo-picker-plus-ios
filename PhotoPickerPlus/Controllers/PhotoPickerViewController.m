@@ -26,9 +26,7 @@
     self = [super init];
     if (self) {
         
-        self.photoPickerViewController = [GCPhotoPickerViewController new];
-        NSDictionary *oauthData = [[GCConfiguration configuration] oauthData];
-        [self.photoPickerViewController setOauth2Client:[GCOAuth2Client clientWithClientID:[oauthData objectForKey:kGCClientID] clientSecret:[oauthData objectForKey:kGCClientSecret]]];
+        self.photoPickerViewController = [GCPhotoPickerViewController new];        
         
 //        UIImage *navBarImage = [UIImage imageNamed:@"gradient_blue.png"];
 //        [self.navigationBar setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];

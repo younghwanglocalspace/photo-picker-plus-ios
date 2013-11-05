@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Aleksandar Trpeski. All rights reserved.
 //
 
-#import "GCServiceAccount.h"
+#import "GCServicePicker.h"
 #import "GCAccount.h"
 #import "GCAccountAlbum.h"
 #import "GCAccountAssets.h"
@@ -25,7 +25,7 @@
 static NSString * const kGCAuth = @"Authorization";
 static NSString * const kClientGET = @"GET";
 
-@implementation GCServiceAccount
+@implementation GCServicePicker
 
 + (void)getProfileInfoWithSuccess:(void (^)(GCResponseStatus *, NSArray *))success failure:(void (^)(NSError *))failure
 {
@@ -63,8 +63,7 @@ static NSString * const kClientGET = @"GET";
 {
     GCClient *apiClient = [GCClient sharedClient];
         
-    NSDictionary *oauthData = [[GCConfiguration configuration] oauthData];
-    NSString *clientID = [oauthData objectForKey:kGCClientID];
+    NSString *clientID = [[GCConfiguration configuration] appId];
     
     
     NSMutableArray *media = [[NSMutableArray alloc] initWithCapacity:[selectedImages count]];
@@ -80,11 +79,6 @@ static NSString * const kClientGET = @"GET";
     NSString *path = @"widgets/native";
     
     NSMutableURLRequest *request = [apiClient requestWithMethod:kGCClientPOST path:path parameters:param];
-//    [request setValue:[apiClient authorizationToken] forHTTPHeaderField:kGCAuth];
-
-//    [apiClient request:request factoryClass:[GCAccountAssets class] success:^(GCResponse *response) {
-//        success(response.response,response.data);
-//    } failure:failure];
     
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         NSDictionary *data = @{

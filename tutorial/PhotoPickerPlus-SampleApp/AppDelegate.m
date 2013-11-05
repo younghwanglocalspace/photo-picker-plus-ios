@@ -7,14 +7,13 @@
 //
 
 #import "AppDelegate.h"
-#import "GCConfiguration.h"
 #import "GetChute.h"
+#import "GCPhotoPickerConfiguration.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [GCConfiguration configuration];
     [GCLog setLogLevel:LOG_LEVEL_VERBOSE];
     
     return YES;

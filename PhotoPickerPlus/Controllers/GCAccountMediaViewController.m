@@ -9,7 +9,7 @@
 #import "GCAccountMediaViewController.h"
 #import "GCAlbumViewController.h"
 #import "GCAssetsCollectionViewController.h"
-#import "GCServiceAccount.h"
+#import "GCServicePicker.h"
 
 #import "MBProgressHUD.h"
 
@@ -71,7 +71,7 @@
 - (void)getDataFromAccount
 {
     [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-    [GCServiceAccount getDataForServiceWithName:self.serviceName forAccountWithID:self.accountID forAlbumWithID:self.albumID success:^(GCResponseStatus *responseStatus, NSArray *folders, NSArray *files) {
+    [GCServicePicker getDataForServiceWithName:self.serviceName forAccountWithID:self.accountID forAlbumWithID:self.albumID success:^(GCResponseStatus *responseStatus, NSArray *folders, NSArray *files) {
         [MBProgressHUD hideHUDForView:self.navigationController.view animated:NO];
         
         self.folders = folders;

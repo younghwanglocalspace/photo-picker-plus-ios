@@ -9,7 +9,7 @@
 #import "NSDictionary+GCAccountAsset.h"
 #import "GCAccountAssets.h"
 #import "GCAsset.h"
-#import "GCConfiguration.h"
+#import "GCPhotoPickerConfiguration.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "GetChute.h"
 
@@ -44,7 +44,7 @@
 
 + (UIImage *)loadImageWithURL:(NSURL *)url
 {
-    if ([[GCConfiguration configuration] loadAssetsFromWeb] == NO){
+    if ([[GCPhotoPickerConfiguration configuration] loadAssetsFromWeb] == NO){
         return nil;
     }
     
