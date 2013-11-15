@@ -221,12 +221,14 @@ static NSDictionary *_sGCServices;
     
     [self.accounts addObject:account];
     [self serialized];
+    [GCConfigurationFile write:self];
 }
 
 - (void)removeAllAccounts
 {
     [self.accounts removeAllObjects];
     [self serialized];
+    [GCConfigurationFile write:self];
 }
 
 - (void)update
