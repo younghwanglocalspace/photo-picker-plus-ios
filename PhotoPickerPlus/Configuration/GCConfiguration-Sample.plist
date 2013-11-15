@@ -29,7 +29,7 @@
   			<string>last_taken_photo</string>
   			<string>camera_photos</string>
   		</array>
-  		<key>load__assets_from_web</key>
+  		<key>load_assets_from_web</key>
   		<true/>
   	</dict>
   </dict>
