@@ -15,13 +15,14 @@
   		<string>https://dl.dropboxusercontent.com/u/23635319/ChuteAPI/config.json</string>
   		<key>services</key>
   		<array>
-  			<string>chute</string>
   			<string>facebook</string>
   			<string>google</string>
-  			<string>trendabl</string>
-  			<string>flickr</string>
+  			<string>googledrive</string>
   			<string>instagram</string>
-  			<string>foursquare</string>
+  			<string>flickr</string>
+  			<string>picasa</string>
+  			<string>dropbox</string>
+  			<string>skydrive</string>
   		</array>
   		<key>local_features</key>
   		<array>
