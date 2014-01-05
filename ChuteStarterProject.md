@@ -97,7 +97,7 @@ ViewController.m
 
 	- (IBAction)pickPhotoSelected:(id)sender
 	{
-    	PhotoPickerViewController *picker = [PhotoPickerViewController new];
+    	PhotoPickerViewController *picker = [[PhotoPickerViewController alloc ] initWithTitle:@"Select Photo"];
 	    [picker setDelegate:self];
     	[picker setIsMultipleSelectionEnabled:NO];
 	    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -117,7 +117,7 @@ ViewController.m
 
 	- (IBAction)pickMultiplePhotosSelected:(id)sender
 	{
-    	PhotoPickerViewController *picker = [PhotoPickerViewController new];
+    	PhotoPickerViewController *picker = [[PhotoPickerViewController alloc ] initWithTitle:@"Select Photo"];
 	    [picker setDelegate:self];
 	    [picker setIsMultipleSelectionEnabled:YES];
     	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {

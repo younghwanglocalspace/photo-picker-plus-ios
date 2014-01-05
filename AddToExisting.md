@@ -74,7 +74,7 @@ Displaying The Image Picker
 Finally replace the code to display the image picker.  Photo Picker Plus lets the user select a source for the image so you don't need to set it ahead of time. You will only need to specify if you want multiple selection picker or single, by setting isMultipleSelectionEnabled. 
 
 ```objective-c
-	PhotoPickerViewController *picker = [PhotoPickerViewController new];
+	PhotoPickerViewController *picker = [[PhotoPickerViewController alloc ] initWithTitle:@"Select Photo"];
     [picker setDelegate:self];
     [picker setIsMultipleSelectionEnabled:NO]; // [picker setIsMultipleSelectionEnabled:YES] - for multiple choice.
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
