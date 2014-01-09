@@ -1,29 +1,30 @@
 PODS:
   - AFNetworking (1.3.3)
-  - Chute-SDK (2.0.4):
+  - Chute-SDK (2.0.5):
     - AFNetworking (~> 1.3.2)
     - CocoaLumberjack (~> 1.6.2)
     - DCKeyValueObjectMapping (~> 1.4)
     - Lockbox (~> 1.4.3)
     - MBProgressHUD (~> 0.7)
-  - CocoaLumberjack (1.6.2)
+  - CocoaLumberjack (1.6.3):
+    - CocoaLumberjack/Core
+    - CocoaLumberjack/Extensions
+  - CocoaLumberjack/Core (1.6.3)
+  - CocoaLumberjack/Extensions (1.6.3):
+    - CocoaLumberjack/Core
   - DCKeyValueObjectMapping (1.4)
-  - Lockbox (1.4.3)
+  - Lockbox (1.4.4)
   - MBProgressHUD (0.8)
 
 DEPENDENCIES:
-  - Chute-SDK (from `../../Chute-SDK-v2-iOS/`)
-
-EXTERNAL SOURCES:
-  Chute-SDK:
-    :path: ../../Chute-SDK-v2-iOS/
+  - Chute-SDK (= 2.0.5)
 
 SPEC CHECKSUMS:
   AFNetworking: 0700ec7a58c36ad217173e167f6e4df7270df66b
-  Chute-SDK: f312deb0202e9f3d7e41a6c40b1dbdc8a642014e
-  CocoaLumberjack: 2619775f386bbec1e870eddb5040f870c68726b1
+  Chute-SDK: 28e2fdc4e1887ee07c97ae15941323ee991e1fb6
+  CocoaLumberjack: 0af89e0de15835a499fcc6ee5e0b6d396bc95976
   DCKeyValueObjectMapping: 39adaf0a54ff6368a22d9221db60f0696d81ad7b
-  Lockbox: 1bcfd564f034b83456fcad5bdd49470a80a38d2b
+  Lockbox: 917945068ab8b0802e65527f225e6480937b2106
   MBProgressHUD: 2bbc6f470111daf7f3eaa4eb12b8cbf01c4c0622
 
-COCOAPODS: 0.27.1
+COCOAPODS: 0.28.0

@@ -37,6 +37,8 @@
 		CCD3C3E21828549200E31F78 /* GCConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = CCD3C3DE1828549200E31F78 /* GCConfiguration.plist */; };
 		CCD3C3E31828549200E31F78 /* GCPhotoPickerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3C3E01828549200E31F78 /* GCPhotoPickerConfiguration.m */; };
 		CCE8E20917C51D3E0058A203 /* GCAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE8E20717C51D3E0058A203 /* GCAlbumViewController.m */; };
+		CCF74E75187F0F8100AB1C84 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CCF74E71187F0F8100AB1C84 /* InfoPlist.strings */; };
+		CCF74E76187F0F8100AB1C84 /* PhotoPickerPlus.strings in Resources */ = {isa = PBXBuildFile; fileRef = CCF74E73187F0F8100AB1C84 /* PhotoPickerPlus.strings */; };
 		E43C535517BE72D000680283 /* gradient_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = E43C535417BE72CF00680283 /* gradient_blue.png */; };
 		E441096017C7C5C200FCAEBD /* album_default.png in Resources */ = {isa = PBXBuildFile; fileRef = E441095F17C7C5C200FCAEBD /* album_default.png */; };
 		E4464FBE17CCFABF00C83F14 /* dropbox.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FB617CCFABF00C83F14 /* dropbox.png */; };
@@ -127,6 +129,9 @@
 		CCD3C3E01828549200E31F78 /* GCPhotoPickerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPhotoPickerConfiguration.m; sourceTree = "<group>"; };
 		CCE8E20717C51D3E0058A203 /* GCAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAlbumViewController.m; sourceTree = "<group>"; };
 		CCE8E20817C51D3E0058A203 /* PhotoPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoPickerViewController.h; sourceTree = "<group>"; };
+		CCF74E72187F0F8100AB1C84 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CCF74E74187F0F8100AB1C84 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/PhotoPickerPlus.strings; sourceTree = "<group>"; };
+		CCF74E77187F191800AB1C84 /* GCMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCMacros.h; sourceTree = "<group>"; };
 		D6A44E3EFCB047F48E216318 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		E43C535417BE72CF00680283 /* gradient_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_blue.png; sourceTree = "<group>"; };
 		E441095F17C7C5C200FCAEBD /* album_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = album_default.png; sourceTree = "<group>"; };
@@ -307,8 +312,18 @@
 				CCD3C3DE1828549200E31F78 /* GCConfiguration.plist */,
 				CCD3C3DF1828549200E31F78 /* GCPhotoPickerConfiguration.h */,
 				CCD3C3E01828549200E31F78 /* GCPhotoPickerConfiguration.m */,
+				CCF74E77187F191800AB1C84 /* GCMacros.h */,
 			);
 			path = Configuration;
+			sourceTree = "<group>";
+		};
+		CCF74E70187F0F8100AB1C84 /* Localizations */ = {
+			isa = PBXGroup;
+			children = (
+				CCF74E71187F0F8100AB1C84 /* InfoPlist.strings */,
+				CCF74E73187F0F8100AB1C84 /* PhotoPickerPlus.strings */,
+			);
+			path = Localizations;
 			sourceTree = "<group>";
 		};
 		E4BDB50A17B55C9C000D4034 /* PhotoPickerPlus */ = {
@@ -378,6 +393,7 @@
 		E4BDB52817B55C9C000D4034 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CCF74E70187F0F8100AB1C84 /* Localizations */,
 				CC1430E017CAE97A0089A020 /* popover_arrow.png */,
 				CC1430E117CAE97A0089A020 /* popover_border.png */,
 				E441095F17C7C5C200FCAEBD /* album_default.png */,
@@ -485,6 +501,7 @@
 				CC7E469617A5C0FA00BEF5B8 /* Default.png in Resources */,
 				CCD3C3E11828549200E31F78 /* GCConfiguration-Sample.plist in Resources */,
 				CC7E469817A5C0FA00BEF5B8 /* Default@2x.png in Resources */,
+				CCF74E75187F0F8100AB1C84 /* InfoPlist.strings in Resources */,
 				CC7E469A17A5C0FA00BEF5B8 /* Default-568h@2x.png in Resources */,
 				CC7E469D17A5C0FA00BEF5B8 /* MainStoryboard_iPhone.storyboard in Resources */,
 				CC7E46A017A5C0FA00BEF5B8 /* MainStoryboard_iPad.storyboard in Resources */,
@@ -511,6 +528,7 @@
 				E4464FD117CCFCB800C83F14 /* facebook@2x.png in Resources */,
 				E4464FD217CCFCB800C83F14 /* facebook.png in Resources */,
 				E4464FD317CCFCB800C83F14 /* picasa.png in Resources */,
+				CCF74E76187F0F8100AB1C84 /* PhotoPickerPlus.strings in Resources */,
 				E4464FD417CCFCB800C83F14 /* flickr.png in Resources */,
 				E4464FD517CCFCB800C83F14 /* picasa@2x.png in Resources */,
 			);
@@ -646,6 +664,22 @@
 				CC7E46B417A5C0FB00BEF5B8 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		CCF74E71187F0F8100AB1C84 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CCF74E72187F0F8100AB1C84 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		CCF74E73187F0F8100AB1C84 /* PhotoPickerPlus.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CCF74E74187F0F8100AB1C84 /* en */,
+			);
+			name = PhotoPickerPlus.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

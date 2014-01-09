@@ -16,6 +16,7 @@
 #import "GCServiceAccount.h"
 #import "GCAccount.h"
 #import "GCPhotoPickerConfiguration.h"
+#import "GCMacros.h"
 
 #import "GetChute.h"
 #import "MBProgressHUD.h"
@@ -93,8 +94,8 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0 && self.hasLocal)
-        return @"Local Services";
-    return @"Online Services";
+        return GCLocalizedString(@"picker.local_services");
+    return GCLocalizedString(@"picker.local_services");
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -118,14 +119,16 @@
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         
         if ([cellTitle isEqualToString:@"Camera Photos"]) {
-            cellTitle = @"Choose Photo";
+            cellTitle = GCLocalizedString(@"picker.choose_photo");
             [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
         }
         if ([cellTitle isEqualToString:@"Take Photo"]) {
+            cellTitle = GCLocalizedString(@"picker.take_photo");
             [cell.imageView setImage:[UIImage imageNamed:@"camera.png"]];
         }
         if ([cellTitle isEqualToString:@"Last Taken Photo"])
         {
+            cellTitle = GCLocalizedString(@"picker.last_photo_taken");
             [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
         }
 
@@ -199,7 +202,7 @@
             [self.navigationController pushViewController:daVC animated:YES];
             
         }
-        else if ([cellTitle isEqualToString:@"Last Taken Photo"])
+        else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_photo_taken")])
         {
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
             [self getLatestPhoto];
@@ -303,7 +306,7 @@
 - (void)setNavBarItems
 {
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
-    self.logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logout)];
+    self.logoutButton = [[UIBarButtonItem alloc] initWithTitle:GCLocalizedString(@"picker.logout") style:UIBarButtonItemStyleBordered target:self action:@selector(logout)];
     
     [self.navigationItem setLeftBarButtonItem:cancelButton];
 }
