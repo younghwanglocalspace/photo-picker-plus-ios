@@ -8,7 +8,7 @@
 
 #import "GCPhotoPickerViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
-#import "PhotoPickerCell.h"
+#import "GCPhotoPickerCell.h"
 #import "GCAssetsCollectionViewController.h"
 #import "GCAccountMediaViewController.h"
 #import "GCAlbumViewController.h"
@@ -62,7 +62,7 @@
     else
         [self setLogoutNavBarButton:YES];
     
-    [self.tableView registerClass:[PhotoPickerCell class] forCellReuseIdentifier:@"GroupCell"];
+    [self.tableView registerClass:[GCPhotoPickerCell class] forCellReuseIdentifier:@"GroupCell"];
 
     [self setLocalFeatures:[[GCPhotoPickerConfiguration configuration] localFeatures]];
     [self setServices:[[GCPhotoPickerConfiguration configuration] services]];
@@ -105,11 +105,11 @@
     return [self.services count];
 }
 
-- (PhotoPickerCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (GCPhotoPickerCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"GroupCell";
 
-    PhotoPickerCell *cell = [[PhotoPickerCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    GCPhotoPickerCell *cell = [[GCPhotoPickerCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
    
     [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     
