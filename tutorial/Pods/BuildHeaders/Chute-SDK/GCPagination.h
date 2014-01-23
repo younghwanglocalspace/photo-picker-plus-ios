@@ -1,1 +1,1 @@
-../../Chute-SDK/Chute-SDK/Models/GCPagination.h
+../../../../../Chute-SDK-v2-iOS/Chute-SDK/Models/GCPagination.h

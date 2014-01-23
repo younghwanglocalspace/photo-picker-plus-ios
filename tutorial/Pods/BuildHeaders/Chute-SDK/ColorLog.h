@@ -1,1 +1,1 @@
-../../Chute-SDK/Chute-SDK/Util/ColorLog.h
+../../../../../Chute-SDK-v2-iOS/Chute-SDK/Util/ColorLog.h

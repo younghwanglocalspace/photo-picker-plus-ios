@@ -148,7 +148,7 @@
         if(group != nil) {
             //Add the album to the array
             [tempAlbums addObject: group];
-            [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+            [group setAssetsFilter:[ALAssetsFilter allAssets]];
             [elementCount addObject: [NSNumber numberWithInt:group.numberOfAssets]];
             
         } else

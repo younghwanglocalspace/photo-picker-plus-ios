@@ -161,7 +161,7 @@ static NSSet *_sGCLocalFeatures;
 + (NSSet *)sGCLocalFeatures
 {
     if (!_sGCLocalFeatures) {
-        _sGCLocalFeatures = [NSSet setWithArray:@[@"take_photo", @"last_taken_photo", @"camera_photos"]];
+        _sGCLocalFeatures = [NSSet setWithArray:@[@"take_media", @"last_media_taken", @"all_media"]];
     }
     return _sGCLocalFeatures;
 }
@@ -180,7 +180,8 @@ static NSDictionary *_sGCServices;
                          @"skydrive": @"microsoft_account",
                          @"twitter":@"twitter",
                          @"chute":@"chute",
-                         @"foursquare":@"foursquare"
+                         @"foursquare":@"foursquare",
+                         @"youtube":@"google"
                          };
     }
     return _sGCServices;

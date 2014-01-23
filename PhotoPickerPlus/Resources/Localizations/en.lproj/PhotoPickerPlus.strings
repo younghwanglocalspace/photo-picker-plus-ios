@@ -11,6 +11,6 @@
 
 "picker.local_services" = "Local Services";
 "picker.online_services" = "Online Services";
-"picker.take_photo" = "Take Photo";
-"picker.last_photo_taken" = "Last Photo Taken";
-"picker.choose_photo" = "Choose Photo";
+"picker.take_media" = "Take Media";
+"picker.last_media_taken" = "Last Media Taken";
+"picker.choose_media" = "All Media";

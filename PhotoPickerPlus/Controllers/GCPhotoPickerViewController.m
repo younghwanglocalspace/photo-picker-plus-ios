@@ -95,7 +95,7 @@
 {
     if (section == 0 && self.hasLocal)
         return GCLocalizedString(@"picker.local_services");
-    return GCLocalizedString(@"picker.local_services");
+    return GCLocalizedString(@"picker.online_services");
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -118,17 +118,16 @@
         NSString *serviceName = [self.localFeatures objectAtIndex:indexPath.row];
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         
-        if ([cellTitle isEqualToString:@"Camera Photos"]) {
-            cellTitle = GCLocalizedString(@"picker.choose_photo");
+        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.choose_media")]) {
+//            cellTitle = GCLocalizedString(@"picker.choose_media");
             [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
         }
-        if ([cellTitle isEqualToString:@"Take Photo"]) {
-            cellTitle = GCLocalizedString(@"picker.take_photo");
+        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.take_media")]) {
+//            cellTitle = GCLocalizedString(@"picker.take_media");
             [cell.imageView setImage:[UIImage imageNamed:@"camera.png"]];
         }
-        if ([cellTitle isEqualToString:@"Last Taken Photo"])
-        {
-            cellTitle = GCLocalizedString(@"picker.last_photo_taken");
+        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_media_taken")]) {
+//            cellTitle = GCLocalizedString(@"picker.last_media_taken");
             [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
         }
 
@@ -176,7 +175,7 @@
         NSString *serviceName = [self.localFeatures objectAtIndex:indexPath.row];
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 
-        if ([cellTitle isEqualToString:@"Take Photo"]) {
+        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.take_media")]) {
 
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 
@@ -186,7 +185,7 @@
             [self presentViewController:picker animated:YES completion:nil];
 
         }
-        else if ([cellTitle isEqualToString:@"Camera Photos"])
+        else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.choose_media")])
         {
             
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -202,7 +201,7 @@
             [self.navigationController pushViewController:daVC animated:YES];
             
         }
-        else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_photo_taken")])
+        else if ([cellTitle isEqualToString:@"Last Media Taken"])
         {
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
             [self getLatestPhoto];
@@ -282,7 +281,7 @@
     [library enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
         
         // Within the group enumeration block, filter to enumerate just photos.
-        [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+        [group setAssetsFilter:[ALAssetsFilter allAssets]];
     
         if (group != nil && [group numberOfAssets] == 0) {
             [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have any photos." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];

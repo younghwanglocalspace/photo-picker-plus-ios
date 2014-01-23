@@ -20,21 +20,24 @@
 
 // CocoaLumberjack
 #define COCOAPODS_POD_AVAILABLE_CocoaLumberjack
-#define COCOAPODS_VERSION_MAJOR_CocoaLumberjack 1
-#define COCOAPODS_VERSION_MINOR_CocoaLumberjack 6
-#define COCOAPODS_VERSION_PATCH_CocoaLumberjack 3
+// This library does not follow semantic-versioning,
+// so we were not able to define version macros.
+// Please contact the author.
+// Version: 1.6.5.1.
 
 // CocoaLumberjack/Core
 #define COCOAPODS_POD_AVAILABLE_CocoaLumberjack_Core
-#define COCOAPODS_VERSION_MAJOR_CocoaLumberjack_Core 1
-#define COCOAPODS_VERSION_MINOR_CocoaLumberjack_Core 6
-#define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Core 3
+// This library does not follow semantic-versioning,
+// so we were not able to define version macros.
+// Please contact the author.
+// Version: 1.6.5.1.
 
 // CocoaLumberjack/Extensions
 #define COCOAPODS_POD_AVAILABLE_CocoaLumberjack_Extensions
-#define COCOAPODS_VERSION_MAJOR_CocoaLumberjack_Extensions 1
-#define COCOAPODS_VERSION_MINOR_CocoaLumberjack_Extensions 6
-#define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Extensions 3
+// This library does not follow semantic-versioning,
+// so we were not able to define version macros.
+// Please contact the author.
+// Version: 1.6.5.1.
 
 // DCKeyValueObjectMapping
 #define COCOAPODS_POD_AVAILABLE_DCKeyValueObjectMapping
@@ -46,7 +49,7 @@
 #define COCOAPODS_POD_AVAILABLE_Lockbox
 #define COCOAPODS_VERSION_MAJOR_Lockbox 1
 #define COCOAPODS_VERSION_MINOR_Lockbox 4
-#define COCOAPODS_VERSION_PATCH_Lockbox 4
+#define COCOAPODS_VERSION_PATCH_Lockbox 6
 
 // MBProgressHUD
 #define COCOAPODS_POD_AVAILABLE_MBProgressHUD

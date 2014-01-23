@@ -1,1 +1,1 @@
-../../Chute-SDK/Chute-SDK/Models/GCAssetDimensions.h
+../../../../../Chute-SDK-v2-iOS/Chute-SDK/Models/GCAssetDimensions.h

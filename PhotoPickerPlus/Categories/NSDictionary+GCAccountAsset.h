@@ -39,4 +39,17 @@
  */
 + (NSDictionary *)infoFromGCAsset:(GCAsset *)asset;
 
+
+/**
+ Creates an info NSDictionary from `GCAccountAssets`.
+ 
+ @param asset The `GCAccountAssets` object from which it should be created NSDictionary object
+ 
+ @return `NSDictionaty`
+ 
+ @warning This method requires `GCAsset` class. Add an `#import "GCAccountAssets.h"` to your header file.
+ */
++ (NSDictionary *)infoFromGCAccountAsset:(GCAccountAssets *)asset;
+
+
 @end

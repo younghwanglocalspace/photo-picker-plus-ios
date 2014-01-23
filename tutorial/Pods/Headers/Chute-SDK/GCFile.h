@@ -1,1 +1,1 @@
-../../Chute-SDK/Chute-SDK/Models/GCFile.h
+../../../../../Chute-SDK-v2-iOS/Chute-SDK/Models/GCFile.h
