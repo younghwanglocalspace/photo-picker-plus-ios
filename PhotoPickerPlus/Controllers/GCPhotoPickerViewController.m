@@ -20,6 +20,8 @@
 
 #import "GetChute.h"
 #import "MBProgressHUD.h"
+#import <MobileCoreServices/MobileCoreServices.h>
+
 
 @interface GCPhotoPickerViewController ()
 
@@ -119,15 +121,24 @@
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         
         if ([cellTitle isEqualToString:GCLocalizedString(@"picker.choose_media")]) {
-//            cellTitle = GCLocalizedString(@"picker.choose_media");
+            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 1)
+                cellTitle = @"Choose Photos";
+            else if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 2)
+                cellTitle = @"Choose Video";
             [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
         }
         if ([cellTitle isEqualToString:GCLocalizedString(@"picker.take_media")]) {
-//            cellTitle = GCLocalizedString(@"picker.take_media");
+            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 1)
+                cellTitle = @"Take Photos";
+            else if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 2)
+                cellTitle = @"Take Video";
             [cell.imageView setImage:[UIImage imageNamed:@"camera.png"]];
         }
         if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_media_taken")]) {
-//            cellTitle = GCLocalizedString(@"picker.last_media_taken");
+            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 1)
+                cellTitle = @"Last Photo Taken";
+            else if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 2)
+                cellTitle = @"Last Video Taken";
             [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
         }
 
@@ -181,6 +192,13 @@
 
             UIImagePickerController *picker = [[UIImagePickerController alloc] init];
             [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
+            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 1)
+                picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *) kUTTypeImage, nil];
+            else if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 2)
+                picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *) kUTTypeMovie, nil];
+            else
+                picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *) kUTTypeMovie, kUTTypeImage, nil];
+
             [picker setDelegate:self];
             [self presentViewController:picker animated:YES completion:nil];
 
@@ -201,7 +219,7 @@
             [self.navigationController pushViewController:daVC animated:YES];
             
         }
-        else if ([cellTitle isEqualToString:@"Last Media Taken"])
+        else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_media_taken")])
         {
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
             [self getLatestPhoto];

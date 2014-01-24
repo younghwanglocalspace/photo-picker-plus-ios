@@ -28,7 +28,13 @@
 /**
  Setting for loading UIImagePickerControllerOriginalImage for assets from web.
  */
-@property (assign, nonatomic) BOOL              loadAssetsFromWeb;
+@property (assign, nonatomic) BOOL              loadImagesFromWeb;
+
+@property (assign, nonatomic) BOOL              loadVideosFromWeb;
+
+@property (assign, nonatomic) BOOL              showImages;
+
+@property (assign, nonatomic) BOOL              showVideos;
 
 /**
  MutableArray used to store logged accounts.
@@ -54,5 +60,7 @@
 - (GCLoginType)loginTypeForString:(NSString *)serviceString;
 
 - (NSString *)loginTypeString:(GCLoginType)loginType;
+
+- (NSInteger)mediaTypesAvailable;
 
 @end

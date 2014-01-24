@@ -20,11 +20,14 @@ static NSString * const kGCConfigurationURL = @"configuration_url";
 static NSString * const kGCServices = @"services";
 static NSString * const kGCLocalFeatures = @"local_features";
 static NSString * const kGCAccounts = @"accounts";
-static NSString * const kGCLoadAssetsFromWeb = @"load_assets_from_web";
+static NSString * const kGCLoadImagesFromWeb = @"load_images_from_web";
+static NSString * const kGCLoadVideosFromWeb = @"load_videos_from_web";
+static NSString * const kGCShowImages = @"show_images";
+static NSString * const kGCShowVideos = @"show_videos";
 
 @implementation GCPhotoPickerConfiguration
 
-@synthesize section, configurationURL, services, localFeatures, loadAssetsFromWeb, accounts;
+@synthesize section, configurationURL, services, localFeatures, loadImagesFromWeb, loadVideosFromWeb, showImages, showVideos, accounts;
 
 #pragma mark - Singleton Design
 
@@ -115,6 +118,20 @@ static NSString * const kGCLoadAssetsFromWeb = @"load_assets_from_web";
         self.configurationURL = nil;
     }
     
+    if ([configuration objectForKey:kGCShowImages]) {
+        self.showImages = [[configuration objectForKey:kGCShowImages] boolValue];
+    }
+    else {
+        self.showImages = YES;
+    }
+    
+    if ([configuration objectForKey:kGCShowVideos]) {
+        self.showVideos = [[configuration objectForKey:kGCShowVideos] boolValue];
+    }
+    else {
+        self.showVideos = YES;
+    }
+        
     if ([configuration objectForKey:kGCServices]){
         
         NSMutableArray *tmpServices = [NSMutableArray array];
@@ -122,7 +139,16 @@ static NSString * const kGCLoadAssetsFromWeb = @"load_assets_from_web";
         [[configuration objectForKey:kGCServices] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 
             if([[[GCPhotoPickerConfiguration sGCServices] allKeys] containsObject:obj]) {
-                [tmpServices addObject:obj];
+                if ([self mediaTypesAvailable] == 1) {
+                    if (![obj isEqualToString:@"youtube"])
+                        [tmpServices addObject:obj];
+                }
+                else if ([self mediaTypesAvailable] == 2) {
+                    if (![obj isEqualToString:@"picasa"])
+                        [tmpServices addObject:obj];
+                }
+                else
+                    [tmpServices addObject:obj];
             }
         }];
         self.services = [NSArray arrayWithArray:tmpServices];
@@ -145,11 +171,18 @@ static NSString * const kGCLoadAssetsFromWeb = @"load_assets_from_web";
         self.accounts = [NSMutableArray arrayWithArray:[mapping parseArray:[configuration objectForKey:kGCAccounts]]];
     }
     
-    if ([configuration objectForKey:kGCLoadAssetsFromWeb]) {
-        self.loadAssetsFromWeb = [[configuration objectForKey:kGCLoadAssetsFromWeb] boolValue];
+    if ([configuration objectForKey:kGCLoadImagesFromWeb]) {
+        self.loadImagesFromWeb = [[configuration objectForKey:kGCLoadImagesFromWeb] boolValue];
     }
     else {
-        self.loadAssetsFromWeb = YES;
+        self.loadImagesFromWeb = YES;
+    }
+    
+    if ([configuration objectForKey:kGCLoadVideosFromWeb]) {
+        self.loadVideosFromWeb = [[configuration objectForKey:kGCLoadVideosFromWeb] boolValue];
+    }
+    else {
+        self.loadVideosFromWeb = NO;
     }
     
     [GCConfigurationFile write:self];
@@ -244,6 +277,18 @@ static NSDictionary *_sGCServices;
             }
         }
     }];
+}
+
+- (NSInteger)mediaTypesAvailable
+{
+    if (self.showImages && self.showVideos) // we show all media
+        return 3;
+    else if (!self.showImages && self.showVideos) // we show only videos
+        return 2;
+    else if (self.showImages && !self.showVideos) // we show only images
+        return 1;
+    else                                                        // it's apsurd to have this one
+        return 0;
 }
 
 @end

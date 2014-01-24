@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import <MBProgressHUD/MBProgressHUD.h>
+#import <AssetsLibrary/AssetsLibrary.h>
+
 //#import "GCPopoverBackgroundView.h"
 
 @interface ViewController ()
@@ -101,13 +103,21 @@
     
     for(NSDictionary *dict in info) {
         
-        UIImage *image = [dict objectForKey:UIImagePickerControllerOriginalImage];
-        
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        [imageView setContentMode:UIViewContentModeScaleAspectFit];
-        imageView.frame = workingFrame;
-        
-        [self.scrollView addSubview:imageView];
+        if ([dict objectForKey:UIImagePickerControllerMediaType] == ALAssetTypeVideo) {
+            UIButton *video = [[UIButton alloc] initWithFrame:workingFrame];
+            UIImage *backgroundImage = [dict objectForKey:UIImagePickerControllerOriginalImage];
+            [video setBackgroundImage:backgroundImage forState:UIControlStateNormal];
+            
+            [self.scrollView addSubview:video];
+        }
+        else {
+            UIImage *image = [dict objectForKey:UIImagePickerControllerOriginalImage];
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+            [imageView setContentMode:UIViewContentModeScaleAspectFit];
+            imageView.frame = workingFrame;
+            [self.scrollView addSubview:imageView];
+        }
+            
         
         workingFrame.origin.x = workingFrame.origin.x + workingFrame.size.width;
     }
@@ -136,13 +146,21 @@
     
     CGRect workingFrame = scrollView.frame;
     workingFrame.origin.x = 0;
-    
-    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-    [imageView setContentMode:UIViewContentModeScaleAspectFit];
-    imageView.frame = workingFrame;
-    
-    [self.scrollView addSubview:imageView];
+    if ([info objectForKey:UIImagePickerControllerMediaType] == ALAssetTypeVideo) {
+        UIButton *video = [[UIButton alloc] initWithFrame:workingFrame];
+        UIImage *backgroundImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+        [video setBackgroundImage:backgroundImage forState:UIControlStateNormal];
+        
+        [self.scrollView addSubview:video];
+    }
+    else {
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        [imageView setContentMode:UIViewContentModeScaleAspectFit];
+        imageView.frame = workingFrame;
+        
+        [self.scrollView addSubview:imageView];
+    }
     
     workingFrame.origin.x = workingFrame.origin.x + workingFrame.size.width;
     [self.scrollView setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];

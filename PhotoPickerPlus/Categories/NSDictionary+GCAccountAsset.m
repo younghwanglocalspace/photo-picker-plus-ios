@@ -66,7 +66,7 @@
 
 + (UIImage *)loadImageWithURL:(NSURL *)url
 {
-    if ([[GCPhotoPickerConfiguration configuration] loadAssetsFromWeb] == NO){
+    if ([[GCPhotoPickerConfiguration configuration] loadImagesFromWeb] == NO){
         return nil;
     }
     

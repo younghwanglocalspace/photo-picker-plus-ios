@@ -62,6 +62,7 @@
 		E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A0114E17BE3B1F0097D3BF /* overlay.png */; };
 		E4A222DB17C382C3000A3A14 /* GCAccountMediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4A222DA17C382C3000A3A14 /* GCAccountMediaViewController.m */; };
 		E4A3753A17D0C3940075B3FF /* NSDictionary+GCAccountAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = E4A3753917D0C3940075B3FF /* NSDictionary+GCAccountAsset.m */; };
+		E4ABE57E189284710007C377 /* VideoButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABE57D189284710007C377 /* VideoButton.m */; };
 		E4BDB53417B55C9C000D4034 /* PhotoPickerClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51417B55C9C000D4034 /* PhotoPickerClient.m */; };
 		E4BDB53517B55C9C000D4034 /* GCServicePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51717B55C9C000D4034 /* GCServicePicker.m */; };
 		E4BDB53717B55C9C000D4034 /* NSDictionary+ALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51C17B55C9C000D4034 /* NSDictionary+ALAsset.m */; };
@@ -157,6 +158,8 @@
 		E4A222DA17C382C3000A3A14 /* GCAccountMediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAccountMediaViewController.m; sourceTree = "<group>"; };
 		E4A3753817D0C3940075B3FF /* NSDictionary+GCAccountAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+GCAccountAsset.h"; sourceTree = "<group>"; };
 		E4A3753917D0C3940075B3FF /* NSDictionary+GCAccountAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+GCAccountAsset.m"; sourceTree = "<group>"; };
+		E4ABE57C189284710007C377 /* VideoButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoButton.h; sourceTree = "<group>"; };
+		E4ABE57D189284710007C377 /* VideoButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoButton.m; sourceTree = "<group>"; };
 		E4BDB51317B55C9C000D4034 /* PhotoPickerClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoPickerClient.h; sourceTree = "<group>"; };
 		E4BDB51417B55C9C000D4034 /* PhotoPickerClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoPickerClient.m; sourceTree = "<group>"; };
 		E4BDB51617B55C9C000D4034 /* GCServicePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCServicePicker.h; sourceTree = "<group>"; };
@@ -254,6 +257,7 @@
 				CC7E469E17A5C0FA00BEF5B8 /* MainStoryboard_iPad.storyboard */,
 				CC7E46A117A5C0FA00BEF5B8 /* ViewController.h */,
 				CC7E46A217A5C0FA00BEF5B8 /* ViewController.m */,
+				E4ABE57B189283690007C377 /* Views */,
 				CC7E468A17A5C0FA00BEF5B8 /* Supporting Files */,
 			);
 			path = "PhotoPickerPlus-SampleApp";
@@ -324,6 +328,15 @@
 				CCF74E73187F0F8100AB1C84 /* PhotoPickerPlus.strings */,
 			);
 			path = Localizations;
+			sourceTree = "<group>";
+		};
+		E4ABE57B189283690007C377 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E4ABE57C189284710007C377 /* VideoButton.h */,
+				E4ABE57D189284710007C377 /* VideoButton.m */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		E4BDB50A17B55C9C000D4034 /* PhotoPickerPlus */ = {
@@ -612,6 +625,7 @@
 				CCD3C3E31828549200E31F78 /* GCPhotoPickerConfiguration.m in Sources */,
 				CC1430DF17CADC2D0089A020 /* GCPopoverBackgroundView.m in Sources */,
 				E4A3753A17D0C3940075B3FF /* NSDictionary+GCAccountAsset.m in Sources */,
+				E4ABE57E189284710007C377 /* VideoButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

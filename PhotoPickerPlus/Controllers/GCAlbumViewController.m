@@ -11,6 +11,7 @@
 #import "GCAccountMediaViewController.h"
 #import "GCAccountAlbum.h"
 #import "GCPhotoPickerCell.h"
+#import "GCPhotoPickerConfiguration.h"
 
 #import "GetChute.h"
 
@@ -148,7 +149,13 @@
         if(group != nil) {
             //Add the album to the array
             [tempAlbums addObject: group];
-            [group setAssetsFilter:[ALAssetsFilter allAssets]];
+            
+            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 1)
+                [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 2)
+                [group setAssetsFilter:[ALAssetsFilter allVideos]];
+            else
+                [group setAssetsFilter:[ALAssetsFilter allAssets]];
             [elementCount addObject: [NSNumber numberWithInt:group.numberOfAssets]];
             
         } else
