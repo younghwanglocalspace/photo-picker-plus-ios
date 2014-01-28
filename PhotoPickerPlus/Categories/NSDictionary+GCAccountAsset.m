@@ -10,8 +10,9 @@
 #import "GCAccountAssets.h"
 #import "GCAsset.h"
 #import "GCPhotoPickerConfiguration.h"
-#import <AssetsLibrary/AssetsLibrary.h>
 #import "GetChute.h"
+
+#import <MobileCoreServices/MobileCoreServices.h>
 
 @implementation NSDictionary (GCAccountAsset)
 
@@ -21,8 +22,11 @@
     [dictionary setValue:asset.id forKey:@"id"];
     [dictionary setValue:asset.caption forKey:@"caption"];
     [dictionary setValue:asset.thumbnail forKey:@"thumbnail"];
-    [dictionary setValue:asset.image_url forKey:@"image_url"];
-    [dictionary setValue:asset.video_url forKey:@"video_url"];
+    if (asset.video_url !=nil)
+        [dictionary setValue:asset.video_url forKey:@"image_url"];
+    else
+        [dictionary setValue:asset.image_url forKey:@"image_url"];
+
     [dictionary setValue:asset.dimensions forKey:@"dimensions"];
     
     return dictionary;
@@ -35,11 +39,11 @@
     UIImage *image = [self loadImageWithURL:[NSURL URLWithString:[asset image_url]]];
     
     if(asset.video_url !=nil) {
-        [mediaInfo setObject:ALAssetTypeVideo forKey:UIImagePickerControllerMediaType];
+        [mediaInfo setObject:(NSString *)kUTTypeVideo forKey:UIImagePickerControllerMediaType];
         [mediaInfo setObject:[NSURL URLWithString:[asset video_url]] forKey:UIImagePickerControllerReferenceURL];
     }
     else {
-        [mediaInfo setObject:ALAssetTypePhoto forKey:UIImagePickerControllerMediaType];
+        [mediaInfo setObject:(NSString *)kUTTypeImage forKey:UIImagePickerControllerMediaType];
         [mediaInfo setObject:[NSURL URLWithString:[asset image_url]] forKey:UIImagePickerControllerReferenceURL];
     }
     
@@ -53,9 +57,9 @@
 + (NSDictionary *)infoFromGCAsset:(GCAsset *)asset
 {
     NSMutableDictionary *mediaInfo = [NSMutableDictionary dictionary];
-    UIImage *image = [self loadImageWithURL:[NSURL URLWithString:[asset url]]];
+    UIImage *image = [self loadImageWithURL:[NSURL URLWithString:[asset thumbnail]]];
     
-    [mediaInfo setObject:ALAssetTypePhoto forKey:UIImagePickerControllerMediaType];
+    [mediaInfo setObject:(NSString *)kUTTypeImage forKey:UIImagePickerControllerMediaType];
     [mediaInfo setObject:[NSURL URLWithString:[asset url]] forKey:UIImagePickerControllerReferenceURL];
     if (image) {
         [mediaInfo setObject:image forKey:UIImagePickerControllerOriginalImage];

@@ -21,7 +21,6 @@ static NSString * const kGCServices = @"services";
 static NSString * const kGCLocalFeatures = @"local_features";
 static NSString * const kGCAccounts = @"accounts";
 static NSString * const kGCLoadImagesFromWeb = @"load_images_from_web";
-static NSString * const kGCLoadVideosFromWeb = @"load_videos_from_web";
 static NSString * const kGCShowImages = @"show_images";
 static NSString * const kGCShowVideos = @"show_videos";
 
@@ -106,6 +105,15 @@ static NSString * const kGCShowVideos = @"show_videos";
         [stockToSave setObject:accountDictionaries forKey:kGCAccounts];
     }
     
+    NSNumber *showImagesNumber = [NSNumber numberWithBool:showImages];
+    [stockToSave setObject:showImagesNumber  forKey:kGCShowImages];
+
+    NSNumber *showVideosNumber = [NSNumber numberWithBool:showVideos];
+    [stockToSave setObject:showVideosNumber forKey:kGCShowVideos];
+
+    NSNumber *loadImagesNumber = [NSNumber numberWithBool:loadImagesFromWeb];
+    [stockToSave setObject:loadImagesNumber forKey:kGCLoadImagesFromWeb];
+    
     return stockToSave;
 }
 
@@ -139,15 +147,6 @@ static NSString * const kGCShowVideos = @"show_videos";
         [[configuration objectForKey:kGCServices] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 
             if([[[GCPhotoPickerConfiguration sGCServices] allKeys] containsObject:obj]) {
-                if ([self mediaTypesAvailable] == 1) {
-                    if (![obj isEqualToString:@"youtube"])
-                        [tmpServices addObject:obj];
-                }
-                else if ([self mediaTypesAvailable] == 2) {
-                    if (![obj isEqualToString:@"picasa"])
-                        [tmpServices addObject:obj];
-                }
-                else
                     [tmpServices addObject:obj];
             }
         }];
@@ -178,13 +177,6 @@ static NSString * const kGCShowVideos = @"show_videos";
         self.loadImagesFromWeb = YES;
     }
     
-    if ([configuration objectForKey:kGCLoadVideosFromWeb]) {
-        self.loadVideosFromWeb = [[configuration objectForKey:kGCLoadVideosFromWeb] boolValue];
-    }
-    else {
-        self.loadVideosFromWeb = NO;
-    }
-    
     [GCConfigurationFile write:self];
 }
 
@@ -194,7 +186,7 @@ static NSSet *_sGCLocalFeatures;
 + (NSSet *)sGCLocalFeatures
 {
     if (!_sGCLocalFeatures) {
-        _sGCLocalFeatures = [NSSet setWithArray:@[@"take_media", @"last_media_taken", @"all_media"]];
+        _sGCLocalFeatures = [NSSet setWithArray:@[@"take_photo", @"last_photo_taken", @"all_media", @"record_video", @"last_video_captured" ]];
     }
     return _sGCLocalFeatures;
 }
@@ -212,7 +204,6 @@ static NSDictionary *_sGCServices;
                          @"dropbox": @"dropbox",
                          @"skydrive": @"microsoft_account",
                          @"twitter":@"twitter",
-                         @"chute":@"chute",
                          @"foursquare":@"foursquare",
                          @"youtube":@"google"
                          };
@@ -275,6 +266,8 @@ static NSDictionary *_sGCServices;
             if (!error) {
                 [self populate:configuration];
             }
+            else
+                NSLog(@"Config ERROR");
         }
     }];
 }

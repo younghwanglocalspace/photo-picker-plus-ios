@@ -9,16 +9,20 @@
 #import "ViewController.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import "CustomImageView.h"
 
 //#import "GCPopoverBackgroundView.h"
 
 @interface ViewController ()
 
+@property (nonatomic, strong) MPMoviePlayerViewController   *videoPlayer;
+
 @end
 
 @implementation ViewController
 
-@synthesize scrollView, pageControl, popoverController;
+@synthesize scrollView, pageControl, popoverController, videoPlayer;
 
 - (void)viewDidLoad
 {
@@ -103,21 +107,9 @@
     
     for(NSDictionary *dict in info) {
         
-        if ([dict objectForKey:UIImagePickerControllerMediaType] == ALAssetTypeVideo) {
-            UIButton *video = [[UIButton alloc] initWithFrame:workingFrame];
-            UIImage *backgroundImage = [dict objectForKey:UIImagePickerControllerOriginalImage];
-            [video setBackgroundImage:backgroundImage forState:UIControlStateNormal];
-            
-            [self.scrollView addSubview:video];
-        }
-        else {
-            UIImage *image = [dict objectForKey:UIImagePickerControllerOriginalImage];
-            UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-            [imageView setContentMode:UIViewContentModeScaleAspectFit];
-            imageView.frame = workingFrame;
-            [self.scrollView addSubview:imageView];
-        }
-            
+        CustomImageView *imageView = [[CustomImageView alloc] initWithFrame:workingFrame andInfo:dict];
+        imageView.delegate = self;
+        [self.scrollView addSubview:imageView];
         
         workingFrame.origin.x = workingFrame.origin.x + workingFrame.size.width;
     }
@@ -146,21 +138,10 @@
     
     CGRect workingFrame = scrollView.frame;
     workingFrame.origin.x = 0;
-    if ([info objectForKey:UIImagePickerControllerMediaType] == ALAssetTypeVideo) {
-        UIButton *video = [[UIButton alloc] initWithFrame:workingFrame];
-        UIImage *backgroundImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-        [video setBackgroundImage:backgroundImage forState:UIControlStateNormal];
-        
-        [self.scrollView addSubview:video];
-    }
-    else {
-        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        [imageView setContentMode:UIViewContentModeScaleAspectFit];
-        imageView.frame = workingFrame;
-        
-        [self.scrollView addSubview:imageView];
-    }
+    
+    CustomImageView *imageView = [[CustomImageView alloc] initWithFrame:workingFrame andInfo:info];
+    imageView.delegate = self;
+    [self.scrollView addSubview:imageView];
     
     workingFrame.origin.x = workingFrame.origin.x + workingFrame.size.width;
     [self.scrollView setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];
@@ -209,6 +190,39 @@
 -(void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView  {
     NSInteger pageNumber = roundf(self.scrollView.contentOffset.x / (self.scrollView.frame.size.width));
     pageControl.currentPage = pageNumber;
+}
+
+#pragma mark - CustomImageView Delegate methods
+
+- (void)playVideoWithURL:(NSURL *)videoURL
+{
+    NSString *url = [NSString stringWithFormat:@"%@",videoURL];
+    if ([url rangeOfString:@"youtube"].location == NSNotFound) {
+        NSLog(@"Other Link");
+        UIGraphicsBeginImageContext(CGSizeMake(1,1));
+        
+        self.videoPlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopVideo:) name:MPMoviePlayerPlaybackDidFinishNotification object:self.videoPlayer];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopVideo:) name:MPMoviePlayerDidExitFullscreenNotification object:self.videoPlayer];
+        
+        [self presentMoviePlayerViewControllerAnimated:self.videoPlayer];
+        UIGraphicsEndImageContext();
+        
+        
+    } else {
+        NSLog(@"Youtube");
+        [[UIApplication sharedApplication] openURL:videoURL];
+    }
+}
+
+#pragma mark - Notification Methods
+
+-(void)stopVideo:(NSNotification*) aNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:self.videoPlayer];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerDidExitFullscreenNotification object:self.videoPlayer];
+    [self dismissMoviePlayerViewControllerAnimated];
 }
 
 @end

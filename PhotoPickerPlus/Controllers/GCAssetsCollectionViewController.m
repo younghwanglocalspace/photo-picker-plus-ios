@@ -217,23 +217,24 @@
             }
             else
             {
-//                for (GCAccountAssets *asset in self.selectedAssets) {
-//                    [infoArray addObject:[NSDictionary infoFromGCAccountAsset:asset]];
-//                }
-//                info = infoArray;
-//                [HUD hide:YES];
-//                [self successBlock](info);
-                [GCServicePicker postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
-                    for(GCAsset *asset in returnedArray){
-                        [infoArray addObject:([NSDictionary infoFromGCAsset:asset])];
-                    }
-                    info = infoArray;
-                    [HUD hide:YES];
-                    [self successBlock](info);
-                } failure:^(NSError *error) {
-                    [HUD hide:YES];
-                    [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-	                }];
+                for (GCAccountAssets *asset in self.selectedAssets) {
+                    [infoArray addObject:[NSDictionary infoFromGCAccountAsset:asset]];
+                }
+                info = infoArray;
+                [HUD hide:YES];
+                [self successBlock](info);
+
+//                [GCServicePicker postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
+//                    for(GCAsset *asset in returnedArray){
+//                        [infoArray addObject:([NSDictionary infoFromGCAsset:asset])];
+//                    }
+//                    info = infoArray;
+//                    [HUD hide:YES];
+//                    [self successBlock](info);
+//                } failure:^(NSError *error) {
+//                    [HUD hide:YES];
+//                    [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+//	                }];
             }
             
         }
@@ -246,9 +247,6 @@
             }
             else
             {
-//                for (GCAccountAssets *asset in self.selectedAssets) {
-//                    [infoArray addObject:[NSDictionary infoFromGCAccountAsset:asset]];
-//                }
                 info = [NSDictionary infoFromGCAccountAsset:[self.selectedAssets objectAtIndex:0]];
                 [HUD hide:YES];
                 [self successBlock](info);

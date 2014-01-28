@@ -8,19 +8,24 @@
 
 #import "NSDictionary+ALAsset.h"
 #import <AssetsLibrary/AssetsLibrary.h>
-#import "GCAccountAssets.h"
+#import <MobileCoreServices/MobileCoreServices.h>
+
 
 @implementation NSDictionary (ALAsset)
 
 + (NSDictionary *)infoFromALAsset:(ALAsset *)asset
 {
     NSMutableDictionary *mediaInfo = [NSMutableDictionary dictionary];
-    [mediaInfo setObject:[asset valueForProperty:ALAssetPropertyType] forKey:UIImagePickerControllerMediaType];
+    if ([asset valueForProperty:ALAssetPropertyType] == ALAssetTypePhoto)
+        [mediaInfo setObject:(NSString *)kUTTypeImage forKey:UIImagePickerControllerMediaType];
+
+    else if ([asset valueForProperty:ALAssetPropertyType] == ALAssetTypeVideo)
+        [mediaInfo setObject:(NSString *)kUTTypeVideo forKey:UIImagePickerControllerMediaType];
+        
     [mediaInfo setObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]] forKey:UIImagePickerControllerOriginalImage];
     [mediaInfo setObject:[[asset valueForProperty:ALAssetPropertyURLs] valueForKey:[[[asset valueForProperty:ALAssetPropertyURLs] allKeys] objectAtIndex:0]] forKey:UIImagePickerControllerReferenceURL];
 
     return mediaInfo;
 }
-
 
 @end

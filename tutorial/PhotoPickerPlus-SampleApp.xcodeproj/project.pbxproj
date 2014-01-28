@@ -62,7 +62,9 @@
 		E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A0114E17BE3B1F0097D3BF /* overlay.png */; };
 		E4A222DB17C382C3000A3A14 /* GCAccountMediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4A222DA17C382C3000A3A14 /* GCAccountMediaViewController.m */; };
 		E4A3753A17D0C3940075B3FF /* NSDictionary+GCAccountAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = E4A3753917D0C3940075B3FF /* NSDictionary+GCAccountAsset.m */; };
-		E4ABE57E189284710007C377 /* VideoButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABE57D189284710007C377 /* VideoButton.m */; };
+		E4A567F01897B5E500617366 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4A567EF1897B5E500617366 /* MediaPlayer.framework */; };
+		E4A567F21897C36600617366 /* play_overlay in Resources */ = {isa = PBXBuildFile; fileRef = E4A567F11897C36600617366 /* play_overlay */; };
+		E4AA8E281896AB69000D75B6 /* CustomImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4AA8E271896AB69000D75B6 /* CustomImageView.m */; };
 		E4BDB53417B55C9C000D4034 /* PhotoPickerClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51417B55C9C000D4034 /* PhotoPickerClient.m */; };
 		E4BDB53517B55C9C000D4034 /* GCServicePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51717B55C9C000D4034 /* GCServicePicker.m */; };
 		E4BDB53717B55C9C000D4034 /* NSDictionary+ALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51C17B55C9C000D4034 /* NSDictionary+ALAsset.m */; };
@@ -158,8 +160,10 @@
 		E4A222DA17C382C3000A3A14 /* GCAccountMediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAccountMediaViewController.m; sourceTree = "<group>"; };
 		E4A3753817D0C3940075B3FF /* NSDictionary+GCAccountAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+GCAccountAsset.h"; sourceTree = "<group>"; };
 		E4A3753917D0C3940075B3FF /* NSDictionary+GCAccountAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+GCAccountAsset.m"; sourceTree = "<group>"; };
-		E4ABE57C189284710007C377 /* VideoButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoButton.h; sourceTree = "<group>"; };
-		E4ABE57D189284710007C377 /* VideoButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoButton.m; sourceTree = "<group>"; };
+		E4A567EF1897B5E500617366 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		E4A567F11897C36600617366 /* play_overlay */ = {isa = PBXFileReference; lastKnownFileType = file; path = play_overlay; sourceTree = "<group>"; };
+		E4AA8E261896AB69000D75B6 /* CustomImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomImageView.h; sourceTree = "<group>"; };
+		E4AA8E271896AB69000D75B6 /* CustomImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomImageView.m; sourceTree = "<group>"; };
 		E4BDB51317B55C9C000D4034 /* PhotoPickerClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoPickerClient.h; sourceTree = "<group>"; };
 		E4BDB51417B55C9C000D4034 /* PhotoPickerClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoPickerClient.m; sourceTree = "<group>"; };
 		E4BDB51617B55C9C000D4034 /* GCServicePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCServicePicker.h; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4A567F01897B5E500617366 /* MediaPlayer.framework in Frameworks */,
 				E49CFD6B17B4EF290063C248 /* AssetsLibrary.framework in Frameworks */,
 				CC7E468417A5C0FA00BEF5B8 /* UIKit.framework in Frameworks */,
 				CC7E468617A5C0FA00BEF5B8 /* Foundation.framework in Frameworks */,
@@ -238,6 +243,7 @@
 		CC7E468217A5C0FA00BEF5B8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E4A567EF1897B5E500617366 /* MediaPlayer.framework */,
 				CC7E46CF17A67C8100BEF5B8 /* AssetsLibrary.framework */,
 				CC7E468317A5C0FA00BEF5B8 /* UIKit.framework */,
 				CC7E468517A5C0FA00BEF5B8 /* Foundation.framework */,
@@ -266,6 +272,7 @@
 		CC7E468A17A5C0FA00BEF5B8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E4A567F11897C36600617366 /* play_overlay */,
 				CC7E468B17A5C0FA00BEF5B8 /* PhotoPickerPlus-SampleApp-Info.plist */,
 				CC7E468C17A5C0FA00BEF5B8 /* InfoPlist.strings */,
 				CC7E468F17A5C0FA00BEF5B8 /* main.m */,
@@ -333,8 +340,8 @@
 		E4ABE57B189283690007C377 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E4ABE57C189284710007C377 /* VideoButton.h */,
-				E4ABE57D189284710007C377 /* VideoButton.m */,
+				E4AA8E261896AB69000D75B6 /* CustomImageView.h */,
+				E4AA8E271896AB69000D75B6 /* CustomImageView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -512,6 +519,7 @@
 				CC7E468E17A5C0FA00BEF5B8 /* InfoPlist.strings in Resources */,
 				CCD3C3E21828549200E31F78 /* GCConfiguration.plist in Resources */,
 				CC7E469617A5C0FA00BEF5B8 /* Default.png in Resources */,
+				E4A567F21897C36600617366 /* play_overlay in Resources */,
 				CCD3C3E11828549200E31F78 /* GCConfiguration-Sample.plist in Resources */,
 				CC7E469817A5C0FA00BEF5B8 /* Default@2x.png in Resources */,
 				CCF74E75187F0F8100AB1C84 /* InfoPlist.strings in Resources */,
@@ -625,7 +633,7 @@
 				CCD3C3E31828549200E31F78 /* GCPhotoPickerConfiguration.m in Sources */,
 				CC1430DF17CADC2D0089A020 /* GCPopoverBackgroundView.m in Sources */,
 				E4A3753A17D0C3940075B3FF /* NSDictionary+GCAccountAsset.m in Sources */,
-				E4ABE57E189284710007C377 /* VideoButton.m in Sources */,
+				E4AA8E281896AB69000D75B6 /* CustomImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

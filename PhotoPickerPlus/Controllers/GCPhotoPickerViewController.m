@@ -23,6 +23,8 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 
 
+static NSUInteger kGCImagePickerVideoMaximumDuration = 20;  // in seconds.
+
 @interface GCPhotoPickerViewController ()
 
 @property (nonatomic) BOOL isItDevice;
@@ -122,26 +124,21 @@
         
         if ([cellTitle isEqualToString:GCLocalizedString(@"picker.choose_media")]) {
             if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 1)
-                cellTitle = @"Choose Photos";
+                cellTitle = GCLocalizedString(@"picker.choose_photo");
             else if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 2)
-                cellTitle = @"Choose Video";
+                cellTitle = GCLocalizedString(@"picker.choose_video");
             [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
         }
-        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.take_media")]) {
-            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 1)
-                cellTitle = @"Take Photos";
-            else if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 2)
-                cellTitle = @"Take Video";
+        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.take_photo")])
             [cell.imageView setImage:[UIImage imageNamed:@"camera.png"]];
-        }
-        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_media_taken")]) {
-            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 1)
-                cellTitle = @"Last Photo Taken";
-            else if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 2)
-                cellTitle = @"Last Video Taken";
+        
+        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_photo_taken")])
             [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
-        }
-
+        
+        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.record_video")])
+            [cell.imageView setImage:[UIImage imageNamed:@"camera.png"]];
+        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_video_captured")])
+            [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
         [cell.titleLabel setText:cellTitle];
     }
     else
@@ -186,23 +183,36 @@
         NSString *serviceName = [self.localFeatures objectAtIndex:indexPath.row];
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 
-        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.take_media")]) {
+        if ([cellTitle isEqualToString:GCLocalizedString(@"picker.take_photo")]) {
 
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 
             UIImagePickerController *picker = [[UIImagePickerController alloc] init];
             [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
-            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 1)
-                picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *) kUTTypeImage, nil];
-            else if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 2)
-                picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *) kUTTypeMovie, nil];
-            else
-                picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *) kUTTypeMovie, kUTTypeImage, nil];
-
             [picker setDelegate:self];
             [self presentViewController:picker animated:YES completion:nil];
 
         }
+        
+        else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.record_video")]) {
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
+            picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *) kUTTypeMovie, nil];
+            picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
+            picker.allowsEditing = YES;
+            picker.videoMaximumDuration = kGCImagePickerVideoMaximumDuration;
+            [picker setDelegate:self];
+            [self presentViewController:picker animated:YES completion:nil];
+
+        }
+        
+        else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_video_captured")]) {
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self getLatestPhoto:NO andVideo:YES];
+        }
+        
         else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.choose_media")])
         {
             
@@ -219,10 +229,10 @@
             [self.navigationController pushViewController:daVC animated:YES];
             
         }
-        else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_media_taken")])
+        else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_photo_taken")])
         {
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-            [self getLatestPhoto];
+            [self getLatestPhoto:YES andVideo:NO];
 
         }
     }
@@ -291,7 +301,7 @@
 
 #pragma mark - Custom Methods
 
-- (void)getLatestPhoto
+- (void)getLatestPhoto:(BOOL)photo andVideo:(BOOL)video
 {
     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
     
@@ -299,8 +309,13 @@
     [library enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
         
         // Within the group enumeration block, filter to enumerate just photos.
-        [group setAssetsFilter:[ALAssetsFilter allAssets]];
-    
+        if (photo && video)
+            [group setAssetsFilter:[ALAssetsFilter allAssets]];
+        else if (video)
+            [group setAssetsFilter:[ALAssetsFilter allVideos]];
+        else
+            [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+            
         if (group != nil && [group numberOfAssets] == 0) {
             [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have any photos." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
             return;
@@ -365,7 +380,19 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    [self successBlock](info);
+    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]){
+    
+    // Saving the video / // Get the new unique filename
+        NSString *sourcePath = [[info objectForKey:UIImagePickerControllerMediaURL]relativePath];
+        UISaveVideoAtPathToSavedPhotosAlbum(sourcePath,self,@selector(video:didFinishSavingWithError:contextInfo:), nil);
+    }
+    else {
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+        [self successBlock](info);
+        
+    }
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingArrayOfMediaWithInfo:(NSArray *)info
@@ -397,6 +424,13 @@
         }
     };
     return cancelBlock;
+}
+
+#pragma mark - Saving ALAsset
+
+-(void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo
+{
+    [self getLatestPhoto:NO andVideo:YES];
 }
 
 #pragma mark - Setters

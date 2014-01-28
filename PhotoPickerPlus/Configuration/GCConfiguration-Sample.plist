@@ -12,7 +12,7 @@
 	<key>photopicker</key>
 	<dict>
 		<key>configuration_url</key>
-		<string>https://www.dropbox.com/s/lat3x3asl2xexm3/config.json</string>
+		<string>https://dl.dropboxusercontent.com/s/lat3x3asl2xexm3/config.json</string>
 		<key>services</key>
 		<array>
 			<string>facebook</string>
@@ -27,16 +27,16 @@
 		<key>local_features</key>
 		<array>
 			<string>take_photo</string>
-			<string>last_taken_photo</string>
-			<string>camera_photos</string>
+			<string>last_photo_taken</string>
+			<string>all_media</string>
+			<string>record_video</string>
+			<string>last_video_captured</string>
 		</array>
-		<key>load_assets_from_web</key>
+		<key>load_images_from_web</key>
 		<true/>
-		<key>load_videos_from_web</key>
-		<false/>
-		<key>show_images_from_web</key>
-		<false/>
-		<key>show_videos_from_web</key>
+		<key>show_images</key>
+		<true/>
+		<key>show_videos</key>
 		<true/>
 	</dict>
 </dict>
