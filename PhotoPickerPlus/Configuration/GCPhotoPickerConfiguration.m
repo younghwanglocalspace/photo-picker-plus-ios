@@ -26,7 +26,7 @@ static NSString * const kGCShowVideos = @"show_videos";
 
 @implementation GCPhotoPickerConfiguration
 
-@synthesize section, configurationURL, services, localFeatures, loadImagesFromWeb, loadVideosFromWeb, showImages, showVideos, accounts;
+@synthesize section, configurationURL, services, localFeatures, loadImagesFromWeb, showImages, showVideos, accounts;
 
 #pragma mark - Singleton Design
 
@@ -105,14 +105,15 @@ static NSString * const kGCShowVideos = @"show_videos";
         [stockToSave setObject:accountDictionaries forKey:kGCAccounts];
     }
     
+    NSNumber *loadImagesNumber = [NSNumber numberWithBool:loadImagesFromWeb];
+    [stockToSave setObject:loadImagesNumber forKey:kGCLoadImagesFromWeb];
+
     NSNumber *showImagesNumber = [NSNumber numberWithBool:showImages];
     [stockToSave setObject:showImagesNumber  forKey:kGCShowImages];
 
     NSNumber *showVideosNumber = [NSNumber numberWithBool:showVideos];
     [stockToSave setObject:showVideosNumber forKey:kGCShowVideos];
 
-    NSNumber *loadImagesNumber = [NSNumber numberWithBool:loadImagesFromWeb];
-    [stockToSave setObject:loadImagesNumber forKey:kGCLoadImagesFromWeb];
     
     return stockToSave;
 }
@@ -126,20 +127,6 @@ static NSString * const kGCShowVideos = @"show_videos";
         self.configurationURL = nil;
     }
     
-    if ([configuration objectForKey:kGCShowImages]) {
-        self.showImages = [[configuration objectForKey:kGCShowImages] boolValue];
-    }
-    else {
-        self.showImages = YES;
-    }
-    
-    if ([configuration objectForKey:kGCShowVideos]) {
-        self.showVideos = [[configuration objectForKey:kGCShowVideos] boolValue];
-    }
-    else {
-        self.showVideos = YES;
-    }
-        
     if ([configuration objectForKey:kGCServices]){
         
         NSMutableArray *tmpServices = [NSMutableArray array];
@@ -173,8 +160,13 @@ static NSString * const kGCShowVideos = @"show_videos";
     if ([configuration objectForKey:kGCLoadImagesFromWeb]) {
         self.loadImagesFromWeb = [[configuration objectForKey:kGCLoadImagesFromWeb] boolValue];
     }
-    else {
-        self.loadImagesFromWeb = YES;
+    
+    if ([configuration objectForKey:kGCShowImages]) {
+        self.showImages = [[configuration objectForKey:kGCShowImages] boolValue];
+    }
+    
+    if ([configuration objectForKey:kGCShowVideos]) {
+        self.showVideos = [[configuration objectForKey:kGCShowVideos] boolValue];
     }
     
     [GCConfigurationFile write:self];
@@ -266,22 +258,20 @@ static NSDictionary *_sGCServices;
             if (!error) {
                 [self populate:configuration];
             }
-            else
-                NSLog(@"Config ERROR");
         }
     }];
 }
 
-- (NSInteger)mediaTypesAvailable
+- (NSString *)mediaTypesAvailable
 {
     if (self.showImages && self.showVideos) // we show all media
-        return 3;
+        return @"All Media";
     else if (!self.showImages && self.showVideos) // we show only videos
-        return 2;
+        return @"Videos";
     else if (self.showImages && !self.showVideos) // we show only images
-        return 1;
-    else                                                        // it's apsurd to have this one
-        return 0;
+        return @"Photos";
+    else                                          // it's apsurd to have this one
+        return @"None";
 }
 
 @end

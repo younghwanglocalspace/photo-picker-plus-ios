@@ -150,11 +150,11 @@
             //Add the album to the array
             [tempAlbums addObject: group];
             
-            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 1)
+            if ([[[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] isEqualToString:@"Photos"])
                 [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 2)
+            if ([[[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] isEqualToString:@"Videos"])
                 [group setAssetsFilter:[ALAssetsFilter allVideos]];
-            else
+            if ([[[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] isEqualToString:@"All Media"])
                 [group setAssetsFilter:[ALAssetsFilter allAssets]];
             [elementCount addObject: [NSNumber numberWithInt:group.numberOfAssets]];
             

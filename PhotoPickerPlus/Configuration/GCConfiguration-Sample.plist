@@ -28,9 +28,9 @@
 		<array>
 			<string>take_photo</string>
 			<string>last_photo_taken</string>
-			<string>all_media</string>
 			<string>record_video</string>
 			<string>last_video_captured</string>
+			<string>all_media</string>
 		</array>
 		<key>load_images_from_web</key>
 		<true/>

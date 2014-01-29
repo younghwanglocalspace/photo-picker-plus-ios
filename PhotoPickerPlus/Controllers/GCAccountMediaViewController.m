@@ -10,6 +10,8 @@
 #import "GCAlbumViewController.h"
 #import "GCAssetsCollectionViewController.h"
 #import "GCServicePicker.h"
+#import "GCPhotoPickerConfiguration.h"
+#import "GCAccountAssets.h"
 
 #import "MBProgressHUD.h"
 
@@ -116,7 +118,7 @@
         [self.scrollView addSubview:self.assetViewController.collectionView];
         [self.assetViewController didMoveToParentViewController:self];
         
-        [self.assetViewController setAssets:self.files];
+        [self.assetViewController setAssets:[self filterFiles:self.files]];
         [self.assetViewController setSuccessBlock:[self successBlock]];
         [self.assetViewController setCancelBlock:[self cancelBlock]];
         [self.assetViewController setIsItDevice:self.isItDevice];
@@ -178,6 +180,23 @@
         [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + collectionViewFrame.size.height)];
         
     }
+}
+
+#pragma mark - Utility Function
+
+- (NSArray *)filterFiles:(NSArray *)files
+{
+    NSMutableArray *filteredFiles = [NSMutableArray new];
+
+    for (GCAccountAssets *asset in files) {
+        if (asset.video_url != nil && [[GCPhotoPickerConfiguration configuration] showVideos] == YES) {
+            [filteredFiles addObject:asset];
+        }
+        if (asset.video_url == nil && [[GCPhotoPickerConfiguration configuration] showImages] == YES) {
+            [filteredFiles addObject:asset];
+        }
+    }
+    return [filteredFiles copy];
 }
 
 @end

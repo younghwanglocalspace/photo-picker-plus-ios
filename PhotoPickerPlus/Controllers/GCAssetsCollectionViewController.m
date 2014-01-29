@@ -94,13 +94,19 @@
     if(self.isItDevice)
     {
         ALAsset *asset = [self.assets objectAtIndex:indexPath.row];
-        cell.imageView.image = [UIImage imageWithCGImage:[asset thumbnail]];
+        if ([asset valueForProperty:ALAssetPropertyType] == ALAssetTypeVideo)
+            cell.imageView.image = [self makeVideoImageFromImage:[UIImage imageWithCGImage:[asset thumbnail]] withFrame:cell.frame];
+        else
+            cell.imageView.image = [UIImage imageWithCGImage:[asset thumbnail]];
     }
     else
     {
         GCAccountAssets *asset = [self.assets objectAtIndex:indexPath.row];
        AFImageRequestOperation *operation = [AFImageRequestOperation imageRequestOperationWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[asset thumbnail]]] success:^(UIImage *image) {
-            [cell.imageView setImage:image];
+           if (asset.video_url != nil)
+                cell.imageView.image = [self makeVideoImageFromImage:image withFrame:cell.frame];
+           else
+                [cell.imageView setImage:image];
        }];
         [operation start];
     }
@@ -189,6 +195,35 @@
     NSArray *navBarItemsToBeAdd = @[[self doneButton], [self cancelButton]];
 
     return navBarItemsToBeAdd;
+}
+
+#pragma mark - Utility Method
+
+- (UIImage *)makeVideoImageFromImage:(UIImage *)image withFrame:(CGRect)frame
+{
+    UIGraphicsBeginImageContextWithOptions(frame.size, NO, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSaveGState(context);
+    UIImage *bottomImage = image;
+    CGRect bottomImageRect = CGRectMake(0, 0, frame.size.width, frame.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextTranslateCTM(context, 0, -bottomImageRect.size.height);
+    CGContextDrawImage(context, bottomImageRect, bottomImage.CGImage);
+    CGContextRestoreGState(context);
+    
+    CGContextSaveGState(context);
+    UIImage *topImage = [UIImage imageNamed:@"play_overlay.png"];
+    CGRect topImageRect = CGRectMake(25, -25, 23.75, 23.75);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextTranslateCTM(context, 0, -topImageRect.size.height);
+    CGContextDrawImage(context, topImageRect, topImage.CGImage);
+    CGContextRestoreGState(context);
+    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+
+    return result;
 }
 
 #pragma mark - Instance Methods

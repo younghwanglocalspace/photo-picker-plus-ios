@@ -22,13 +22,9 @@
 #import "MBProgressHUD.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
-
-static NSUInteger kGCImagePickerVideoMaximumDuration = 20;  // in seconds.
-
 @interface GCPhotoPickerViewController ()
 
 @property (nonatomic) BOOL isItDevice;
-
 @property (assign, nonatomic) BOOL hasLocal;
 @property (strong, nonatomic) NSArray *localFeatures;
 @property (assign, nonatomic) BOOL hasOnline;
@@ -123,9 +119,9 @@ static NSUInteger kGCImagePickerVideoMaximumDuration = 20;  // in seconds.
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         
         if ([cellTitle isEqualToString:GCLocalizedString(@"picker.choose_media")]) {
-            if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 1)
+            if ([[[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] isEqualToString:@"Photos"])
                 cellTitle = GCLocalizedString(@"picker.choose_photo");
-            else if ([[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] == 2)
+            else if ([[[GCPhotoPickerConfiguration configuration] mediaTypesAvailable] isEqualToString:@"Videos"])
                 cellTitle = GCLocalizedString(@"picker.choose_video");
             [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
         }
@@ -202,7 +198,6 @@ static NSUInteger kGCImagePickerVideoMaximumDuration = 20;  // in seconds.
             picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *) kUTTypeMovie, nil];
             picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
             picker.allowsEditing = YES;
-            picker.videoMaximumDuration = kGCImagePickerVideoMaximumDuration;
             [picker setDelegate:self];
             [self presentViewController:picker animated:YES completion:nil];
 

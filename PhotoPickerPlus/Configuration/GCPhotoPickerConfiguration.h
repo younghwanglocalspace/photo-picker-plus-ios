@@ -30,8 +30,6 @@
  */
 @property (assign, nonatomic) BOOL              loadImagesFromWeb;
 
-@property (assign, nonatomic) BOOL              loadVideosFromWeb;
-
 @property (assign, nonatomic) BOOL              showImages;
 
 @property (assign, nonatomic) BOOL              showVideos;
@@ -61,6 +59,6 @@
 
 - (NSString *)loginTypeString:(GCLoginType)loginType;
 
-- (NSInteger)mediaTypesAvailable;
+- (NSString *)mediaTypesAvailable;
 
 @end
