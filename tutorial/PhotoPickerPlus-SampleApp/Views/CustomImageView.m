@@ -9,6 +9,7 @@
 #import "CustomImageView.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import "UIImage+VideoImage.h"
 
 @interface CustomImageView ()
 
@@ -44,29 +45,7 @@
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(performAction:)];
             tap.numberOfTapsRequired = 1;
             
-            UIGraphicsBeginImageContextWithOptions(frame.size, NO, 0.0);
-            CGContextRef context = UIGraphicsGetCurrentContext();
-            
-            CGContextSaveGState(context);
-            UIImage *bottomImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-            CGRect bottomImageRect = CGRectMake(0, 0, frame.size.width, frame.size.height);
-            CGContextScaleCTM(context, 1.0, -1.0);
-            CGContextTranslateCTM(context, 0, -bottomImageRect.size.height);
-            CGContextDrawImage(context, bottomImageRect, bottomImage.CGImage);
-            CGContextRestoreGState(context);
-            
-            CGContextSaveGState(context);
-            UIImage *topImage = [UIImage imageNamed:@"play_overlay.png"];
-            CGRect topImageRect = CGRectMake(110, -110, 60, 60);
-            CGContextScaleCTM(context, 1.0, -1.0);
-            CGContextTranslateCTM(context, 0, -topImageRect.size.height);
-            CGContextDrawImage(context, topImageRect, topImage.CGImage);
-            CGContextRestoreGState(context);
-            UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
-            
-            UIGraphicsEndImageContext();
-            
-            [self setImage:result];
+            [self setImage:[UIImage makeImageFromBottomImage:[info objectForKey:UIImagePickerControllerOriginalImage] withFrame:frame andTopImage:[UIImage imageNamed:@"play_overlay.png"] withFrame:CGRectMake(110, 110, 60, 60)]];
             
             [self addGestureRecognizer:tap];
         }

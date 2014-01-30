@@ -30,8 +30,14 @@
  */
 @property (assign, nonatomic) BOOL              loadImagesFromWeb;
 
+/**
+ Variable which let you choose do you want images to be shown.
+ */
 @property (assign, nonatomic) BOOL              showImages;
 
+/**
+ Variable which let you choose do you want videos to be shown.
+ */
 @property (assign, nonatomic) BOOL              showVideos;
 
 /**
@@ -53,12 +59,18 @@
 
 - (void)addAccount:(GCAccount *)account;
 
+/**
+ Removing all accounts from configuration.
+ */
 - (void)removeAllAccounts;
 
 - (GCLoginType)loginTypeForString:(NSString *)serviceString;
 
 - (NSString *)loginTypeString:(GCLoginType)loginType;
 
+/**
+ Method used to return string for which media types are available including Photos, Videos and Both.
+ */
 - (NSString *)mediaTypesAvailable;
 
 @end
