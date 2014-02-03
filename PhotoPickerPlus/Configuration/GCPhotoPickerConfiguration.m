@@ -169,6 +169,9 @@ static NSString * const kGCShowVideos = @"show_videos";
         self.showVideos = [[configuration objectForKey:kGCShowVideos] boolValue];
     }
     
+    if (!self.showImages && !self.showVideos)
+        @throw [NSException exceptionWithName:@"Error" reason:@"You must choose to show at least one type of assets in your configuration" userInfo:nil];
+
     [GCConfigurationFile write:self];
 }
 
@@ -271,7 +274,7 @@ static NSDictionary *_sGCServices;
     else if (self.showImages && !self.showVideos) // we show only images
         return @"Photos";
     else                                          // it's apsurd to have this one
-        return @"None";
+        return nil;
 }
 
 @end
