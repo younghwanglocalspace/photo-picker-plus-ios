@@ -104,7 +104,7 @@
     {
         GCAccountAssets *asset = [self.assets objectAtIndex:indexPath.row];
        AFImageRequestOperation *operation = [AFImageRequestOperation imageRequestOperationWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[asset thumbnail]]] success:^(UIImage *image) {
-           if (asset.video_url != nil)
+           if (asset.videoUrl != nil)
                cell.imageView.image = [UIImage makeImageFromBottomImage:image withFrame:cell.frame andTopImage:[UIImage imageNamed:@"play_overlay.png"] withFrame:CGRectMake(25, 25, 23.75, 23.75)];
            else
                 [cell.imageView setImage:image];
@@ -224,24 +224,17 @@
             }
             else
             {
-                for (GCAccountAssets *asset in self.selectedAssets) {
-                    [infoArray addObject:[NSDictionary infoFromGCAccountAsset:asset]];
-                }
-                info = infoArray;
-                [HUD hide:YES];
-                [self successBlock](info);
-
-//                [GCServicePicker postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
-//                    for(GCAsset *asset in returnedArray){
-//                        [infoArray addObject:([NSDictionary infoFromGCAsset:asset])];
-//                    }
-//                    info = infoArray;
-//                    [HUD hide:YES];
-//                    [self successBlock](info);
-//                } failure:^(NSError *error) {
-//                    [HUD hide:YES];
-//                    [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-//	                }];
+                [GCServicePicker postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
+                    for(GCAsset *asset in returnedArray){
+                        [infoArray addObject:([NSDictionary infoFromGCAsset:asset])];
+                    }
+                    info = infoArray;
+                    [HUD hide:YES];
+                    [self successBlock](info);
+                } failure:^(NSError *error) {
+                    [HUD hide:YES];
+                    [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+	                }];
             }
             
         }
@@ -254,19 +247,14 @@
             }
             else
             {
-                info = [NSDictionary infoFromGCAccountAsset:[self.selectedAssets objectAtIndex:0]];
-                [HUD hide:YES];
-                [self successBlock](info);
-
-                
-//                [GCServicePicker postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
-//                    info = [NSDictionary infoFromGCAsset:[returnedArray objectAtIndex:0]];
-//                    [HUD hide:YES];
-//                    [self successBlock](info);
-//                } failure:^(NSError *error) {
-//                    [HUD hide:YES];
-//                    [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-//                }];
+                [GCServicePicker postSelectedImages:self.selectedAssets success:^(GCResponseStatus *responseStatus, NSArray *returnedArray) {
+                    info = [NSDictionary infoFromGCAsset:[returnedArray objectAtIndex:0]];
+                    [HUD hide:YES];
+                    [self successBlock](info);
+                } failure:^(NSError *error) {
+                    [HUD hide:YES];
+                    [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                }];
                 
             }
         }

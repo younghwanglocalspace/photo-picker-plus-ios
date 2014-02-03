@@ -15,8 +15,8 @@
 @property (strong, nonatomic) NSNumber *id;
 @property (strong, nonatomic) NSString *caption;
 @property (strong, nonatomic) NSString *thumbnail;
-@property (strong, nonatomic) NSString *image_url;
-@property (strong, nonatomic) NSString *video_url;
+@property (strong, nonatomic) NSString *imageUrl;
+@property (strong, nonatomic) NSString *videoUrl;
 @property (strong, nonatomic) GCAssetDimensions *dimensions;
 
 @end

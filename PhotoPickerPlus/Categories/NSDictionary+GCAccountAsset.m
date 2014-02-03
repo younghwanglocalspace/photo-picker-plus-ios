@@ -22,10 +22,10 @@
     [dictionary setValue:asset.id forKey:@"id"];
     [dictionary setValue:asset.caption forKey:@"caption"];
     [dictionary setValue:asset.thumbnail forKey:@"thumbnail"];
-    if (asset.video_url !=nil)
-        [dictionary setValue:asset.video_url forKey:@"image_url"];
-    else
-        [dictionary setValue:asset.image_url forKey:@"image_url"];
+    [dictionary setValue:asset.videoUrl forKey:@"video_url"];
+    [dictionary setValue:asset.imageUrl forKey:@"image_url"];
+    if (asset.videoUrl != nil)
+        [dictionary setValue:@"video" forKey:@"file_type"];
 
     [dictionary setValue:asset.dimensions forKey:@"dimensions"];
     
@@ -36,15 +36,15 @@
 {
     NSMutableDictionary *mediaInfo = [NSMutableDictionary dictionary];
     
-    UIImage *image = [self loadImageWithURL:[NSURL URLWithString:[asset image_url]]];
+    UIImage *image = [self loadImageWithURL:[NSURL URLWithString:[asset imageUrl]]];
     
-    if(asset.video_url !=nil) {
+    if(asset.videoUrl !=nil) {
         [mediaInfo setObject:(NSString *)kUTTypeVideo forKey:UIImagePickerControllerMediaType];
-        [mediaInfo setObject:[NSURL URLWithString:[asset video_url]] forKey:UIImagePickerControllerReferenceURL];
+        [mediaInfo setObject:[NSURL URLWithString:[asset videoUrl]] forKey:UIImagePickerControllerReferenceURL];
     }
     else {
         [mediaInfo setObject:(NSString *)kUTTypeImage forKey:UIImagePickerControllerMediaType];
-        [mediaInfo setObject:[NSURL URLWithString:[asset image_url]] forKey:UIImagePickerControllerReferenceURL];
+        [mediaInfo setObject:[NSURL URLWithString:[asset imageUrl]] forKey:UIImagePickerControllerReferenceURL];
     }
     
     if(image)
@@ -59,8 +59,15 @@
     NSMutableDictionary *mediaInfo = [NSMutableDictionary dictionary];
     UIImage *image = [self loadImageWithURL:[NSURL URLWithString:[asset thumbnail]]];
     
-    [mediaInfo setObject:(NSString *)kUTTypeImage forKey:UIImagePickerControllerMediaType];
-    [mediaInfo setObject:[NSURL URLWithString:[asset url]] forKey:UIImagePickerControllerReferenceURL];
+    if ([asset.type isEqualToString:@"video"]) {
+        [mediaInfo setObject:(NSString *)kUTTypeVideo forKey:UIImagePickerControllerMediaType];
+        [mediaInfo setObject:[NSURL URLWithString:[asset videoUrl]] forKey:UIImagePickerControllerReferenceURL];
+    }
+    else {
+        [mediaInfo setObject:(NSString *)kUTTypeImage forKey:UIImagePickerControllerMediaType];
+        [mediaInfo setObject:[NSURL URLWithString:[asset url]] forKey:UIImagePickerControllerReferenceURL];
+    }
+    
     if (image) {
         [mediaInfo setObject:image forKey:UIImagePickerControllerOriginalImage];
     }

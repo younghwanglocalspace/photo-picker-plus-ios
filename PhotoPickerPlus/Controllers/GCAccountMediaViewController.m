@@ -189,10 +189,10 @@
     NSMutableArray *filteredFiles = [NSMutableArray new];
 
     for (GCAccountAssets *asset in files) {
-        if (asset.video_url != nil && [[GCPhotoPickerConfiguration configuration] showVideos] == YES) {
+        if (asset.videoUrl != nil && [[GCPhotoPickerConfiguration configuration] showVideos] == YES) {
             [filteredFiles addObject:asset];
         }
-        if (asset.video_url == nil && [[GCPhotoPickerConfiguration configuration] showImages] == YES) {
+        if (asset.videoUrl == nil && [[GCPhotoPickerConfiguration configuration] showImages] == YES) {
             [filteredFiles addObject:asset];
         }
     }

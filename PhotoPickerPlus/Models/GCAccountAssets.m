@@ -10,6 +10,6 @@
 
 @implementation GCAccountAssets
 
-@synthesize id,caption,image_url,video_url,thumbnail,dimensions;
+@synthesize id,caption,imageUrl,videoUrl,thumbnail,dimensions;
 
 @end
