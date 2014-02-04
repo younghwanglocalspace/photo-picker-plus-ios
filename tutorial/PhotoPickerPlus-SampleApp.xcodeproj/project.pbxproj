@@ -65,6 +65,8 @@
 		E4A3C22A189A5AEA00276EF7 /* UIImage+VideoImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E4A3C229189A5AEA00276EF7 /* UIImage+VideoImage.m */; };
 		E4A567F01897B5E500617366 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4A567EF1897B5E500617366 /* MediaPlayer.framework */; };
 		E4A567F21897C36600617366 /* play_overlay in Resources */ = {isa = PBXBuildFile; fileRef = E4A567F11897C36600617366 /* play_overlay */; };
+		E4A88B4118A1307C00184921 /* youtube.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A88B3F18A1307C00184921 /* youtube.png */; };
+		E4A88B4218A1307C00184921 /* youtube@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A88B4018A1307C00184921 /* youtube@2x.png */; };
 		E4AA8E281896AB69000D75B6 /* CustomImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4AA8E271896AB69000D75B6 /* CustomImageView.m */; };
 		E4BDB53417B55C9C000D4034 /* PhotoPickerClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51417B55C9C000D4034 /* PhotoPickerClient.m */; };
 		E4BDB53517B55C9C000D4034 /* GCServicePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDB51717B55C9C000D4034 /* GCServicePicker.m */; };
@@ -165,6 +167,8 @@
 		E4A3C229189A5AEA00276EF7 /* UIImage+VideoImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+VideoImage.m"; sourceTree = "<group>"; };
 		E4A567EF1897B5E500617366 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		E4A567F11897C36600617366 /* play_overlay */ = {isa = PBXFileReference; lastKnownFileType = file; path = play_overlay; sourceTree = "<group>"; };
+		E4A88B3F18A1307C00184921 /* youtube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youtube.png; sourceTree = "<group>"; };
+		E4A88B4018A1307C00184921 /* youtube@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youtube@2x.png"; sourceTree = "<group>"; };
 		E4AA8E261896AB69000D75B6 /* CustomImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomImageView.h; sourceTree = "<group>"; };
 		E4AA8E271896AB69000D75B6 /* CustomImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomImageView.m; sourceTree = "<group>"; };
 		E4BDB51317B55C9C000D4034 /* PhotoPickerClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoPickerClient.h; sourceTree = "<group>"; };
@@ -443,6 +447,8 @@
 				E4464FCB17CCFCB800C83F14 /* picasa.png */,
 				E4464FCC17CCFCB800C83F14 /* flickr.png */,
 				E4464FCD17CCFCB800C83F14 /* picasa@2x.png */,
+				E4A88B3F18A1307C00184921 /* youtube.png */,
+				E4A88B4018A1307C00184921 /* youtube@2x.png */,
 				E4BDB52B17B55C9C000D4034 /* defaultThumb.png */,
 			);
 			path = Resources;
@@ -533,6 +539,7 @@
 				CC7E46A017A5C0FA00BEF5B8 /* MainStoryboard_iPad.storyboard in Resources */,
 				E4BDB53D17B55C9C000D4034 /* camera.png in Resources */,
 				E4BDB53E17B55C9C000D4034 /* chute.png in Resources */,
+				E4A88B4118A1307C00184921 /* youtube.png in Resources */,
 				E4BDB53F17B55C9C000D4034 /* defaultThumb.png in Resources */,
 				E4A0114F17BE3B1F0097D3BF /* overlay@2x.png in Resources */,
 				E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */,
@@ -540,6 +547,7 @@
 				E441096017C7C5C200FCAEBD /* album_default.png in Resources */,
 				CC1430E217CAE97A0089A020 /* popover_arrow.png in Resources */,
 				CC1430E317CAE97A0089A020 /* popover_border.png in Resources */,
+				E4A88B4218A1307C00184921 /* youtube@2x.png in Resources */,
 				E4464FBE17CCFABF00C83F14 /* dropbox.png in Resources */,
 				E4464FBF17CCFABF00C83F14 /* dropbox@2x.png in Resources */,
 				E4464FC017CCFABF00C83F14 /* google.png in Resources */,

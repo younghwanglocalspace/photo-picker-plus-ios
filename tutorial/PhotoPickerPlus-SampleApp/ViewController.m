@@ -198,22 +198,16 @@
 {
     NSString *url = [NSString stringWithFormat:@"%@",videoURL];
     if ([url rangeOfString:@"youtube"].location == NSNotFound) {
-        NSLog(@"Other Link");
-        UIGraphicsBeginImageContext(CGSizeMake(1,1));
         
         self.videoPlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopVideo:) name:MPMoviePlayerPlaybackDidFinishNotification object:self.videoPlayer];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopVideo:) name:MPMoviePlayerDidExitFullscreenNotification object:self.videoPlayer];
         
-        [self presentMoviePlayerViewControllerAnimated:self.videoPlayer];
-        UIGraphicsEndImageContext();
-        
-        
-    } else {
-        NSLog(@"Youtube");
-        [[UIApplication sharedApplication] openURL:videoURL];
+        [self presentMoviePlayerViewControllerAnimated:self.videoPlayer];        
     }
+    else
+        [[UIApplication sharedApplication] openURL:videoURL];
 }
 
 #pragma mark - Notification Methods
