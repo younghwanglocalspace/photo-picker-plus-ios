@@ -29,7 +29,7 @@ Add The SDK And Component And Link Dependancies
 
 Configure the PhotoPicker+
 ------------------------------
-Follow [PhotoPickerConfiguration.md](PhotoPickerConfiguration.md) on how to initialize PhotoPicker+ component with proper configuration.
+Follow [Photo Picker Configuration](PhotoPickerConfiguration.md) on how to initialize PhotoPicker+ component with proper configuration.
 
 At this point you may want to try running the project to make sure that everything is added ok.  If it builds then everything should be correctly added and linked.
 
@@ -66,7 +66,7 @@ In your class, in UIImagePickerController delegate methods, just change the clas
 	}
 
 ```
-####Note: If you have set the boolean property `show_videos` to `YES` in the configuration, then you can also return videos with these methods. You can check what type of media you have chosen by inspecting the `UIImagePickerControllerMediaType`.
+**Note:** If you have set the boolean property `show_videos` to `YES` in the configuration, then you can also return videos with these methods. You can check what type of media you have chosen by inspecting the `UIImagePickerControllerMediaType`.
 
 Displaying The Image Picker
 ---------------------------
