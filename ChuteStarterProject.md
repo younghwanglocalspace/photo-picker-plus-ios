@@ -35,7 +35,7 @@ Add The SDK And Component And Link Dependancies
 
 Configure the PhotoPicker+
 ---------------------------
-First you need to setup the configuration. Follow [PhotoPickerConfiguration.md](PhotoPickerConfiguration.md) on how to initialize PhotoPicker+ component with proper configuration.
+First you need to setup the configuration. Follow [Photo Picker Configuration](PhotoPickerConfiguration.md) on how to initialize PhotoPicker+ component with proper configuration.
 
 At this point you may want to try running the project to make sure that everything is added ok.  If it builds then everything should be correctly added and linked.
 
@@ -117,7 +117,7 @@ Write The Delegate Methods
 --------------------------
 The PhotoPickerViewControllerDelegate methods are just as same as in UIImagePickerControllerDelegate, the only difference is the class type of the picker.  These work exactly the same as the UIImagePickerController delegate methods to make things easier.  You can refer to Apple's documentation on UIImagePickerControllerDelegate to see what the keys in the dictionary are.
 
-####Note: The following code is just to show the delegate methods and not to copy the whole code from ViewController.m. For detail implementation you can check the tutorial.
+#####Note: The following code is just to show the delegate methods and not to copy the whole code from ViewController.m. For detail implementation you can check the sample app (tutorial).
 
 ViewController.m
 
