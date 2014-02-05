@@ -46,7 +46,7 @@ Screenshots
 
 Configuration
 -------------
-First you need to setup the configuration. Follow [PhotoPickerConfiguration.md](PhotoPickerConfiguration.md) on how to initialize PhotoPicker+ component with proper configuration.
+First you need to setup the configuration. Follow [Photo Picker Configuration](PhotoPickerConfiguration.md) on how to initialize PhotoPicker+ component with proper configuration.
 
 Initialization
 --------------
