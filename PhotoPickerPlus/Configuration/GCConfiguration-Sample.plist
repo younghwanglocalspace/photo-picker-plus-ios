@@ -23,6 +23,7 @@
 			<string>picasa</string>
 			<string>dropbox</string>
 			<string>skydrive</string>
+			<string>youtube</string>
 		</array>
 		<key>local_features</key>
 		<array>

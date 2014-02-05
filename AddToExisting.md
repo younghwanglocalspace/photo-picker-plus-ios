@@ -1,7 +1,7 @@
 Adding Photo Picker+ To A Project
 =================================
 
-Photo Picker Plus is a drop-in component that replaces the default photo picker in your app.  It allows you to take a photo as well as choose a photo from the device or from several online sources. It also supports multiple selection.  This tutorial will show you how to replace the default UIImagePicker in your application with Photo Picker Plus.  This tutorial was written using version 5.0 of the iOS SDK and version 4.2 of Xcode.  Some changes may need to be made for other software versions.
+Photo Picker Plus is a drop-in component that replaces the default photo picker in your app.  It allows you to take a photo or record a video as well as choose a photo or video from the device or from several online sources. It also supports multiple selection. This tutorial will show you how to replace the default UIImagePicker in your application with Photo Picker Plus.  This tutorial was written using version 6.0 of the iOS SDK and version 4.2 of Xcode.  Some changes may need to be made for other software versions.
 
 ![image1](/screenshots/screen1.png)
 ![image2](/screenshots/screen2.png)
@@ -9,7 +9,7 @@ Photo Picker Plus is a drop-in component that replaces the default photo picker 
 
 Preparation
 -----------
-1.  Download the PhotoPickerPlus component and Chute SDK from https://github.com/chute/photo-picker-plus-ios
+1.  Download the PhotoPickerPlus component and Chute SDK from https://github.com/chute/photo-picker-plus-ios or add as a pod `pod PhotoPickerPlus` in your podfile.
 2.  If you don't have a Chute developer account or an app created on chute for this project then create a Chute developer account and make a new app in Chute at http://apps.getchute.com/
 	*  For the URL you can enter http://getchute.com/ if you don't have a site for your app
 	*  For the Callback URL you can use http://getchute.com/oauth/callback if you don't need callbacks for another purpose.
@@ -27,11 +27,9 @@ Add The SDK And Component And Link Dependancies
 ![image6](/screenshots/3.png)
 
 
-Edit Your App ID And Secret
----------------------------
-The next step is to enter your chute app information in the GCConfiguration.plist file.  This file can be found in Resource directory in PhotoPickerPlus directory.  You will need to fill in your APP ID and APP secret from the summary tab of your admin panel.  If you used a custom Redirect URL when setting up your app on Chute you will also need to adjust the `redirect_uri` to match the callback url you set. If you used `http://getchute.com/oauth/callback` then you can leave these as they are.
-
-![image7](/screenshots/4.png)
+Configure the PhotoPicker+
+------------------------------
+Follow [PhotoPickerConfiguration.md](PhotoPickerConfiguration.md) on how to initialize PhotoPicker+ component with proper configuration.
 
 At this point you may want to try running the project to make sure that everything is added ok.  If it builds then everything should be correctly added and linked.
 
@@ -68,6 +66,7 @@ In your class, in UIImagePickerController delegate methods, just change the clas
 	}
 
 ```
+####Note: If you have set the boolean property `show_videos` to `YES` in the configuration, then you can also return videos with these methods. You can check what type of media you have chosen by inspecting the `UIImagePickerControllerMediaType`.
 
 Displaying The Image Picker
 ---------------------------

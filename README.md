@@ -26,7 +26,7 @@ https://github.com/chute/Chute-SDK-v2-iOS
 Description
 -----------
 
-This class allows you to pick a photo from any supported online source such as Facebook, Instagram and Dropbox among others. It also replaces the standard picker in that it allows you to pick photos from the device, take photo with the camera or just to pick the latest photo in your library. It has integrated support for multiple image selection, just as the original Image Picker from Apple.
+This class allows you to pick a photo or a video from any supported online source such as Facebook, Instagram and Dropbox among others. It also replaces the standard picker in that it allows you to pick photos and videos from the device, take photo or record video with the camera or just to pick the latest photo/video in your library. It has integrated support for multiple image selection, just as the original Image Picker from Apple.
 
 Screenshots
 -----------
@@ -44,6 +44,10 @@ Screenshots
 ![screen12](/screenshots/screen12.png)
 ![screen13](/screenshots/screen13.png)
 
+Configuration
+-------------
+First you need to setup the configuration. Follow [PhotoPickerConfiguration.md](PhotoPickerConfiguration.md) on how to initialize PhotoPicker+ component with proper configuration.
+
 Initialization
 --------------
 
@@ -55,7 +59,7 @@ Initialization
     
 Implementation
 --------------
-You will need to implement PhotoPickerPlus.h in your .h file. You will also need to put `<PhotoPickerViewControllerDelegate>`
+You will need to implement PhotoPickerViewController.h in your .h file. You will also need to put `<PhotoPickerViewControllerDelegate>`
 ```objective-c
 
 	- (void)imagePickerControllerDidCancel:(PhotoPickerViewController *)picker{
@@ -67,9 +71,9 @@ You will need to implement PhotoPickerPlus.h in your .h file. You will also need
     	}
 	}
 	
-    ////////////////////////
-    //	  Single Photo	  //
-    ////////////////////////
+    ///////////////////////////
+    //	  Single Selection   //
+    ///////////////////////////
     
     - (void)showPhotoPickerPlus {
     	PhotoPickerViewController *picker = [PhotoPickerViewController new];
@@ -96,9 +100,9 @@ You will need to implement PhotoPickerPlus.h in your .h file. You will also need
 	    //additional work such as removing the picker from the screen
 	}
 	
-	///////////////////////
-    //	  Multi Photo    //
-    ///////////////////////
+	///////////////////////////
+    //	  Multi Selection    //
+    ///////////////////////////
     
     - (void)showPhotoPickerPlus {
     	PhotoPickerViewController *picker = [PhotoPickerViewController new];
@@ -125,6 +129,11 @@ You will need to implement PhotoPickerPlus.h in your .h file. You will also need
 	    //additional work such as removing the picker from the screen
 	}
 ```
+
+Cocoapods
+---------
+
+You can add this component using Cocoapods. Add `pod PhotoPickerPlus` to your podfile. 
 
 Tutorials
 ---------

@@ -1,7 +1,7 @@
 Chute Starter Project Tutorial
 ==============================
 
-Photo Picker Plus is a drop-in component that replaces the default photo picker in your app.  It allows you to take a photo as well as choose a photo from the device or from several online sources. It also supports multiple selection. This tutorial will show you how to use the Photo Picker Plus component to present the user with a multi-service photo picker and use the chosen image/images to set a scrollView with imageView.  This tutorial was written using version 5.0 of the iOS SDK and version 4.2 of Xcode. Some changes may need to be made for other software versions.
+Photo Picker Plus is a drop-in component that replaces the default photo picker in your app.  It allows you to take a photo or record a video as well as choose a photo or video from the device or from several online sources. It also supports multiple selection. This tutorial will show you how to use the Photo Picker Plus component to present the user with a multi-service photo picker and use the chosen image/images to set a scrollView with imageView.  This tutorial was written using version 6.0 of the iOS SDK and version 4.2 of Xcode. Some changes may need to be made for other software versions.
 
 ![image1](/screenshots/screen1.png)
 ![image2](/screenshots/screen2.png)
@@ -15,7 +15,7 @@ Start by creating a new Xcode project.  A single view application will be easies
 
 Preparation
 -----------
-1.  Download the PhotoPickerPlus component and Chute SDK from https://github.com/chute/photo-picker-plus-ios
+1.  Download the PhotoPickerPlus component and Chute SDK from https://github.com/chute/photo-picker-plus-ios or add as a pod `pod PhotoPickerPlus` in your podfile.
 2.  Create a Chute developer account and make a new app in Chute at http://apps.getchute.com/
 	*  For the URL you can enter http://getchute.com/ if you don't have a site for your app
 	*  For the Callback URL you can use http://getchute.com/oauth/callback if you don't need callbacks for another purpose.
@@ -33,39 +33,15 @@ Add The SDK And Component And Link Dependancies
 
 ![image7](/screenshots/3.png)
 
-Configure the PhotoPicker
+Configure the PhotoPicker+
 ---------------------------
-The next step is to enter your chute app information in the GCConfiguration.plist file. This file can be found in Resource directory in PhotoPickerPlus directory.  You will need to fill in your APP ID and APP secret from the summary tab of your admin panel. 
-
-![image8](/screenshots/4.png)
-
-Also in the configuration file 2 arrays, `services` for the web sources for the PP+ (Facebook, Instagram, etc.) and `local_features` for accessing the local assets. The items that will be listed in the `GCConfiguration.plist` are the ones that will be available in the PP+. This configuration is the initial configuration for the picker, but in `GCConfiguration.m` there's a constant defined as `kGCConfigurationURL`. That constant is for the remote configuration of the PP+, which consists of a JSON object with the listed services & local_features. That way it's possible for the PP+ to be remotely configured in future.
-
-```
-{
-	"services":[
-		"facebook", 
-		"google", 
-		"googledrive", 
-		"instagram", 
-		"flickr", 
-		"picasa", 
-		"dropbox", 
-		"skydrive",
-	],
-	"local_features":[
-		"take_photo",
-		"last_taken_photo",
-		"camera_photos",
-	]
-}
-```
+First you need to setup the configuration. Follow [PhotoPickerConfiguration.md](PhotoPickerConfiguration.md) on how to initialize PhotoPicker+ component with proper configuration.
 
 At this point you may want to try running the project to make sure that everything is added ok.  If it builds then everything should be correctly added and linked.
 
 Set ViewController As Delegate And Add Objects/Methods
 -----------------------------------------------
-In your viewController.h file import PhotoPickerViewController.h and set up the class as a `PhotoPickerViewControllerDelegate`.  Then add an object for the scrollView, pageControl and popOverController and a methods for changing value of the pageControl and pressing the pick photo button and pick multiple photos button.  This should look similar to this
+In your ViewController.h file import PhotoPickerViewController.h and set up the class as a `PhotoPickerViewControllerDelegate`. There are some properties and actions that are going to be connected during creating the UI later.
 
 ViewController.h
 
@@ -86,14 +62,15 @@ ViewController.h
 	@end
 ```
 
-Synthesize Objects And Write The Display Methods
+Write The Display Methods
 -------------------------------------------------
-In viewController.m you now need to synthesize your objects and write the methods to display the photo picker plus component.  The method will initialize the controller, set itself as the delegate, set single or multiple selection by setting isMultipleSelectionEnabled and present it. For the iPad version the component is presented as pop over.
+In ViewController.m write the methods to display the photo picker plus component. The methods will initialize the controller, set itself as the delegate, set single or multiple selection by setting isMultipleSelectionEnabled and present it. For the iPad version the component is presented as pop over.
 
 ViewController.m
 
 ```objective-c
 	@synthesize scrollView, pageControl, popoverController;
+
 
 	- (IBAction)pickPhotoSelected:(id)sender
 	{
@@ -138,7 +115,9 @@ ViewController.m
 
 Write The Delegate Methods
 --------------------------
-The PhotoPickerViewControllerDelegate methods are just as same as in UIImagePickerControllerDelegate, the only difference is the class type of the picker.  These work exactly the same as the UIImagePickerController delegate methods to make things easier.  You can refer to Apple's documentation on UIImagePickerControllerDelegate to see what the keys in the dictionary are.  The only one we are going to be concerned with is `UIImagePickerControllerOriginalImage`.  So our cancel method will just dismiss the picker and our success method will display the image in the scrollView and dismiss the picker.  The code for these methods is
+The PhotoPickerViewControllerDelegate methods are just as same as in UIImagePickerControllerDelegate, the only difference is the class type of the picker.  These work exactly the same as the UIImagePickerController delegate methods to make things easier.  You can refer to Apple's documentation on UIImagePickerControllerDelegate to see what the keys in the dictionary are.
+
+####Note: The following code is just to show the delegate methods and not to copy the whole code from ViewController.m. For detail implementation you can check the tutorial.
 
 ViewController.m
 
@@ -156,25 +135,9 @@ ViewController.m
 	- (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 	{
 
-    	[self.scrollView setDelegate:self];
-    
-    	for (UIView *v in [self.scrollView subviews]) {
-        	[v removeFromSuperview];
-    	}
-    
-    	CGRect workingFrame = scrollView.frame;
-    	workingFrame.origin.x = 0;
-    
-	    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    	UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-	    [imageView setContentMode:UIViewContentModeScaleAspectFit];
-    	imageView.frame = workingFrame;
-    
-	    [self.scrollView addSubview:imageView];
-    
-    	workingFrame.origin.x = workingFrame.origin.x + workingFrame.size.width;
-	    [self.scrollView setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];
-    
+    	// your code for displaying the chosen image/video. For detail implementation code you can check the tutorial.
+    	
+    	    
     	if (self.popoverController) {
         	[self.popoverController dismissPopoverAnimated:YES];
 	    }
@@ -186,36 +149,8 @@ ViewController.m
 	- (void)imagePickerController:(PhotoPickerViewController *)picker didFinishPickingArrayOfMediaWithInfo:(NSArray *)info
 	{
 
-    	[self.scrollView setDelegate:self];
-	    [self.scrollView setPagingEnabled:YES];
-    	[self.scrollView setContentOffset:CGPointZero];
-	    [self.pageControl setCurrentPage:0];
-    
-	    for (UIView *v in [scrollView subviews]) {
-    	    [v removeFromSuperview];
-    	}
-    
-    	CGRect workingFrame = self.scrollView.frame;
-	    workingFrame.origin.x = 0;
-    
-    	for(NSDictionary *dict in info) {
-        
-        	UIImage *image = [dict objectForKey:UIImagePickerControllerOriginalImage];
-        
-	        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-    	    [imageView setContentMode:UIViewContentModeScaleAspectFit];
-        	imageView.frame = workingFrame;
-        
-	        [self.scrollView addSubview:imageView];
-        
-    	    workingFrame.origin.x = workingFrame.origin.x + workingFrame.size.width;
-    	}
-    
-	    [self.scrollView setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];
-    
-    	self.pageControl.numberOfPages = self.scrollView.contentSize.width/self.scrollView.frame.size.width;
-	    [self.pageControl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
-
+    	// your code for displaying the array of chosen images/videos. For detail implementation code you can check the tutorial.
+    	
     	if (self.popoverController) {
         	[self.popoverController dismissPopoverAnimated:YES];
 	    }
@@ -225,34 +160,7 @@ ViewController.m
 	}
 ```
 
-You will need to define some methods for page control to work properly and to change when user scrolls. You will also need to setup scrollView layout after rotation. That look something like this
 
-```objective-c
-	
-	- (IBAction)changePage:(id)sender {
-    	CGFloat x = self.pageControl.currentPage * self.scrollView.frame.size.width;
-	    [self.scrollView setContentOffset:CGPointMake(x, 0) animated:YES];
-	}
-	
-	- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-	{
-    	CGRect workingFrame = self.scrollView.frame;
-	    workingFrame.origin.x = 0;
-
-    	for (UIView *v in [self.scrollView subviews]) {
-        	v.frame = workingFrame;
-	        workingFrame.origin.x = workingFrame.origin.x + workingFrame.size.width;
-    	}
-	    [self.scrollView setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];
-    	CGFloat x = self.pageControl.currentPage * self.scrollView.frame.size.width;
-	    [self.scrollView setContentOffset:CGPointMake(x, 0)];
-	}
-
-	-(void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView  {
-    	NSInteger pageNumber = roundf(self.scrollView.contentOffset.x / (self.scrollView.frame.size.width));
-	    pageControl.currentPage = pageNumber;
-	}
-```
 
 Create The UI
 -------------
