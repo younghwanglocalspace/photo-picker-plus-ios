@@ -289,6 +289,47 @@
                 [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
             }];
         } failure:^(NSError *error) {
+            if ([error code] == 302) {
+                NSString *newToken = [NSString stringWithFormat:@"Bearer %@", [[error userInfo] objectForKey:@"new_token"]];
+                GCClient *apiClient = [GCClient sharedClient];
+                NSString *oldToken = [apiClient authorizationToken];
+                
+                [apiClient clearAuthorizationHeader];
+                [apiClient setDefaultHeader:@"Authorization" value:newToken];
+                
+                [GCServiceAccount getProfileInfoWithSuccess:^(GCResponseStatus *responseStatus, NSArray *accounts) {
+                    GCAccount *account;
+                    for (GCAccount *acc in accounts) {
+                        if ([loginTypeString isEqualToString:acc.type])
+                            account = acc;
+                        
+                        [[GCPhotoPickerConfiguration configuration] addAccount:acc];
+                    }
+                    if (!account)
+                        return;
+                    
+                    GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];
+                    [amVC setIsItDevice:self.isItDevice];
+                    [amVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+                    [amVC setAccountID:account.shortcut];
+                    [amVC setServiceName:serviceName];
+                    [amVC setSuccessBlock:[self successBlock]];
+                    [amVC setCancelBlock:[self cancelBlock]];
+                    
+                    [self setLogoutNavBarButton:YES];
+                    [self.tableView reloadData];
+                    [self.navigationController pushViewController:amVC animated:YES];
+                    
+                    [apiClient clearAuthorizationHeader];
+                    [apiClient setDefaultHeader:@"Authorization" value:oldToken];
+                    
+                } failure:^(NSError *error) {
+                    GCLogError([error localizedDescription]);
+                    [apiClient setDefaultHeader:@"Authorization" value:oldToken];
+                    [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                }];
+
+            }
             GCLogError([error localizedDescription]);
         }];
     }
