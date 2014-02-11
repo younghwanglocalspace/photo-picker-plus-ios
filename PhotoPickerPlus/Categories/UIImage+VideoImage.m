@@ -24,7 +24,7 @@
     CGContextRestoreGState(context);
     
     CGContextSaveGState(context);
-    UIImage *overlayImage = [UIImage imageNamed:@"play_overlay.png"];
+    UIImage *overlayImage = topImage;
     CGRect topImageRect = CGRectMake(topImageFrame.origin.x, -topImageFrame.origin.y, topImageFrame.size.width, topImageFrame.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
     CGContextTranslateCTM(context, 0, -topImageRect.size.height);

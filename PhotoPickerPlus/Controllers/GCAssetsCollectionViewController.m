@@ -96,7 +96,7 @@
     {
         ALAsset *asset = [self.assets objectAtIndex:indexPath.row];
         if ([asset valueForProperty:ALAssetPropertyType] == ALAssetTypeVideo)
-            cell.imageView.image = [UIImage makeImageFromBottomImage:[UIImage imageWithCGImage:[asset thumbnail]] withFrame:cell.frame andTopImage:[UIImage imageNamed:@"play_overlay.png"] withFrame:CGRectMake(25, 25, 23.75, 23.75)];
+            cell.imageView.image = [UIImage makeImageFromBottomImage:[UIImage imageWithCGImage:[asset thumbnail]] withFrame:cell.frame andTopImage:[UIImage imageNamed:@"video_overlay.png"] withFrame:CGRectMake(0, 0, 20, 20)];
         else
             cell.imageView.image = [UIImage imageWithCGImage:[asset thumbnail]];
     }
@@ -105,7 +105,7 @@
         GCAccountAssets *asset = [self.assets objectAtIndex:indexPath.row];
        AFImageRequestOperation *operation = [AFImageRequestOperation imageRequestOperationWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[asset thumbnail]]] success:^(UIImage *image) {
            if (asset.videoUrl != nil)
-               cell.imageView.image = [UIImage makeImageFromBottomImage:image withFrame:cell.frame andTopImage:[UIImage imageNamed:@"play_overlay.png"] withFrame:CGRectMake(25, 25, 23.75, 23.75)];
+               cell.imageView.image = [UIImage makeImageFromBottomImage:image withFrame:cell.frame andTopImage:[UIImage imageNamed:@"video_overlay.png"] withFrame:CGRectMake(0, 0, 20, 20)];
            else
                 [cell.imageView setImage:image];
        }];

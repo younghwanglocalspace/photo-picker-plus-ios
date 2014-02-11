@@ -45,7 +45,7 @@
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(performAction:)];
             tap.numberOfTapsRequired = 1;
             
-            [self setImage:[UIImage makeImageFromBottomImage:[info objectForKey:UIImagePickerControllerOriginalImage] withFrame:frame andTopImage:[UIImage imageNamed:@"play_overlay.png"] withFrame:CGRectMake(frame.size.width/2-30, frame.size.height/2-30-frame.origin.y, 60, 60)]];
+            [self setImage:[UIImage makeImageFromBottomImage:[info objectForKey:UIImagePickerControllerOriginalImage] withFrame:frame andTopImage:[UIImage imageNamed:@"video_overlay.png"] withFrame:CGRectMake(0, 0, 40, 40)]];
             
             [self addGestureRecognizer:tap];
         }
