@@ -26,6 +26,11 @@
 @property (strong, nonatomic) NSArray           *localFeatures;
 
 /**
+ Dictionary used to set the layout for each service
+ */
+@property (strong, nonatomic) NSDictionary      *servicesLayouts;
+
+/**
  Setting for loading UIImagePickerControllerOriginalImage for assets from web.
  */
 @property (assign, nonatomic) BOOL              loadImagesFromWeb;

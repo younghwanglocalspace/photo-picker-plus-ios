@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class GCAlbumViewController, GCAssetsCollectionViewController;
+@class GCAlbumsTableViewController, GCAssetsCollectionViewController;
 
 @interface GCAccountMediaViewController : UIViewController
 
@@ -22,7 +22,7 @@
  
  @see GCAlbumViewController
  */
-@property (strong, nonatomic) GCAlbumViewController             *albumViewController;
+@property (strong, nonatomic) GCAlbumsTableViewController             *albumViewController;
 
 /**
  The view controller that will be initialized if there are assets.

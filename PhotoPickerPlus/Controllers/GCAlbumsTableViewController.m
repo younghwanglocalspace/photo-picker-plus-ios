@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Chute. All rights reserved.
 //
 
-#import "GCAlbumViewController.h"
+#import "GCAlbumsTableViewController.h"
 #import "GCAssetsCollectionViewController.h"
 #import "GCAccountMediaViewController.h"
 #import "GCAccountAlbum.h"
@@ -19,7 +19,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 
 
-@interface GCAlbumViewController ()
+@interface GCAlbumsTableViewController ()
 
 @property (strong, nonatomic) ALAssetsLibrary *assetsLibrary;
 @property (strong, nonatomic) NSMutableArray *tempAlbums;
@@ -27,7 +27,7 @@
 
 @end
 
-@implementation GCAlbumViewController
+@implementation GCAlbumsTableViewController
 
 @synthesize albums, assetsLibrary,elementCount,tempAlbums;
 
@@ -48,10 +48,8 @@
     
     self.navigationItem.title = @"Albums";
     
-    if(self.isItDevice)
-    {
+    if(self.isItDevice) {
         [self getAlbumsFromDevice];
-        [self.navigationItem setRightBarButtonItem:[self setCancelButton]];
     }
 }
 

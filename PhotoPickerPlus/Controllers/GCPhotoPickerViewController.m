@@ -11,7 +11,7 @@
 #import "GCPhotoPickerCell.h"
 #import "GCAssetsCollectionViewController.h"
 #import "GCAccountMediaViewController.h"
-#import "GCAlbumViewController.h"
+#import "GCAlbumsTableViewController.h"
 #import "NSDictionary+ALAsset.h"
 #import "GCServiceAccount.h"
 #import "GCAccount.h"
@@ -215,7 +215,7 @@
             
             self.isItDevice = YES;
             
-            GCAlbumViewController *daVC = [[GCAlbumViewController alloc] init];
+            GCAlbumsTableViewController *daVC = [[GCAlbumsTableViewController alloc] init];
             [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
             [daVC setSuccessBlock:[self successBlock]];
             [daVC setCancelBlock:[self cancelBlock]];

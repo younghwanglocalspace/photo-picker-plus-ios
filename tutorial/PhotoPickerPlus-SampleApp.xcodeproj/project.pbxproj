@@ -36,7 +36,7 @@
 		CCD3C3E11828549200E31F78 /* GCConfiguration-Sample.plist in Resources */ = {isa = PBXBuildFile; fileRef = CCD3C3DD1828549200E31F78 /* GCConfiguration-Sample.plist */; };
 		CCD3C3E21828549200E31F78 /* GCConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = CCD3C3DE1828549200E31F78 /* GCConfiguration.plist */; };
 		CCD3C3E31828549200E31F78 /* GCPhotoPickerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3C3E01828549200E31F78 /* GCPhotoPickerConfiguration.m */; };
-		CCE8E20917C51D3E0058A203 /* GCAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE8E20717C51D3E0058A203 /* GCAlbumViewController.m */; };
+		CCE8E20917C51D3E0058A203 /* GCAlbumsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE8E20717C51D3E0058A203 /* GCAlbumsTableViewController.m */; };
 		CCF74E75187F0F8100AB1C84 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CCF74E71187F0F8100AB1C84 /* InfoPlist.strings */; };
 		CCF74E76187F0F8100AB1C84 /* PhotoPickerPlus.strings in Resources */ = {isa = PBXBuildFile; fileRef = CCF74E73187F0F8100AB1C84 /* PhotoPickerPlus.strings */; };
 		E43C535517BE72D000680283 /* gradient_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = E43C535417BE72CF00680283 /* gradient_blue.png */; };
@@ -57,6 +57,8 @@
 		E4464FD317CCFCB800C83F14 /* picasa.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FCB17CCFCB800C83F14 /* picasa.png */; };
 		E4464FD417CCFCB800C83F14 /* flickr.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FCC17CCFCB800C83F14 /* flickr.png */; };
 		E4464FD517CCFCB800C83F14 /* picasa@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4464FCD17CCFCB800C83F14 /* picasa@2x.png */; };
+		E488013B18D34DEB00EAD26C /* GCAlbumsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E488013A18D34DEB00EAD26C /* GCAlbumsCollectionViewController.m */; };
+		E488013E18D365D700EAD26C /* GCAssetsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E488013D18D365D700EAD26C /* GCAssetsTableViewController.m */; };
 		E49CFD6B17B4EF290063C248 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E46CF17A67C8100BEF5B8 /* AssetsLibrary.framework */; };
 		E4A0114F17BE3B1F0097D3BF /* overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A0114D17BE3B1F0097D3BF /* overlay@2x.png */; };
 		E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A0114E17BE3B1F0097D3BF /* overlay.png */; };
@@ -134,7 +136,7 @@
 		CCD3C3DE1828549200E31F78 /* GCConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GCConfiguration.plist; sourceTree = "<group>"; };
 		CCD3C3DF1828549200E31F78 /* GCPhotoPickerConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPhotoPickerConfiguration.h; sourceTree = "<group>"; };
 		CCD3C3E01828549200E31F78 /* GCPhotoPickerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPhotoPickerConfiguration.m; sourceTree = "<group>"; };
-		CCE8E20717C51D3E0058A203 /* GCAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAlbumViewController.m; sourceTree = "<group>"; };
+		CCE8E20717C51D3E0058A203 /* GCAlbumsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAlbumsTableViewController.m; sourceTree = "<group>"; };
 		CCE8E20817C51D3E0058A203 /* PhotoPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoPickerViewController.h; sourceTree = "<group>"; };
 		CCF74E72187F0F8100AB1C84 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CCF74E74187F0F8100AB1C84 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/PhotoPickerPlus.strings; sourceTree = "<group>"; };
@@ -158,6 +160,10 @@
 		E4464FCB17CCFCB800C83F14 /* picasa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picasa.png; sourceTree = "<group>"; };
 		E4464FCC17CCFCB800C83F14 /* flickr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flickr.png; sourceTree = "<group>"; };
 		E4464FCD17CCFCB800C83F14 /* picasa@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "picasa@2x.png"; sourceTree = "<group>"; };
+		E488013918D34DEB00EAD26C /* GCAlbumsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAlbumsCollectionViewController.h; sourceTree = "<group>"; };
+		E488013A18D34DEB00EAD26C /* GCAlbumsCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAlbumsCollectionViewController.m; sourceTree = "<group>"; };
+		E488013C18D365D700EAD26C /* GCAssetsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAssetsTableViewController.h; sourceTree = "<group>"; };
+		E488013D18D365D700EAD26C /* GCAssetsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAssetsTableViewController.m; sourceTree = "<group>"; };
 		E4A0114D17BE3B1F0097D3BF /* overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "overlay@2x.png"; sourceTree = "<group>"; };
 		E4A0114E17BE3B1F0097D3BF /* overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = overlay.png; sourceTree = "<group>"; };
 		E4A222D917C382C3000A3A14 /* GCAccountMediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAccountMediaViewController.h; sourceTree = "<group>"; };
@@ -181,7 +187,7 @@
 		E4BDB51C17B55C9C000D4034 /* NSDictionary+ALAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ALAsset.m"; sourceTree = "<group>"; };
 		E4BDB51E17B55C9C000D4034 /* GCAssetsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAssetsCollectionViewController.h; sourceTree = "<group>"; };
 		E4BDB51F17B55C9C000D4034 /* GCAssetsCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAssetsCollectionViewController.m; sourceTree = "<group>"; };
-		E4BDB52017B55C9C000D4034 /* GCAlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAlbumViewController.h; sourceTree = "<group>"; };
+		E4BDB52017B55C9C000D4034 /* GCAlbumsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAlbumsTableViewController.h; sourceTree = "<group>"; };
 		E4BDB52217B55C9C000D4034 /* GCPhotoPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPhotoPickerViewController.h; sourceTree = "<group>"; };
 		E4BDB52317B55C9C000D4034 /* GCPhotoPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPhotoPickerViewController.m; sourceTree = "<group>"; };
 		E4BDB52917B55C9C000D4034 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
@@ -408,14 +414,18 @@
 			children = (
 				E4A222D917C382C3000A3A14 /* GCAccountMediaViewController.h */,
 				E4A222DA17C382C3000A3A14 /* GCAccountMediaViewController.m */,
+				E488013918D34DEB00EAD26C /* GCAlbumsCollectionViewController.h */,
+				E488013A18D34DEB00EAD26C /* GCAlbumsCollectionViewController.m */,
 				E4BDB51E17B55C9C000D4034 /* GCAssetsCollectionViewController.h */,
 				E4BDB51F17B55C9C000D4034 /* GCAssetsCollectionViewController.m */,
-				E4BDB52017B55C9C000D4034 /* GCAlbumViewController.h */,
-				CCE8E20717C51D3E0058A203 /* GCAlbumViewController.m */,
+				E4BDB52017B55C9C000D4034 /* GCAlbumsTableViewController.h */,
+				CCE8E20717C51D3E0058A203 /* GCAlbumsTableViewController.m */,
 				E4BDB52217B55C9C000D4034 /* GCPhotoPickerViewController.h */,
 				E4BDB52317B55C9C000D4034 /* GCPhotoPickerViewController.m */,
 				CCE8E20817C51D3E0058A203 /* PhotoPickerViewController.h */,
 				CCA4C50B17B5BDEC00D203A9 /* PhotoPickerViewController.m */,
+				E488013C18D365D700EAD26C /* GCAssetsTableViewController.h */,
+				E488013D18D365D700EAD26C /* GCAssetsTableViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -635,6 +645,7 @@
 				CC7E469417A5C0FA00BEF5B8 /* AppDelegate.m in Sources */,
 				CC7E46A317A5C0FA00BEF5B8 /* ViewController.m in Sources */,
 				E4BDB53417B55C9C000D4034 /* PhotoPickerClient.m in Sources */,
+				E488013B18D34DEB00EAD26C /* GCAlbumsCollectionViewController.m in Sources */,
 				E4BDB53517B55C9C000D4034 /* GCServicePicker.m in Sources */,
 				E4BDB53717B55C9C000D4034 /* NSDictionary+ALAsset.m in Sources */,
 				E4BDB53817B55C9C000D4034 /* GCAssetsCollectionViewController.m in Sources */,
@@ -646,12 +657,13 @@
 				CC72FBCC17B6142B00E3981B /* GCAccountAssets.m in Sources */,
 				CC72FBD217B63FCF00E3981B /* NSObject+GCDictionary.m in Sources */,
 				E4A222DB17C382C3000A3A14 /* GCAccountMediaViewController.m in Sources */,
-				CCE8E20917C51D3E0058A203 /* GCAlbumViewController.m in Sources */,
+				CCE8E20917C51D3E0058A203 /* GCAlbumsTableViewController.m in Sources */,
 				CCD3C3E31828549200E31F78 /* GCPhotoPickerConfiguration.m in Sources */,
 				E4A3C22A189A5AEA00276EF7 /* UIImage+VideoImage.m in Sources */,
 				CC1430DF17CADC2D0089A020 /* GCPopoverBackgroundView.m in Sources */,
 				E4A3753A17D0C3940075B3FF /* NSDictionary+GCAccountAsset.m in Sources */,
 				E4AA8E281896AB69000D75B6 /* CustomImageView.m in Sources */,
+				E488013E18D365D700EAD26C /* GCAssetsTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

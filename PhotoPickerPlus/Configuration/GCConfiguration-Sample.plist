@@ -39,6 +39,72 @@
 		<true/>
 		<key>show_videos</key>
 		<true/>
+		<key>services_layouts</key>
+		<dict>
+			<key>facebook</key>
+			<dict>
+				<key>folder_layout</key>
+				<string>tableView</string>
+				<key>asset_layout</key>
+				<string>gridView</string>
+			</dict>
+			<key>google</key>
+			<dict>
+				<key>folder_layout</key>
+				<string>tableView</string>
+				<key>asset_layout</key>
+				<string>gridView</string>
+			</dict>
+			<key>googledrive</key>
+			<dict>
+				<key>folder_layout</key>
+				<string>tableView</string>
+				<key>asset_layout</key>
+				<string>gridView</string>
+			</dict>
+			<key>instagram</key>
+			<dict>
+				<key>folder_layout</key>
+				<string>tableView</string>
+				<key>asset_layout</key>
+				<string>gridView</string>
+			</dict>
+			<key>flickr</key>
+			<dict>
+				<key>folder_layout</key>
+				<string>tableView</string>
+				<key>asset_layout</key>
+				<string>gridView</string>
+			</dict>
+			<key>picasa</key>
+			<dict>
+				<key>folder_layout</key>
+				<string>tableView</string>
+				<key>asset_layout</key>
+				<string>gridView</string>
+			</dict>
+			<key>dropbox</key>
+			<dict>
+				<key>folder_layout</key>
+				<string>tableView</string>
+				<key>asset_layout</key>
+				<string>gridView</string>
+			</dict>
+			<key>skydrive</key>
+			<dict>
+				<key>folder_layout</key>
+				<string>tableView</string>
+				<key>asset_layout</key>
+				<string>gridView</string>
+			</dict>
+			<key>youtube</key>
+			<dict>
+				<key>folder_layout</key>
+				<string>tableView</string>
+				<key>asset_layout</key>
+				<string>gridView</string>
+			</dict>
+		</dict>
 	</dict>
 </dict>
 </plist>

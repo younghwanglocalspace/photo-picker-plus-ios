@@ -7,7 +7,8 @@
 //
 
 #import "GCAccountMediaViewController.h"
-#import "GCAlbumViewController.h"
+#import "GCAlbumsTableViewController.h"
+#import "GCAlbumsCollectionViewController.h"
 #import "GCAssetsCollectionViewController.h"
 #import "GCServicePicker.h"
 #import "GCPhotoPickerConfiguration.h"
@@ -20,13 +21,16 @@
 @property (strong, nonatomic) NSArray *folders;
 @property (strong, nonatomic) NSArray *files;
 
+@property (strong, nonatomic) NSString  *foldersLayout;
+@property (strong, nonatomic) NSString  *assetsLayout;
+
 @end
 
 @implementation GCAccountMediaViewController
 
 @synthesize scrollView;
 @synthesize albumViewController, assetViewController;
-@synthesize accountID, albumID, serviceName, isItDevice, isMultipleSelectionEnabled;
+@synthesize accountID, albumID, isItDevice, isMultipleSelectionEnabled;
 @synthesize successBlock, cancelBlock;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -36,6 +40,19 @@
         // Custom initialization
     }
     return self;
+}
+
+- (void)setServiceName:(NSString *)newServiceName
+{
+    if (newServiceName != _serviceName) {
+        _serviceName = newServiceName;
+        
+        NSDictionary *layouts = [[GCPhotoPickerConfiguration configuration] servicesLayouts];
+        NSDictionary *serviceLayout = [layouts objectForKey:_serviceName];
+        
+        self.foldersLayout = [serviceLayout objectForKey:@"folder_layout"];
+        self.assetsLayout = [serviceLayout objectForKey:@"asset_layout"];
+    }
 }
 
 - (void)viewDidLoad
@@ -49,9 +66,9 @@
     [self.scrollView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.scrollView];
     
-    [self.albumViewController.tableView setFrame:CGRectZero];
-    [self.assetViewController.collectionView setFrame:CGRectZero];
-    [self.assetViewController.collectionView setBackgroundColor:[UIColor whiteColor]];
+//    [self.albumViewController.tableView setFrame:CGRectZero];
+//    [self.assetViewController.collectionView setFrame:CGRectZero];
+//    [self.assetViewController.collectionView setBackgroundColor:[UIColor whiteColor]];
     
     [self getDataFromAccount];
 }
@@ -92,40 +109,51 @@
     
     if(self.folders != nil)
     {
-        self.albumViewController = [GCAlbumViewController new];
-        [self addChildViewController:self.albumViewController];
-        [self.scrollView addSubview:self.albumViewController.tableView];
-        [self.albumViewController didMoveToParentViewController:self];
-        
-        [self.albumViewController setServiceName:self.serviceName];
-        [self.albumViewController setAccountID:self.accountID];
-        [self.albumViewController setAlbums:self.folders];
-        [self.albumViewController setIsItDevice:self.isItDevice];
-        [self.albumViewController setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-        [self.albumViewController setSuccessBlock:self.successBlock];
-        [self.albumViewController setCancelBlock:self.cancelBlock];
-        
+        if ([self.foldersLayout isEqualToString:@"tableView"]) {
+            self.albumViewController = [GCAlbumsTableViewController new];
+            
+            [self addChildViewController:self.albumViewController];
+            [self.scrollView addSubview:self.albumViewController.tableView];
+            [self.albumViewController didMoveToParentViewController:self];
+            
+            [self.albumViewController setServiceName:self.serviceName];
+            [self.albumViewController setAccountID:self.accountID];
+            [self.albumViewController setAlbums:self.folders];
+            [self.albumViewController setIsItDevice:self.isItDevice];
+            [self.albumViewController setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+            [self.albumViewController setSuccessBlock:self.successBlock];
+            [self.albumViewController setCancelBlock:self.cancelBlock];
+            
+            [self.albumViewController.tableView reloadData];
+
+        }
+        else {
+            
+        }
         
         [self.navigationItem setRightBarButtonItem:[self.albumViewController setCancelButton]];
-        
-        [self.albumViewController.tableView reloadData];
     }
     
     if(self.files != nil)
     {
-        self.assetViewController = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:[GCAssetsCollectionViewController setupLayout]];
-        [self addChildViewController:self.assetViewController];
-        [self.scrollView addSubview:self.assetViewController.collectionView];
-        [self.assetViewController didMoveToParentViewController:self];
+        if ([self.assetsLayout isEqualToString:@"collectionView"]) {
+            self.assetViewController = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:[GCAssetsCollectionViewController setupLayout]];
+            [self addChildViewController:self.assetViewController];
+            [self.scrollView addSubview:self.assetViewController.collectionView];
+            [self.assetViewController didMoveToParentViewController:self];
+            
+            [self.assetViewController setAssets:[self filterFiles:self.files]];
+            [self.assetViewController setSuccessBlock:[self successBlock]];
+            [self.assetViewController setCancelBlock:[self cancelBlock]];
+            [self.assetViewController setIsItDevice:self.isItDevice];
+            [self.assetViewController setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+            
+            [self.assetViewController.collectionView reloadData];
+        }
         
-        [self.assetViewController setAssets:[self filterFiles:self.files]];
-        [self.assetViewController setSuccessBlock:[self successBlock]];
-        [self.assetViewController setCancelBlock:[self cancelBlock]];
-        [self.assetViewController setIsItDevice:self.isItDevice];
-        [self.assetViewController setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-        
-        [self.assetViewController.collectionView reloadData];
-        
+        else {
+            
+        }
         
         if ([self isMultipleSelectionEnabled]) {
             [self.navigationItem setRightBarButtonItems:[self.assetViewController doneAndCancelButtons]];

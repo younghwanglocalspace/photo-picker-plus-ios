@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GCAlbumViewController : UITableViewController
+@interface GCAlbumsTableViewController : UITableViewController
 
 /**
  BOOL value with which is determined if the user can select multiple assets (YES) or not (NO).

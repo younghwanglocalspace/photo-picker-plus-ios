@@ -23,10 +23,11 @@ static NSString * const kGCAccounts = @"accounts";
 static NSString * const kGCLoadImagesFromWeb = @"load_images_from_web";
 static NSString * const kGCShowImages = @"show_images";
 static NSString * const kGCShowVideos = @"show_videos";
+static NSString * const kGCServicesLayouts = @"services_layouts";
 
 @implementation GCPhotoPickerConfiguration
 
-@synthesize section, configurationURL, services, localFeatures, loadImagesFromWeb, showImages, showVideos, accounts;
+@synthesize section, configurationURL, services, localFeatures, servicesLayouts, loadImagesFromWeb, showImages, showVideos, accounts;
 
 #pragma mark - Singleton Design
 
@@ -114,6 +115,9 @@ static NSString * const kGCShowVideos = @"show_videos";
     NSNumber *showVideosNumber = [NSNumber numberWithBool:showVideos];
     [stockToSave setObject:showVideosNumber forKey:kGCShowVideos];
 
+    if ([self servicesLayouts]) {
+        [stockToSave setObject:servicesLayouts forKey:kGCServicesLayouts];
+    }
     
     return stockToSave;
 }
@@ -172,6 +176,30 @@ static NSString * const kGCShowVideos = @"show_videos";
     if (!self.showImages && !self.showVideos)
         @throw [NSException exceptionWithName:@"Error" reason:@"You must choose to show at least one type of assets in your configuration" userInfo:nil];
 
+    if ([configuration objectForKey:kGCServicesLayouts]) {
+        
+        NSMutableDictionary *tmpServiceLayouts = [NSMutableDictionary dictionary];
+        
+        [[configuration objectForKey:kGCServicesLayouts] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            if ([[[GCPhotoPickerConfiguration sGCServices] allKeys] containsObject:key]) {
+                
+                NSMutableDictionary *dict = [obj mutableCopy];
+                
+                if (!([[dict objectForKey:@"folder_layout"] isEqualToString:@"tableView"] || [[dict objectForKey:@"folder_layout"] isEqualToString:@"collectionView"])) {
+                    [dict setObject:@"tableView" forKey:@"folder_layout"];
+                }
+                
+                if (!([[dict objectForKey:@"asset_layout"] isEqualToString:@"tableView"] || [[dict objectForKey:@"asset_layout"] isEqualToString:@"collectionView"])) {
+                    [dict setObject:@"collectionView" forKey:@"asset_layout"];
+                }
+                
+                [tmpServiceLayouts setObject:dict forKey:key];
+            }
+        }];
+        
+        self.servicesLayouts = [NSDictionary dictionaryWithDictionary:tmpServiceLayouts];
+    }
+    
     [GCConfigurationFile write:self];
 }
 

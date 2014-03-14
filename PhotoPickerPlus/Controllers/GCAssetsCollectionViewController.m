@@ -52,21 +52,12 @@
     return aFlowLayout;
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.navigationItem.title = @"Assets";
     [self.collectionView setBackgroundColor:[UIColor whiteColor]];
 
-    if(self.isMultipleSelectionEnabled)
-        [self.navigationItem setRightBarButtonItems:[self doneAndCancelButtons]];
-    else
-        [self.navigationItem setRightBarButtonItem:[self cancelButton]];
-    
     self.selectedAssets = [@[] mutableCopy];
 
     if(self.isItDevice)
