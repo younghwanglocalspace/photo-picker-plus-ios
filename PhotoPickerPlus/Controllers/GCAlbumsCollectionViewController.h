@@ -47,7 +47,6 @@
  */
 @property (readwrite, copy) void (^cancelBlock)(void);
 
-
 /**
  Sets cancel button in the right corner of NavigationBar.
  

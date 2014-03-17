@@ -10,6 +10,7 @@
 #import "GCAlbumsTableViewController.h"
 #import "GCAlbumsCollectionViewController.h"
 #import "GCAssetsCollectionViewController.h"
+#import "GCAssetsTableViewController.h"
 #import "GCServicePicker.h"
 #import "GCPhotoPickerConfiguration.h"
 #import "GCAccountAssets.h"
@@ -30,6 +31,7 @@
 
 @synthesize scrollView;
 @synthesize albumViewController, assetViewController;
+@synthesize albumCollectionViewController, assetTableViewController;
 @synthesize accountID, albumID, isItDevice, isMultipleSelectionEnabled;
 @synthesize successBlock, cancelBlock;
 
@@ -65,11 +67,7 @@
     
     [self.scrollView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.scrollView];
-    
-//    [self.albumViewController.tableView setFrame:CGRectZero];
-//    [self.assetViewController.collectionView setFrame:CGRectZero];
-//    [self.assetViewController.collectionView setBackgroundColor:[UIColor whiteColor]];
-    
+       
     [self getDataFromAccount];
 }
 
@@ -109,7 +107,26 @@
     
     if(self.folders != nil)
     {
-        if ([self.foldersLayout isEqualToString:@"tableView"]) {
+        if ([self.foldersLayout isEqualToString:@"collectionView"]) {
+            self.albumCollectionViewController = [[GCAlbumsCollectionViewController alloc] initWithCollectionViewLayout:[GCAlbumsCollectionViewController setupLayout]];
+            
+            [self addChildViewController:self.albumCollectionViewController];
+            [self.scrollView addSubview:self.albumCollectionViewController.collectionView];
+            [self.albumCollectionViewController didMoveToParentViewController:self];
+            
+            [self.albumCollectionViewController setServiceName:self.serviceName];
+            [self.albumCollectionViewController setAccountID:self.accountID];
+            [self.albumCollectionViewController setAlbums:self.folders];
+            [self.albumCollectionViewController setIsItDevice:self.isItDevice];
+            [self.albumCollectionViewController setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+            [self.albumCollectionViewController setSuccessBlock:self.successBlock];
+            [self.albumCollectionViewController setCancelBlock:self.cancelBlock];
+            
+            [self.albumCollectionViewController.collectionView reloadData];
+            [self.navigationItem setRightBarButtonItem:[self.albumCollectionViewController setCancelButton]];
+
+        }
+        else  {
             self.albumViewController = [GCAlbumsTableViewController new];
             
             [self addChildViewController:self.albumViewController];
@@ -125,18 +142,39 @@
             [self.albumViewController setCancelBlock:self.cancelBlock];
             
             [self.albumViewController.tableView reloadData];
+            [self.navigationItem setRightBarButtonItem:[self.albumViewController setCancelButton]];
 
         }
-        else {
-            
-        }
-        
-        [self.navigationItem setRightBarButtonItem:[self.albumViewController setCancelButton]];
     }
     
     if(self.files != nil)
     {
-        if ([self.assetsLayout isEqualToString:@"collectionView"]) {
+        if ([self.assetsLayout isEqualToString:@"tableView"]) {
+            
+            self.assetTableViewController = [GCAssetsTableViewController new];
+            
+            [self addChildViewController:self.assetTableViewController];
+            [self.scrollView addSubview:self.assetTableViewController.tableView];
+            [self.assetTableViewController didMoveToParentViewController:self];
+            
+            [self.assetTableViewController setAssets:[self filterFiles:self.files]];
+            [self.assetTableViewController setIsItDevice:self.isItDevice];
+            [self.assetTableViewController setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+            [self.assetTableViewController setSuccessBlock:[self successBlock]];
+            [self.assetTableViewController setCancelBlock:[self cancelBlock]];
+            
+            [self.assetTableViewController.tableView reloadData];
+            
+            if ([self isMultipleSelectionEnabled]) {
+                [self.navigationItem setRightBarButtonItems:[self.assetTableViewController doneAndCancelButtons]];
+            }
+            else {
+                [self.navigationItem setRightBarButtonItem:[self.assetTableViewController cancelButton]];
+            }
+            
+        }
+
+        else {
             self.assetViewController = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:[GCAssetsCollectionViewController setupLayout]];
             [self addChildViewController:self.assetViewController];
             [self.scrollView addSubview:self.assetViewController.collectionView];
@@ -149,17 +187,13 @@
             [self.assetViewController setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
             
             [self.assetViewController.collectionView reloadData];
-        }
-        
-        else {
             
-        }
-        
-        if ([self isMultipleSelectionEnabled]) {
-            [self.navigationItem setRightBarButtonItems:[self.assetViewController doneAndCancelButtons]];
-        }
-        else {
-            [self.navigationItem setRightBarButtonItem:[self.assetViewController cancelButton]];
+            if ([self isMultipleSelectionEnabled]) {
+                [self.navigationItem setRightBarButtonItems:[self.assetViewController doneAndCancelButtons]];
+            }
+            else {
+                [self.navigationItem setRightBarButtonItem:[self.assetViewController cancelButton]];
+            }
         }
         
     }
@@ -177,36 +211,63 @@
     
     if (self.albumViewController != nil)
         self.albumViewController.tableView.bounds = self.scrollView.bounds;
+    if (self.albumCollectionViewController != nil)
+        self.albumCollectionViewController.collectionView.bounds = self.scrollView.bounds;
     if (self.assetViewController != nil)
         self.assetViewController.collectionView.bounds = self.scrollView.bounds;
+    if (self.assetTableViewController != nil)
+        self.assetTableViewController.tableView.bounds = self.scrollView.bounds;
 
 
     if(self.folders !=nil)
     {
-        
-        CGRect tableViewFrame = self.albumViewController.tableView.bounds;
-        tableViewFrame.size.height = self.albumViewController.tableView.contentSize.height;
-        tableViewFrame.size.width = scrollViewWidth;
-        tableViewFrame.origin.y = self.scrollView.contentSize.height;
-        self.albumViewController.tableView.frame = tableViewFrame;
-        [self.albumViewController.tableView setScrollEnabled:NO];
+        if ([self.foldersLayout isEqualToString:@"collectionView"]) {
+            CGRect collectionViewFrame = self.albumCollectionViewController.collectionView.bounds;
+            collectionViewFrame.size.height = self.albumCollectionViewController.collectionView.collectionViewLayout.collectionViewContentSize.height;
+            collectionViewFrame.size.width = scrollViewWidth;
+            collectionViewFrame.origin.y = self.scrollView.contentSize.height;
+            self.albumCollectionViewController.collectionView.frame = collectionViewFrame;
+            [self.albumCollectionViewController.collectionView setScrollEnabled:NO];
+            
+            [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + collectionViewFrame.size.height)];
+        }
+        else {
+            CGRect tableViewFrame = self.albumViewController.tableView.bounds;
+            tableViewFrame.size.height = self.albumViewController.tableView.contentSize.height;
+            tableViewFrame.size.width = scrollViewWidth;
+            tableViewFrame.origin.y = self.scrollView.contentSize.height;
+            self.albumViewController.tableView.frame = tableViewFrame;
+            [self.albumViewController.tableView setScrollEnabled:NO];
 
-        [self.albumViewController.tableView reloadData];
+            [self.albumViewController.tableView reloadData];
 
-        [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + tableViewFrame.size.height)];
-
+            [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + tableViewFrame.size.height)];
+        }
     }
+    
     if (self.files != nil) {
         
-        CGRect collectionViewFrame = self.assetViewController.collectionView.bounds;
-        collectionViewFrame.size.height = self.assetViewController.collectionView.collectionViewLayout.collectionViewContentSize.height;
-        collectionViewFrame.size.width = scrollViewWidth;
-        collectionViewFrame.origin.y = self.scrollView.contentSize.height;
-        self.assetViewController.collectionView.frame = collectionViewFrame;
-        [self.assetViewController.collectionView setScrollEnabled:NO];
-                
-        [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + collectionViewFrame.size.height)];
+        if ([self.assetsLayout isEqualToString:@"tableView"]) {
+            CGRect tableViewFrame = self.assetTableViewController.tableView.bounds;
+            tableViewFrame.size.height = self.assetTableViewController.tableView.contentSize.height;
+            tableViewFrame.size.width = scrollViewWidth;
+            tableViewFrame.origin.y = self.scrollView.contentSize.height;
+            self.assetTableViewController.tableView.frame = tableViewFrame;
+            [self.assetTableViewController.tableView setScrollEnabled:NO];
+            
+            [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + tableViewFrame.size.height)];
+        }
         
+        else {
+            CGRect collectionViewFrame = self.assetViewController.collectionView.bounds;
+            collectionViewFrame.size.height = self.assetViewController.collectionView.collectionViewLayout.collectionViewContentSize.height;
+            collectionViewFrame.size.width = scrollViewWidth;
+            collectionViewFrame.origin.y = self.scrollView.contentSize.height;
+            self.assetViewController.collectionView.frame = collectionViewFrame;
+            [self.assetViewController.collectionView setScrollEnabled:NO];
+                    
+            [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height + collectionViewFrame.size.height)];
+        }
     }
 }
 

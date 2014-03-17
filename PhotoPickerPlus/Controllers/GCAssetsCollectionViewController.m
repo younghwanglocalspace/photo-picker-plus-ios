@@ -60,8 +60,15 @@
 
     self.selectedAssets = [@[] mutableCopy];
 
-    if(self.isItDevice)
+    if(self.isItDevice) {
         [self getLocalAssets];
+        if (self.isMultipleSelectionEnabled) {
+            [self.navigationItem setRightBarButtonItems:[self doneAndCancelButtons]];
+        }
+        else {
+            [self.navigationItem setRightBarButtonItem:[self cancelButton]];
+        }
+    }
     
     [self.collectionView registerClass:[GCPhotoCell class] forCellWithReuseIdentifier:@"Cell"];
 }

@@ -24,10 +24,14 @@ static NSString * const kGCLoadImagesFromWeb = @"load_images_from_web";
 static NSString * const kGCShowImages = @"show_images";
 static NSString * const kGCShowVideos = @"show_videos";
 static NSString * const kGCServicesLayouts = @"services_layouts";
+static NSString * const kGCDefaultLayouts = @"default_layouts";
+
+static NSString * const kGCTableView = @"tableView";
+static NSString * const kGCCollectionView = @"collectionView";
 
 @implementation GCPhotoPickerConfiguration
 
-@synthesize section, configurationURL, services, localFeatures, servicesLayouts, loadImagesFromWeb, showImages, showVideos, accounts;
+@synthesize section, configurationURL, services, localFeatures, servicesLayouts, defaultLayouts, loadImagesFromWeb, showImages, showVideos, accounts;
 
 #pragma mark - Singleton Design
 
@@ -119,6 +123,10 @@ static NSString * const kGCServicesLayouts = @"services_layouts";
         [stockToSave setObject:servicesLayouts forKey:kGCServicesLayouts];
     }
     
+    if ([self defaultLayouts]) {
+        [stockToSave setObject:defaultLayouts forKey:kGCDefaultLayouts];
+    }
+    
     return stockToSave;
 }
 
@@ -176,6 +184,26 @@ static NSString * const kGCServicesLayouts = @"services_layouts";
     if (!self.showImages && !self.showVideos)
         @throw [NSException exceptionWithName:@"Error" reason:@"You must choose to show at least one type of assets in your configuration" userInfo:nil];
 
+    if ([configuration objectForKey:kGCDefaultLayouts]) {
+        
+        __block NSMutableDictionary *dict = [[configuration objectForKey:kGCDefaultLayouts] mutableCopy];
+        [[configuration objectForKey:kGCDefaultLayouts] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                       
+            if ([key isEqualToString:@"folder_layout"]) {
+                if (!([obj isEqualToString:kGCTableView] || [obj isEqualToString:kGCCollectionView])) {
+                    [dict setObject:kGCTableView forKey:key];
+                }
+            }
+            else if ([key isEqualToString:@"asset_layout"]) {
+                if (!([obj isEqualToString:kGCTableView] || [obj isEqualToString:kGCCollectionView])) {
+                    [dict setObject:kGCCollectionView forKey:key];
+                }
+            }
+            
+        }];
+        self.defaultLayouts = [NSDictionary dictionaryWithDictionary:dict];
+    }
+    
     if ([configuration objectForKey:kGCServicesLayouts]) {
         
         NSMutableDictionary *tmpServiceLayouts = [NSMutableDictionary dictionary];
@@ -185,12 +213,12 @@ static NSString * const kGCServicesLayouts = @"services_layouts";
                 
                 NSMutableDictionary *dict = [obj mutableCopy];
                 
-                if (!([[dict objectForKey:@"folder_layout"] isEqualToString:@"tableView"] || [[dict objectForKey:@"folder_layout"] isEqualToString:@"collectionView"])) {
-                    [dict setObject:@"tableView" forKey:@"folder_layout"];
+                if (!([[dict objectForKey:@"folder_layout"] isEqualToString:kGCTableView] || [[dict objectForKey:@"folder_layout"] isEqualToString:kGCCollectionView])) {
+                    [dict setObject:kGCTableView forKey:@"folder_layout"];
                 }
                 
-                if (!([[dict objectForKey:@"asset_layout"] isEqualToString:@"tableView"] || [[dict objectForKey:@"asset_layout"] isEqualToString:@"collectionView"])) {
-                    [dict setObject:@"collectionView" forKey:@"asset_layout"];
+                if (!([[dict objectForKey:@"asset_layout"] isEqualToString:kGCTableView] || [[dict objectForKey:@"asset_layout"] isEqualToString:kGCCollectionView])) {
+                    [dict setObject:kGCCollectionView forKey:@"asset_layout"];
                 }
                 
                 [tmpServiceLayouts setObject:dict forKey:key];

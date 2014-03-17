@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class GCAlbumsTableViewController, GCAssetsCollectionViewController;
+@class GCAlbumsTableViewController, GCAssetsCollectionViewController, GCAlbumsCollectionViewController, GCAssetsTableViewController;
 
 @interface GCAccountMediaViewController : UIViewController
 
@@ -18,19 +18,20 @@
 @property (strong, nonatomic) UIScrollView *scrollView;
 
 /**
- The view controller that will be initialized if there are albums.
+ One of the view controllers that will be initialized if there are albums depending on chosen layout.
  
  @see GCAlbumViewController
  */
 @property (strong, nonatomic) GCAlbumsTableViewController             *albumViewController;
+@property (strong, nonatomic) GCAlbumsCollectionViewController        *albumCollectionViewController;
 
 /**
- The view controller that will be initialized if there are assets.
+ One of the view controllers that will be initialized if there are assets depending on chosen layout.
  
  @see GCAssetsCollectionViewController  
  */
 @property (strong, nonatomic) GCAssetsCollectionViewController  *assetViewController;
-
+@property (strong, nonatomic) GCAssetsTableViewController       *assetTableViewController;
 
 /**
  BOOL value with which is determined if the user can select multiple assets (YES) or not (NO).

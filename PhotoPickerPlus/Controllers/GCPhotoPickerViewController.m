@@ -9,6 +9,7 @@
 #import "GCPhotoPickerViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "GCPhotoPickerCell.h"
+#import "GCAlbumsCollectionViewController.h"
 #import "GCAssetsCollectionViewController.h"
 #import "GCAccountMediaViewController.h"
 #import "GCAlbumsTableViewController.h"
@@ -215,24 +216,36 @@
             
             self.isItDevice = YES;
             
-            GCAlbumsTableViewController *daVC = [[GCAlbumsTableViewController alloc] init];
-            [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-            [daVC setSuccessBlock:[self successBlock]];
-            [daVC setCancelBlock:[self cancelBlock]];
-            [daVC setIsItDevice:self.isItDevice];
+            NSDictionary *defaultLayouts = [[GCPhotoPickerConfiguration configuration] defaultLayouts];
             
-            [self.navigationController pushViewController:daVC animated:YES];
+            if ([[defaultLayouts objectForKey:@"folder_layout"] isEqualToString:@"collectionView"]) {
+                
+                GCAlbumsCollectionViewController *albumVC = [[GCAlbumsCollectionViewController alloc] initWithCollectionViewLayout:[GCAlbumsCollectionViewController setupLayout]];
+                [albumVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+                [albumVC setSuccessBlock:[self successBlock]];
+                [albumVC setCancelBlock:[self cancelBlock]];
+                [albumVC setIsItDevice:self.isItDevice];
+                
+                [self.navigationController pushViewController:albumVC animated:YES];
+            }
+            else {
             
+                GCAlbumsTableViewController *daVC = [[GCAlbumsTableViewController alloc] init];
+                [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+                [daVC setSuccessBlock:[self successBlock]];
+                [daVC setCancelBlock:[self cancelBlock]];
+                [daVC setIsItDevice:self.isItDevice];
+                
+                [self.navigationController pushViewController:daVC animated:YES];
+            }
         }
-        else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_photo_taken")])
-        {
+        else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_photo_taken")]) {
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
             [self getLatestPhoto:YES andVideo:NO];
-
         }
     }
-    else
-    {
+    else {
+        
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         self.isItDevice = NO;
         
@@ -242,8 +255,7 @@
         
         
         for (GCAccount *account in [[GCPhotoPickerConfiguration configuration] accounts]) {
-            if(!([account.type isEqualToString:@"google"] || [account.type isEqualToString:@"microsoft_account"]))
-            {
+            if(!([account.type isEqualToString:@"google"] || [account.type isEqualToString:@"microsoft_account"])) {
                 if ([account.type isEqualToString:loginTypeString]) {
                     
                     GCAccountMediaViewController *amVC = [[GCAccountMediaViewController alloc] init];

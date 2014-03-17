@@ -8,6 +8,7 @@
 
 #import "GCAlbumsTableViewController.h"
 #import "GCAssetsCollectionViewController.h"
+#import "GCAssetsTableViewController.h"
 #import "GCAccountMediaViewController.h"
 #import "GCAccountAlbum.h"
 #import "GCPhotoPickerCell.h"
@@ -50,6 +51,7 @@
     
     if(self.isItDevice) {
         [self getAlbumsFromDevice];
+        [self.navigationItem setRightBarButtonItem:[self setCancelButton]];
     }
 }
 
@@ -74,6 +76,7 @@
     if (cell == nil) {
         cell = [[GCPhotoPickerCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    
     if([self isItDevice])
     {
         ALAssetsGroup *albumForCell = [albums objectAtIndex:indexPath.row];
@@ -101,18 +104,36 @@
 {
     if(self.isItDevice)
     {
-        GCAssetsCollectionViewController *acVC = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:[GCAssetsCollectionViewController setupLayout]];
-        [acVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-        [acVC setSuccessBlock:self.successBlock];
-        [acVC setCancelBlock:self.cancelBlock];
-        [acVC setIsItDevice:self.isItDevice];
-        [acVC setAssetGroup:[self.albums objectAtIndex:indexPath.item]];
+        NSDictionary *defaultLayouts = [[GCPhotoPickerConfiguration configuration] defaultLayouts];
+        
+        if ([[defaultLayouts objectForKey:@"asset_layout"] isEqualToString:@"tableView"]) {
+            
+            GCAssetsTableViewController *atVC = [GCAssetsTableViewController new];
+            [atVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+            [atVC setSuccessBlock:[self successBlock]];
+            [atVC setCancelBlock:[self cancelBlock]];
+            [atVC setIsItDevice:self.isItDevice];
+            [atVC setAssetGroup:[self.albums objectAtIndex:indexPath.row]];
+            
+            [self.navigationController pushViewController:atVC animated:YES];
+        }
+        
+        else {
+        
+            GCAssetsCollectionViewController *acVC = [[GCAssetsCollectionViewController alloc] initWithCollectionViewLayout:[GCAssetsCollectionViewController setupLayout]];
+            [acVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+            [acVC setSuccessBlock:self.successBlock];
+            [acVC setCancelBlock:self.cancelBlock];
+            [acVC setIsItDevice:self.isItDevice];
+            [acVC setAssetGroup:[self.albums objectAtIndex:indexPath.row]];
 
-        [self.navigationController pushViewController:acVC animated:YES];
+            [self.navigationController pushViewController:acVC animated:YES];
+        }
     }
+    
     else
     {
-        GCAccountAlbum *accAlbum = [self.albums objectAtIndex:indexPath.item];
+        GCAccountAlbum *accAlbum = [self.albums objectAtIndex:indexPath.row];
         GCAccountMediaViewController *amVC = [GCAccountMediaViewController new];
         [amVC setAccountID:self.accountID];
         [amVC setAlbumID:accAlbum.id];
@@ -124,8 +145,6 @@
         
         [self.parentViewController.navigationController pushViewController:amVC animated:YES];
     }
-    
-
 }
 
 #pragma mark - Custom Methods

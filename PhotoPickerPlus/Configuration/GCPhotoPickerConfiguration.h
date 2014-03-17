@@ -31,6 +31,11 @@
 @property (strong, nonatomic) NSDictionary      *servicesLayouts;
 
 /**
+ Dictionaty with default layouts
+ */
+@property (strong, nonatomic) NSDictionary      *defaultLayouts;
+
+/**
  Setting for loading UIImagePickerControllerOriginalImage for assets from web.
  */
 @property (assign, nonatomic) BOOL              loadImagesFromWeb;
