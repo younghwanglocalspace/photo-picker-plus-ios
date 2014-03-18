@@ -83,7 +83,8 @@
     {
         ALAsset *asset = [self.assets objectAtIndex:indexPath.row];
 
-        NSLog(@"Asset Descr:%@", asset.description);
+        [cell.titleLabel setText:@"No caption available"];
+        [cell.titleLabel setTextColor:[UIColor colorWithRed:0.71 green:0.71 blue:0.71 alpha:1]];
         
         if ([asset valueForProperty:ALAssetPropertyType] == ALAssetTypeVideo) {
             cell.imageView.image = [UIImage makeImageFromBottomImage:[UIImage imageWithCGImage:[asset thumbnail]] withFrame:cell.imageView.frame andTopImage:[UIImage imageNamed:@"video_overlay.png"] withFrame:CGRectMake(0, 0, 15, 15)];
@@ -96,7 +97,13 @@
     {
         GCAccountAssets *asset = [self.assets objectAtIndex:indexPath.row];
         
-        [cell.titleLabel setText:asset.caption];
+        if (asset.caption != nil) {
+            [cell.titleLabel setText:asset.caption];
+        }
+        else {
+            [cell.titleLabel setText:@"No caption available"];
+            [cell.titleLabel setTextColor:[UIColor colorWithRed:0.71 green:0.71 blue:0.71 alpha:1]];
+        }
         
         AFImageRequestOperation *operation = [AFImageRequestOperation imageRequestOperationWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[asset thumbnail]]] success:^(UIImage *image) {
             if (asset.videoUrl != nil) {
