@@ -13,7 +13,6 @@
 		CC72FBCB17B6142B00E3981B /* GCAccountAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBC717B6142B00E3981B /* GCAccountAlbum.m */; };
 		CC72FBCC17B6142B00E3981B /* GCAccountAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBC917B6142B00E3981B /* GCAccountAssets.m */; };
 		CC72FBD217B63FCF00E3981B /* NSObject+GCDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = CC72FBD117B63FCF00E3981B /* NSObject+GCDictionary.m */; };
-		CC7E468417A5C0FA00BEF5B8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E468317A5C0FA00BEF5B8 /* UIKit.framework */; };
 		CC7E468617A5C0FA00BEF5B8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E468517A5C0FA00BEF5B8 /* Foundation.framework */; };
 		CC7E468817A5C0FA00BEF5B8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E468717A5C0FA00BEF5B8 /* CoreGraphics.framework */; };
 		CC7E468E17A5C0FA00BEF5B8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CC7E468C17A5C0FA00BEF5B8 /* InfoPlist.strings */; };
@@ -81,6 +80,7 @@
 		E4BDB53D17B55C9C000D4034 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52917B55C9C000D4034 /* camera.png */; };
 		E4BDB53E17B55C9C000D4034 /* chute.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52A17B55C9C000D4034 /* chute.png */; };
 		E4BDB53F17B55C9C000D4034 /* defaultThumb.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BDB52B17B55C9C000D4034 /* defaultThumb.png */; };
+		E4C3EA1A18F6E50000B14304 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7E468317A5C0FA00BEF5B8 /* UIKit.framework */; };
 		E5C227AF2E6B4E428ADAEC4B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAF8DED3820048119B12E914 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -207,9 +207,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4C3EA1A18F6E50000B14304 /* UIKit.framework in Frameworks */,
 				E4A567F01897B5E500617366 /* MediaPlayer.framework in Frameworks */,
 				E49CFD6B17B4EF290063C248 /* AssetsLibrary.framework in Frameworks */,
-				CC7E468417A5C0FA00BEF5B8 /* UIKit.framework in Frameworks */,
 				CC7E468617A5C0FA00BEF5B8 /* Foundation.framework in Frameworks */,
 				CC7E468817A5C0FA00BEF5B8 /* CoreGraphics.framework in Frameworks */,
 				E5C227AF2E6B4E428ADAEC4B /* libPods.a in Frameworks */,

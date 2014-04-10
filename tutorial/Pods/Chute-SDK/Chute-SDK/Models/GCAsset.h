@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class GCComment,GCResponseStatus,GCLinks,GCAssetDimensions,GCAssetSource,GCCoordinate,GCPagination,GCHeart,GCHeartCount, GCVote,GCVoteCount,GCFlag,GCFlagCount;
+@class GCComment,GCResponseStatus,GCLinks,GCAssetDimensions,GCAssetSource,GCCoordinate,GCPagination,GCHeart,GCHeartCount, GCVote,GCVoteCount,GCFlag,GCFlagCount, GCUser;
 
 @interface GCAsset : NSObject
 
@@ -21,6 +21,16 @@
 @property (strong, nonatomic) GCAssetDimensions *dimensions;
 @property (strong, nonatomic) GCAssetSource     *source;
 @property (strong, nonatomic) GCCoordinate      *coordinate;
+@property (strong, nonatomic) GCUser            *user;
+@property (strong, nonatomic) NSString          *videoUrl;
+@property (strong, nonatomic) NSDate            *createdAt;
+@property (strong, nonatomic) NSDate            *updatedAt;
+@property (strong, nonatomic) NSString          *shortcut;
+@property (strong, nonatomic) NSString          *service;
+@property (strong, nonatomic) NSString          *username;
+
+
+- (void)updateAssetWithCaption:(NSString *)_caption inAlbumID:(NSNumber *)albumID success:(void(^)(GCResponseStatus *responseStatus, GCAsset *asset))success failure:(void(^)(NSError *error))failure;
 
 - (void)createComment:(NSString *)comment forAlbumWithID:(NSNumber *)albumID fromUserWithName:(NSString *)name andEmail:(NSString *)email success:(void (^)(GCResponseStatus *responseStatus, GCComment *comment))success failure:(void (^)(NSError *error))failure;
 
