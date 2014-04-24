@@ -61,6 +61,10 @@
 {
     [super viewDidLoad];
 
+//    self.navigationController.navigationBar.topItem.title = @"Services";
+    
+    [self.navigationItem setTitle:[self.serviceName capitalizedString]];
+
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

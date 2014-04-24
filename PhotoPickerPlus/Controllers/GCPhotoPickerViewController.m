@@ -32,12 +32,15 @@
 @property (strong, nonatomic) NSArray *services;
 @property (nonatomic, strong) UIBarButtonItem *logoutButton;
 
+@property (nonatomic, strong) NSMutableArray  *allServices;
+
 @end
 
 @implementation GCPhotoPickerViewController
 
 @synthesize delegate, isMultipleSelectionEnabled = _isMultipleSelectionEnabled;
 @synthesize isItDevice;
+@synthesize allServices;
 @synthesize navigationTitle = _navigationTitle;
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -54,6 +57,8 @@
     [super viewDidLoad];
     self.navigationItem.title = self.navigationTitle? self.navigationTitle: @"Photo Picker";
     
+    [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    
     [self setNavBarItems];
 
     GCClient *apiClient = [GCClient sharedClient];
@@ -67,6 +72,9 @@
 
     [self setLocalFeatures:[[GCPhotoPickerConfiguration configuration] localFeatures]];
     [self setServices:[[GCPhotoPickerConfiguration configuration] services]];
+    
+    self.allServices = [[NSMutableArray alloc] initWithArray:self.localFeatures];
+    [self.allServices addObjectsFromArray:self.services];
     
     if([self.localFeatures count] > 0)
         self.hasLocal = YES;
@@ -83,6 +91,13 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationItem.title = self.navigationTitle? self.navigationTitle: @"Photo Picker";
+
 }
 
 #pragma mark - Table view data source
@@ -112,7 +127,7 @@
 
     GCPhotoPickerCell *cell = [[GCPhotoPickerCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
    
-    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+//    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     
     if(indexPath.section == 0 && self.hasLocal){
         
@@ -330,6 +345,9 @@
                     
                     [self setLogoutNavBarButton:YES];
                     [self.tableView reloadData];
+                    
+                    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Services" style:UIBarButtonItemStyleBordered target:nil action:nil];
+                    self.navigationItem.backBarButtonItem = backButton;
                     [self.navigationController pushViewController:amVC animated:YES];
                     
                     [apiClient clearAuthorizationHeader];
@@ -385,10 +403,11 @@
 
 - (void)setNavBarItems
 {
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+//    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
     self.logoutButton = [[UIBarButtonItem alloc] initWithTitle:GCLocalizedString(@"picker.logout") style:UIBarButtonItemStyleBordered target:self action:@selector(logout)];
     
-    [self.navigationItem setLeftBarButtonItem:cancelButton];
+    [self.navigationItem setLeftBarButtonItem:closeButton];
 }
 
 - (void)setLogoutNavBarButton:(BOOL)toBeAdded

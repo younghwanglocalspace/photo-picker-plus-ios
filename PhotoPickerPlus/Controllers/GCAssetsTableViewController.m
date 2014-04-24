@@ -141,6 +141,8 @@
     {
         [self.tableView setAllowsMultipleSelection:YES];
         
+        [self updateDoneTitle];
+        
         if([self.selectedAssets count] > 0)
             [self.doneButton setEnabled:YES];
     }
@@ -168,6 +170,8 @@
         
         if([self.selectedAssets count] == 0)
             [self.doneButton setEnabled:NO];
+        
+        [self updateDoneTitle];
     }
 
 }
@@ -198,12 +202,17 @@
 
 - (NSArray *)doneAndCancelButtons
 {
-    self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    self.doneButton = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"Use (%d)", [self.selectedAssets count]] style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
     [self.doneButton setEnabled:NO];
     
     NSArray *navBarItemsToBeAdd = @[[self doneButton], [self cancelButton]];
     
     return navBarItemsToBeAdd;
+}
+
+- (void)updateDoneTitle
+{
+    [self.doneButton setTitle:[NSString stringWithFormat:@"Use (%d)",[self.selectedAssets count]]];
 }
 
 #pragma mark - Instance Methods
