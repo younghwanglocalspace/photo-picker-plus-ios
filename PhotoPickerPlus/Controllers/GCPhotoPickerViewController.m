@@ -76,15 +76,15 @@
     self.allServices = [[NSMutableArray alloc] initWithArray:self.localFeatures];
     [self.allServices addObjectsFromArray:self.services];
     
-    if([self.localFeatures count] > 0)
-        self.hasLocal = YES;
-    else
-        self.hasLocal = NO;
-    
-    if( [self.services count] > 0)
-        self.hasOnline = YES;
-    else
-        self.hasOnline = NO;
+//    if([self.localFeatures count] > 0)
+//        self.hasLocal = YES;
+//    else
+//        self.hasLocal = NO;
+//    
+//    if( [self.services count] > 0)
+//        self.hasOnline = YES;
+//    else
+//        self.hasOnline = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -102,23 +102,24 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return (self.hasLocal + self.hasOnline);
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == 0 && self.hasLocal)
-        return GCLocalizedString(@"picker.local_services");
-    return GCLocalizedString(@"picker.online_services");
-}
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+//{
+//    return (self.hasLocal + self.hasOnline);
+//}
+//
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    if (section == 0 && self.hasLocal)
+//        return GCLocalizedString(@"picker.local_services");
+//    return GCLocalizedString(@"picker.online_services");
+//}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(section == 0 && self.hasLocal)
-        return [self.localFeatures count];
-    return [self.services count];
+//    if(section == 0 && self.hasLocal)
+//        return [self.localFeatures count];
+//    return [self.services count];
+    return [self.allServices count];
 }
 
 - (GCPhotoPickerCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -129,8 +130,9 @@
    
 //    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     
-    if(indexPath.section == 0 && self.hasLocal){
-        
+//    if(indexPath.section == 0 && self.hasLocal){
+    if ([self.localFeatures count] > indexPath.row) {
+    
         NSString *serviceName = [self.localFeatures objectAtIndex:indexPath.row];
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         
@@ -152,10 +154,14 @@
         if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_video_captured")])
             [cell.imageView setImage:[UIImage imageNamed:@"defaultThumb.png"]];
         [cell.titleLabel setText:cellTitle];
+        [cell.titleLabel setTextColor:[self colorForService:cellTitle]];
     }
     else
     {
-        NSString *serviceName = [self.services objectAtIndex:indexPath.row];
+//        NSString *serviceName = [self.services objectAtIndex:indexPath.row];
+        NSUInteger index = indexPath.row - [self.localFeatures count];
+        NSString *serviceName = [self.services objectAtIndex:index];
+        
         GCLoginType loginType = [[GCPhotoPickerConfiguration configuration] loginTypeForString:serviceName];
         NSString *loginTypeString = [[GCPhotoPickerConfiguration configuration] loginTypeString:loginType];
         
@@ -164,6 +170,7 @@
         [cell.imageView setImage:temp];
         
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        [cell.titleLabel setTextColor:[self colorForService:cellTitle]];
 
         for (GCAccount *account in [[GCPhotoPickerConfiguration configuration] accounts]) {
             if([account.type isEqualToString:loginTypeString]){
@@ -189,8 +196,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section == 0 && self.hasLocal){
-        
+//    if(indexPath.section == 0 && self.hasLocal){
+    if ([self.localFeatures count] > indexPath.row) {
+    
         
         NSString *serviceName = [self.localFeatures objectAtIndex:indexPath.row];
         NSString *cellTitle = [[serviceName capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
@@ -264,7 +272,8 @@
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         self.isItDevice = NO;
         
-        NSString *serviceName = [self.services objectAtIndex:indexPath.row];
+        NSUInteger index = indexPath.row - [self.localFeatures count];
+        NSString *serviceName = [self.services objectAtIndex:index];
         GCLoginType loginType = [[GCPhotoPickerConfiguration configuration] loginTypeForString:serviceName];
         NSString *loginTypeString = [[GCPhotoPickerConfiguration configuration] loginTypeString:loginType];
         
@@ -436,6 +445,41 @@
     {
         [self.delegate imagePickerControllerDidCancel:(PhotoPickerViewController *)self.navigationController];
     }
+}
+
+- (UIColor *)colorForService:(NSString *)serviceName
+{
+    if ([serviceName isEqualToString:@"Facebook"]) {
+        return [UIColor colorWithRed:0.2 green:0.35 blue:0.58 alpha:1];
+    }
+    else if ([serviceName isEqualToString:@"Instagram"]) {
+        return [UIColor colorWithRed:0.21 green:0.45 blue:0.6 alpha:1];
+    }
+    else if ([serviceName isEqualToString:@"Google"]) {
+        return [UIColor colorWithRed:0.9 green:0.29 blue:0.25 alpha:1];
+    }
+    else if ([serviceName isEqualToString:@"Googledrive"]) {
+        return [UIColor colorWithRed:0.96 green:0.77 blue:0.22 alpha:1];
+    }
+    else if ([serviceName isEqualToString:@"Dropbox"]) {
+        return [UIColor colorWithRed:0 green:0.49 blue:0.88 alpha:1];
+    }
+    else if ([serviceName isEqualToString:@"Skydrive"]) {
+        return [UIColor colorWithRed:0 green:0.29 blue:0.68 alpha:1];
+    }
+    else if ([serviceName isEqualToString:@"Flickr"]) {
+        return [UIColor colorWithRed:1 green:0 blue:0.52 alpha:1];
+    }
+    else if ([serviceName isEqualToString:@"Picasa"]) {
+        return [UIColor colorWithRed:0.02 green:0.6 blue:0.84 alpha:1];
+    }
+    else if ([serviceName isEqualToString:@"Youtube"]) {
+        return [UIColor colorWithRed:0.8 green:0.18 blue:0.19 alpha:1];
+    }
+    else {
+        return [UIColor colorWithRed:0.49 green:0.55 blue:0.55 alpha:1];
+    }
+
 }
 
 #pragma mark - UIImagePicker Delegate Methods

@@ -10,6 +10,7 @@
 
 @interface GCPhotoPickerCell : UITableViewCell
 
-@property (strong, nonatomic) UILabel *titleLabel;
+@property (strong, nonatomic) UILabel       *titleLabel;
+@property (strong, nonatomic) UIImageView   *imageView;
 
 @end
