@@ -11,7 +11,7 @@
 #import "GCAssetsTableViewController.h"
 #import "GCAccountMediaViewController.h"
 #import "GCAccountAlbum.h"
-#import "GCPhotoPickerCell.h"
+#import "GCAlbumTableViewCell.h"
 #import "GCPhotoPickerConfiguration.h"
 
 #import "GetChute.h"
@@ -69,12 +69,12 @@
     return [self.albums count];
 }
 
-- (GCPhotoPickerCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (GCAlbumTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
-    GCPhotoPickerCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    GCAlbumTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[GCPhotoPickerCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[GCAlbumTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     if([self isItDevice])
@@ -93,7 +93,7 @@
         cell.titleLabel.text = [NSString stringWithFormat:@"%@",albumForCell.name];
         
     }
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
    
     return cell;
 }

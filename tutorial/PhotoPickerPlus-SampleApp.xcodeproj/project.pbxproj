@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5998C1F2190A703E0039D3A5 /* camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5998C1F0190A703E0039D3A5 /* camera@2x.png */; };
 		5998C1F3190A703E0039D3A5 /* defaultThumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5998C1F1190A703E0039D3A5 /* defaultThumb@2x.png */; };
+		5998C1F6190AAEE50039D3A5 /* GCAlbumTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5998C1F5190AAEE50039D3A5 /* GCAlbumTableViewCell.m */; };
 		5998F3A51909057F003893A8 /* albumIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5998F3A31909057F003893A8 /* albumIcon.png */; };
 		5998F3A61909057F003893A8 /* albumIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5998F3A41909057F003893A8 /* albumIcon@2x.png */; };
 		CC1430DF17CADC2D0089A020 /* GCPopoverBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1430DE17CADC2D0089A020 /* GCPopoverBackgroundView.m */; };
@@ -101,6 +102,8 @@
 /* Begin PBXFileReference section */
 		5998C1F0190A703E0039D3A5 /* camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera@2x.png"; sourceTree = "<group>"; };
 		5998C1F1190A703E0039D3A5 /* defaultThumb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defaultThumb@2x.png"; sourceTree = "<group>"; };
+		5998C1F4190AAEE50039D3A5 /* GCAlbumTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCAlbumTableViewCell.h; sourceTree = "<group>"; };
+		5998C1F5190AAEE50039D3A5 /* GCAlbumTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAlbumTableViewCell.m; sourceTree = "<group>"; };
 		5998F3A31909057F003893A8 /* albumIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = albumIcon.png; sourceTree = "<group>"; };
 		5998F3A41909057F003893A8 /* albumIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "albumIcon@2x.png"; sourceTree = "<group>"; };
 		CC1430DD17CADC2D0089A020 /* GCPopoverBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPopoverBackgroundView.h; sourceTree = "<group>"; };
@@ -344,6 +347,8 @@
 				E4A17D0918D6F28A004835EC /* GCAlbumCell.m */,
 				E4A17D0B18D723E1004835EC /* GCAssetCell.h */,
 				E4A17D0C18D723E1004835EC /* GCAssetCell.m */,
+				5998C1F4190AAEE50039D3A5 /* GCAlbumTableViewCell.h */,
+				5998C1F5190AAEE50039D3A5 /* GCAlbumTableViewCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -673,6 +678,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC7E469017A5C0FA00BEF5B8 /* main.m in Sources */,
+				5998C1F6190AAEE50039D3A5 /* GCAlbumTableViewCell.m in Sources */,
 				CC7E469417A5C0FA00BEF5B8 /* AppDelegate.m in Sources */,
 				CC7E46A317A5C0FA00BEF5B8 /* ViewController.m in Sources */,
 				E4A17D0A18D6F28A004835EC /* GCAlbumCell.m in Sources */,
@@ -835,6 +841,7 @@
 			baseConfigurationReference = D6A44E3EFCB047F48E216318 /* Pods.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Oliver Dimitrov (293579DR4T)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../Chute-SDK/Vendor/KeyValueObjectMapping\"",
