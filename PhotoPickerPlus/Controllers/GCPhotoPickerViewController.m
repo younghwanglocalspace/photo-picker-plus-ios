@@ -321,12 +321,10 @@
             }];
         } failure:^(NSError *error) {
             if ([error code] == 302) {
-                NSString *newToken = [NSString stringWithFormat:@"Bearer %@", [[error userInfo] objectForKey:@"new_token"]];
                 GCClient *apiClient = [GCClient sharedClient];
                 NSString *oldToken = [[[apiClient authorizationToken] componentsSeparatedByString:@" "] objectAtIndex:1];
                 
                 [apiClient clearAuthorizationHeader];
-//                [apiClient setDefaultHeader:@"Authorization" value:newToken];
               [apiClient setAuthorizationHeaderWithToken:[NSString stringWithFormat:@"%@", [[error userInfo] objectForKey:@"new_token"]]];
                 
                 [GCServiceAccount getProfileInfoWithSuccess:^(GCResponseStatus *responseStatus, NSArray *accounts) {
@@ -353,12 +351,10 @@
                     [self.navigationController pushViewController:amVC animated:YES];
                     
                     [apiClient clearAuthorizationHeader];
-//                    [apiClient setDefaultHeader:@"Authorization" value:oldToken];
                   [apiClient setAuthorizationHeaderWithToken:oldToken];
                     
                 } failure:^(NSError *error) {
                     GCLogError([error localizedDescription]);
-//                    [apiClient setDefaultHeader:@"Authorization" value:oldToken];
                   [apiClient setAuthorizationHeaderWithToken:oldToken];
                     [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                 }];

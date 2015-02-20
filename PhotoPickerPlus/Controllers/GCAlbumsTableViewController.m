@@ -201,21 +201,6 @@
   }];
   self.albums = @[smartAlbums, topLevelAlbums];
   
-//  for (NSArray *array in self.albums) {
-//    for (PHCollection *collection in array) {
-//      __block NSInteger assetsCount = 0;
-//      if ([collection isKindOfClass:[PHAssetCollection class]]) {
-//        PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:(PHAssetCollection *)collection options:[PHAsset fetchOptions]];
-//        [assets enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx, BOOL *stop) {
-//          if (asset.mediaSubtypes != PHAssetMediaSubtypeVideoHighFrameRate)
-//            assetsCount++;
-//        }];
-//      }
-//      NSLog(@"Asset Count:%d", assetsCount);
-//      [self.elementCount addObject:@(assetsCount)];
-//    }
-//  }
-  
   [self.tableView reloadData];
 }
 

@@ -51,39 +51,6 @@
     options.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     
     [[PHImageManager defaultManager] requestAVAssetForVideo:self options:options resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
-//      if ([asset isKindOfClass:[AVComposition class]] || [asset isKindOfClass:[AVMutableComposition class]]) {
-//        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//        NSString *documentsDirectory = [paths objectAtIndex:0];
-//        NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:
-//                                 [NSString stringWithFormat:@"ProcessedVideo-%d.mov", arc4random() % 1000]];
-//        NSURL *url = [NSURL fileURLWithPath:myPathDocs];
-//        
-//        AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset1280x720];
-//        
-//        NSLog(@"%@", exporter);
-//        
-//        exporter.outputURL = url;
-//        exporter.outputFileType = AVFileTypeQuickTimeMovie;
-//        
-//        [exporter exportAsynchronouslyWithCompletionHandler:^(void) {
-//          switch (exporter.status) {
-//            case AVAssetExportSessionStatusCompleted:
-//              NSLog(@"Completed");
-//              break;
-//            case AVAssetExportSessionStatusFailed:
-//              NSLog(@"Failed:%@",exporter.error);
-//              break;
-//            case AVAssetExportSessionStatusCancelled:
-//              NSLog(@"Canceled:%@",exporter.error);
-//              break;
-//            default:
-//              break;
-//          }
-//        }];
-//        
-//        
-//      }
-//      else {
         AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
         gen.appliesPreferredTrackTransform = YES;
         CMTime time = CMTimeMakeWithSeconds(0.0, 600);
@@ -97,8 +64,7 @@
         
         AVURLAsset *urlAsset = (AVURLAsset *)asset;
         [metadata setObject:urlAsset.URL forKey:UIImagePickerControllerReferenceURL];
-//      }
-      
+
       block(metadata);
     }];
   }
