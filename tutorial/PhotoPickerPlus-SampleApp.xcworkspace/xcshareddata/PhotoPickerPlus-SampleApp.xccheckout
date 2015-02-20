@@ -10,29 +10,29 @@
 	<string>PhotoPickerPlus-SampleApp</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>63DEAFB4-B2A4-489B-BA43-F636A30736A6</key>
+		<key>CEF32E7B9D293E066B83F2B2CADCAA3271F1558C</key>
 		<string>https://github.com/chute/photo-picker-plus-ios.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>tutorial/PhotoPickerPlus-SampleApp.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>63DEAFB4-B2A4-489B-BA43-F636A30736A6</key>
+		<key>CEF32E7B9D293E066B83F2B2CADCAA3271F1558C</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/chute/photo-picker-plus-ios.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>63DEAFB4-B2A4-489B-BA43-F636A30736A6</string>
+	<string>CEF32E7B9D293E066B83F2B2CADCAA3271F1558C</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>63DEAFB4-B2A4-489B-BA43-F636A30736A6</string>
+			<string>CEF32E7B9D293E066B83F2B2CADCAA3271F1558C</string>
 			<key>IDESourceControlWCCName</key>
 			<string>photo-picker-plus-ios</string>
 		</dict>

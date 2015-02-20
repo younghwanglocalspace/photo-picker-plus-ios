@@ -12,4 +12,5 @@
 
 + (UIImage *)makeImageFromBottomImage:(UIImage *)bottomImage withFrame:(CGRect)bottomImageFrame andTopImage:(UIImage *)topImage withFrame:(CGRect)topImageFrame;
 
+
 @end

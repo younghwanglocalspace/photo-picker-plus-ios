@@ -19,9 +19,14 @@
 #import "GCPhotoPickerConfiguration.h"
 #import "GCMacros.h"
 
+#import "GCLegacyAlbumsTableViewController.h"
+#import "GCLegacyAlbumsCollectionViewController.h"
+
 #import "GetChute.h"
 #import "MBProgressHUD.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
 @interface GCPhotoPickerViewController ()
 
@@ -211,33 +216,48 @@
         
         else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.choose_media")])
         {
-            
-            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-            
-            self.isItDevice = YES;
-            
-            NSDictionary *defaultLayouts = [[GCPhotoPickerConfiguration configuration] defaultLayouts];
-            
+          [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+          self.isItDevice = YES;
+          NSDictionary *defaultLayouts = [[GCPhotoPickerConfiguration configuration] defaultLayouts];
+          
+          if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
             if ([[defaultLayouts objectForKey:@"folder_layout"] isEqualToString:@"collectionView"]) {
-                
-                GCAlbumsCollectionViewController *albumVC = [[GCAlbumsCollectionViewController alloc] initWithCollectionViewLayout:[GCAlbumsCollectionViewController setupLayout]];
-                [albumVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-                [albumVC setSuccessBlock:[self successBlock]];
-                [albumVC setCancelBlock:[self cancelBlock]];
-                [albumVC setIsItDevice:self.isItDevice];
-                
-                [self.navigationController pushViewController:albumVC animated:YES];
+              GCLegacyAlbumsCollectionViewController *albumVC = [[GCLegacyAlbumsCollectionViewController alloc] initWithCollectionViewLayout:[GCLegacyAlbumsCollectionViewController setupLayout]];
+              [albumVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+              [albumVC setSuccessBlock:[self successBlock]];
+              [albumVC setCancelBlock:[self cancelBlock]];
+              [albumVC setIsItDevice:self.isItDevice];
+              
+              [self.navigationController pushViewController:albumVC animated:YES];
+            } else {
+              GCLegacyAlbumsTableViewController *daVC = [[GCLegacyAlbumsTableViewController alloc] init];
+              [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+              [daVC setSuccessBlock:[self successBlock]];
+              [daVC setCancelBlock:[self cancelBlock]];
+              [daVC setIsItDevice:self.isItDevice];
+              
+              [self.navigationController pushViewController:daVC animated:YES];
             }
-            else {
-            
-                GCAlbumsTableViewController *daVC = [[GCAlbumsTableViewController alloc] init];
-                [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
-                [daVC setSuccessBlock:[self successBlock]];
-                [daVC setCancelBlock:[self cancelBlock]];
-                [daVC setIsItDevice:self.isItDevice];
-                
-                [self.navigationController pushViewController:daVC animated:YES];
+          }
+          else {
+            if ([[defaultLayouts objectForKey:@"folder_layout"] isEqualToString:@"collectionView"]) {
+              GCAlbumsCollectionViewController *albumVC = [[GCAlbumsCollectionViewController alloc] initWithCollectionViewLayout:[GCAlbumsCollectionViewController setupLayout]];
+              [albumVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+              [albumVC setSuccessBlock:[self successBlock]];
+              [albumVC setCancelBlock:[self cancelBlock]];
+              [albumVC setIsItDevice:self.isItDevice];
+              
+              [self.navigationController pushViewController:albumVC animated:YES];
+            } else {
+              GCAlbumsTableViewController *daVC = [[GCAlbumsTableViewController alloc] init];
+              [daVC setIsMultipleSelectionEnabled:self.isMultipleSelectionEnabled];
+              [daVC setSuccessBlock:[self successBlock]];
+              [daVC setCancelBlock:[self cancelBlock]];
+              [daVC setIsItDevice:self.isItDevice];
+              
+              [self.navigationController pushViewController:daVC animated:YES];
             }
+          }
         }
         else if ([cellTitle isEqualToString:GCLocalizedString(@"picker.last_photo_taken")]) {
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -252,7 +272,6 @@
         NSString *serviceName = [self.services objectAtIndex:indexPath.row];
         GCLoginType loginType = [[GCPhotoPickerConfiguration configuration] loginTypeForString:serviceName];
         NSString *loginTypeString = [[GCPhotoPickerConfiguration configuration] loginTypeString:loginType];
-        
         
         for (GCAccount *account in [[GCPhotoPickerConfiguration configuration] accounts]) {
             if(!([account.type isEqualToString:@"google"] || [account.type isEqualToString:@"microsoft_account"])) {
@@ -304,10 +323,11 @@
             if ([error code] == 302) {
                 NSString *newToken = [NSString stringWithFormat:@"Bearer %@", [[error userInfo] objectForKey:@"new_token"]];
                 GCClient *apiClient = [GCClient sharedClient];
-                NSString *oldToken = [apiClient authorizationToken];
+                NSString *oldToken = [[[apiClient authorizationToken] componentsSeparatedByString:@" "] objectAtIndex:1];
                 
                 [apiClient clearAuthorizationHeader];
-                [apiClient setDefaultHeader:@"Authorization" value:newToken];
+//                [apiClient setDefaultHeader:@"Authorization" value:newToken];
+              [apiClient setAuthorizationHeaderWithToken:[NSString stringWithFormat:@"%@", [[error userInfo] objectForKey:@"new_token"]]];
                 
                 [GCServiceAccount getProfileInfoWithSuccess:^(GCResponseStatus *responseStatus, NSArray *accounts) {
                     GCAccount *account;
@@ -333,16 +353,21 @@
                     [self.navigationController pushViewController:amVC animated:YES];
                     
                     [apiClient clearAuthorizationHeader];
-                    [apiClient setDefaultHeader:@"Authorization" value:oldToken];
+//                    [apiClient setDefaultHeader:@"Authorization" value:oldToken];
+                  [apiClient setAuthorizationHeaderWithToken:oldToken];
                     
                 } failure:^(NSError *error) {
                     GCLogError([error localizedDescription]);
-                    [apiClient setDefaultHeader:@"Authorization" value:oldToken];
+//                    [apiClient setDefaultHeader:@"Authorization" value:oldToken];
+                  [apiClient setAuthorizationHeaderWithToken:oldToken];
                     [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                 }];
 
             }
-            GCLogError([error localizedDescription]);
+            else {
+              GCLogError([error localizedDescription]);
+              [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Oops! Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            }
         }];
     }
 }

@@ -12,5 +12,7 @@
 
 @property (nonatomic, strong) UIImageView   *imageView;
 @property (nonatomic, strong) UILabel       *titleLabel;
+@property (nonatomic, strong) UIImageView   *videoView;
+@property (nonatomic, strong) UILabel       *duration;
 
 @end

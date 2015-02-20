@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5990EA401A8B9E9B0001C5E0 /* GCConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5990EA3F1A8B9E9B0001C5E0 /* GCConfiguration.plist */; };
+		5990EA441A8B9EF10001C5E0 /* GCLegacyAlbumsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5990EA431A8B9EF10001C5E0 /* GCLegacyAlbumsTableViewController.m */; };
+		5990EA471A8B9F030001C5E0 /* GCLegacyAssetsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5990EA461A8B9F030001C5E0 /* GCLegacyAssetsTableViewController.m */; };
+		5990EA4A1A8B9F130001C5E0 /* GCLegacyAlbumsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5990EA491A8B9F130001C5E0 /* GCLegacyAlbumsCollectionViewController.m */; };
+		5990EA4D1A8B9F240001C5E0 /* GCLegacyAssetsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5990EA4C1A8B9F240001C5E0 /* GCLegacyAssetsCollectionViewController.m */; };
+		599100B21A8CC5DB0091AB4F /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 599100B11A8CC5DB0091AB4F /* Photos.framework */; };
+		59917C981A8E358000829AC1 /* PHAsset+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 59917C971A8E358000829AC1 /* PHAsset+Utilities.m */; };
+		59917C9A1A8E4FC300829AC1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59917C991A8E4FC300829AC1 /* AVFoundation.framework */; };
+		59917C9C1A8E516300829AC1 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59917C9B1A8E516300829AC1 /* CoreMedia.framework */; };
 		CC1430DF17CADC2D0089A020 /* GCPopoverBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1430DE17CADC2D0089A020 /* GCPopoverBackgroundView.m */; };
 		CC1430E217CAE97A0089A020 /* popover_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = CC1430E017CAE97A0089A020 /* popover_arrow.png */; };
 		CC1430E317CAE97A0089A020 /* popover_border.png in Resources */ = {isa = PBXBuildFile; fileRef = CC1430E117CAE97A0089A020 /* popover_border.png */; };
@@ -33,7 +42,6 @@
 		CCA4C50817B5A78500D203A9 /* GCPhotoPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA4C50617B5A78500D203A9 /* GCPhotoPickerCell.m */; };
 		CCA4C50C17B5BDED00D203A9 /* PhotoPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA4C50B17B5BDEC00D203A9 /* PhotoPickerViewController.m */; };
 		CCD3C3E11828549200E31F78 /* GCConfiguration-Sample.plist in Resources */ = {isa = PBXBuildFile; fileRef = CCD3C3DD1828549200E31F78 /* GCConfiguration-Sample.plist */; };
-		CCD3C3E21828549200E31F78 /* GCConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = CCD3C3DE1828549200E31F78 /* GCConfiguration.plist */; };
 		CCD3C3E31828549200E31F78 /* GCPhotoPickerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3C3E01828549200E31F78 /* GCPhotoPickerConfiguration.m */; };
 		CCE8E20917C51D3E0058A203 /* GCAlbumsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE8E20717C51D3E0058A203 /* GCAlbumsTableViewController.m */; };
 		CCF74E75187F0F8100AB1C84 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CCF74E71187F0F8100AB1C84 /* InfoPlist.strings */; };
@@ -95,6 +103,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4535380FB2D2395BDCE4B884 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		4E0891CCC2A705F7E0E55E57 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		5990EA3F1A8B9E9B0001C5E0 /* GCConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GCConfiguration.plist; sourceTree = "<group>"; };
+		5990EA421A8B9EF10001C5E0 /* GCLegacyAlbumsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCLegacyAlbumsTableViewController.h; sourceTree = "<group>"; };
+		5990EA431A8B9EF10001C5E0 /* GCLegacyAlbumsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCLegacyAlbumsTableViewController.m; sourceTree = "<group>"; };
+		5990EA451A8B9F030001C5E0 /* GCLegacyAssetsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCLegacyAssetsTableViewController.h; sourceTree = "<group>"; };
+		5990EA461A8B9F030001C5E0 /* GCLegacyAssetsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCLegacyAssetsTableViewController.m; sourceTree = "<group>"; };
+		5990EA481A8B9F130001C5E0 /* GCLegacyAlbumsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCLegacyAlbumsCollectionViewController.h; sourceTree = "<group>"; };
+		5990EA491A8B9F130001C5E0 /* GCLegacyAlbumsCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCLegacyAlbumsCollectionViewController.m; sourceTree = "<group>"; };
+		5990EA4B1A8B9F240001C5E0 /* GCLegacyAssetsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCLegacyAssetsCollectionViewController.h; sourceTree = "<group>"; };
+		5990EA4C1A8B9F240001C5E0 /* GCLegacyAssetsCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCLegacyAssetsCollectionViewController.m; sourceTree = "<group>"; };
+		599100B11A8CC5DB0091AB4F /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		59917C961A8E358000829AC1 /* PHAsset+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PHAsset+Utilities.h"; sourceTree = "<group>"; };
+		59917C971A8E358000829AC1 /* PHAsset+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PHAsset+Utilities.m"; sourceTree = "<group>"; };
+		59917C991A8E4FC300829AC1 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		59917C9B1A8E516300829AC1 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		CC1430DD17CADC2D0089A020 /* GCPopoverBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPopoverBackgroundView.h; sourceTree = "<group>"; };
 		CC1430DE17CADC2D0089A020 /* GCPopoverBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPopoverBackgroundView.m; sourceTree = "<group>"; };
 		CC1430E017CAE97A0089A020 /* popover_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = popover_arrow.png; sourceTree = "<group>"; };
@@ -135,7 +159,6 @@
 		CCA4C50617B5A78500D203A9 /* GCPhotoPickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPhotoPickerCell.m; sourceTree = "<group>"; };
 		CCA4C50B17B5BDEC00D203A9 /* PhotoPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoPickerViewController.m; sourceTree = "<group>"; };
 		CCD3C3DD1828549200E31F78 /* GCConfiguration-Sample.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GCConfiguration-Sample.plist"; sourceTree = "<group>"; };
-		CCD3C3DE1828549200E31F78 /* GCConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GCConfiguration.plist; sourceTree = "<group>"; };
 		CCD3C3DF1828549200E31F78 /* GCPhotoPickerConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPhotoPickerConfiguration.h; sourceTree = "<group>"; };
 		CCD3C3E01828549200E31F78 /* GCPhotoPickerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPhotoPickerConfiguration.m; sourceTree = "<group>"; };
 		CCE8E20717C51D3E0058A203 /* GCAlbumsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCAlbumsTableViewController.m; sourceTree = "<group>"; };
@@ -143,7 +166,6 @@
 		CCF74E72187F0F8100AB1C84 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CCF74E74187F0F8100AB1C84 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/PhotoPickerPlus.strings; sourceTree = "<group>"; };
 		CCF74E77187F191800AB1C84 /* GCMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCMacros.h; sourceTree = "<group>"; };
-		D6A44E3EFCB047F48E216318 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		E43C535417BE72CF00680283 /* gradient_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_blue.png; sourceTree = "<group>"; };
 		E441095F17C7C5C200FCAEBD /* album_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = album_default.png; sourceTree = "<group>"; };
 		E4464FB617CCFABF00C83F14 /* dropbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dropbox.png; sourceTree = "<group>"; };
@@ -207,6 +229,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59917C9C1A8E516300829AC1 /* CoreMedia.framework in Frameworks */,
+				59917C9A1A8E4FC300829AC1 /* AVFoundation.framework in Frameworks */,
+				599100B21A8CC5DB0091AB4F /* Photos.framework in Frameworks */,
 				E4C3EA1A18F6E50000B14304 /* UIKit.framework in Frameworks */,
 				E4A567F01897B5E500617366 /* MediaPlayer.framework in Frameworks */,
 				E49CFD6B17B4EF290063C248 /* AssetsLibrary.framework in Frameworks */,
@@ -229,6 +254,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3776ABF2447161A1494B913E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4E0891CCC2A705F7E0E55E57 /* Pods.debug.xcconfig */,
+				4535380FB2D2395BDCE4B884 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		5990EA411A8B9ED90001C5E0 /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				5990EA421A8B9EF10001C5E0 /* GCLegacyAlbumsTableViewController.h */,
+				5990EA431A8B9EF10001C5E0 /* GCLegacyAlbumsTableViewController.m */,
+				5990EA451A8B9F030001C5E0 /* GCLegacyAssetsTableViewController.h */,
+				5990EA461A8B9F030001C5E0 /* GCLegacyAssetsTableViewController.m */,
+				5990EA481A8B9F130001C5E0 /* GCLegacyAlbumsCollectionViewController.h */,
+				5990EA491A8B9F130001C5E0 /* GCLegacyAlbumsCollectionViewController.m */,
+				5990EA4B1A8B9F240001C5E0 /* GCLegacyAssetsCollectionViewController.h */,
+				5990EA4C1A8B9F240001C5E0 /* GCLegacyAssetsCollectionViewController.m */,
+			);
+			path = Legacy;
+			sourceTree = "<group>";
+		};
 		CC72FBC317B6142B00E3981B /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -248,7 +297,7 @@
 				CC7E46B017A5C0FB00BEF5B8 /* PhotoPickerPlus-SampleAppTests */,
 				CC7E468217A5C0FA00BEF5B8 /* Frameworks */,
 				CC7E468117A5C0FA00BEF5B8 /* Products */,
-				D6A44E3EFCB047F48E216318 /* Pods.xcconfig */,
+				3776ABF2447161A1494B913E /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -264,6 +313,9 @@
 		CC7E468217A5C0FA00BEF5B8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				59917C9B1A8E516300829AC1 /* CoreMedia.framework */,
+				59917C991A8E4FC300829AC1 /* AVFoundation.framework */,
+				599100B11A8CC5DB0091AB4F /* Photos.framework */,
 				E4A567EF1897B5E500617366 /* MediaPlayer.framework */,
 				CC7E46CF17A67C8100BEF5B8 /* AssetsLibrary.framework */,
 				CC7E468317A5C0FA00BEF5B8 /* UIKit.framework */,
@@ -343,8 +395,8 @@
 		CCD3C3DC1828549200E31F78 /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
+				5990EA3F1A8B9E9B0001C5E0 /* GCConfiguration.plist */,
 				CCD3C3DD1828549200E31F78 /* GCConfiguration-Sample.plist */,
-				CCD3C3DE1828549200E31F78 /* GCConfiguration.plist */,
 				CCD3C3DF1828549200E31F78 /* GCPhotoPickerConfiguration.h */,
 				CCD3C3E01828549200E31F78 /* GCPhotoPickerConfiguration.m */,
 				CCF74E77187F191800AB1C84 /* GCMacros.h */,
@@ -415,6 +467,8 @@
 				E4A3753917D0C3940075B3FF /* NSDictionary+GCAccountAsset.m */,
 				E4A3C228189A5AEA00276EF7 /* UIImage+VideoImage.h */,
 				E4A3C229189A5AEA00276EF7 /* UIImage+VideoImage.m */,
+				59917C961A8E358000829AC1 /* PHAsset+Utilities.h */,
+				59917C971A8E358000829AC1 /* PHAsset+Utilities.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -422,6 +476,7 @@
 		E4BDB51D17B55C9C000D4034 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				5990EA411A8B9ED90001C5E0 /* Legacy */,
 				E4A222D917C382C3000A3A14 /* GCAccountMediaViewController.h */,
 				E4A222DA17C382C3000A3A14 /* GCAccountMediaViewController.m */,
 				E4BDB52017B55C9C000D4034 /* GCAlbumsTableViewController.h */,
@@ -516,7 +571,7 @@
 			name = "PhotoPickerPlus-SampleAppTests";
 			productName = "PhotoPickerPlus-SampleAppTests";
 			productReference = CC7E46A917A5C0FB00BEF5B8 /* PhotoPickerPlus-SampleAppTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -551,7 +606,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC7E468E17A5C0FA00BEF5B8 /* InfoPlist.strings in Resources */,
-				CCD3C3E21828549200E31F78 /* GCConfiguration.plist in Resources */,
 				CC7E469617A5C0FA00BEF5B8 /* Default.png in Resources */,
 				CCD3C3E11828549200E31F78 /* GCConfiguration-Sample.plist in Resources */,
 				CC7E469817A5C0FA00BEF5B8 /* Default@2x.png in Resources */,
@@ -567,6 +621,7 @@
 				E4A0115017BE3B1F0097D3BF /* overlay.png in Resources */,
 				E43C535517BE72D000680283 /* gradient_blue.png in Resources */,
 				E441096017C7C5C200FCAEBD /* album_default.png in Resources */,
+				5990EA401A8B9E9B0001C5E0 /* GCConfiguration.plist in Resources */,
 				CC1430E217CAE97A0089A020 /* popover_arrow.png in Resources */,
 				CC1430E317CAE97A0089A020 /* popover_border.png in Resources */,
 				E4A88B4218A1307C00184921 /* youtube@2x.png in Resources */,
@@ -628,7 +683,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 		};
 		F0337CCB09CA447796070977 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -654,16 +709,20 @@
 				CC7E469017A5C0FA00BEF5B8 /* main.m in Sources */,
 				CC7E469417A5C0FA00BEF5B8 /* AppDelegate.m in Sources */,
 				CC7E46A317A5C0FA00BEF5B8 /* ViewController.m in Sources */,
+				5990EA4D1A8B9F240001C5E0 /* GCLegacyAssetsCollectionViewController.m in Sources */,
 				E4A17D0A18D6F28A004835EC /* GCAlbumCell.m in Sources */,
 				E4BDB53417B55C9C000D4034 /* PhotoPickerClient.m in Sources */,
 				E488013B18D34DEB00EAD26C /* GCAlbumsCollectionViewController.m in Sources */,
 				E4BDB53517B55C9C000D4034 /* GCServicePicker.m in Sources */,
 				E4BDB53717B55C9C000D4034 /* NSDictionary+ALAsset.m in Sources */,
 				E4BDB53817B55C9C000D4034 /* GCAssetsCollectionViewController.m in Sources */,
+				5990EA4A1A8B9F130001C5E0 /* GCLegacyAlbumsCollectionViewController.m in Sources */,
 				E4A17D0D18D723E1004835EC /* GCAssetCell.m in Sources */,
+				5990EA441A8B9EF10001C5E0 /* GCLegacyAlbumsTableViewController.m in Sources */,
 				E4BDB53A17B55C9C000D4034 /* GCPhotoPickerViewController.m in Sources */,
 				CCA4C50717B5A78500D203A9 /* GCPhotoCell.m in Sources */,
 				CCA4C50817B5A78500D203A9 /* GCPhotoPickerCell.m in Sources */,
+				59917C981A8E358000829AC1 /* PHAsset+Utilities.m in Sources */,
 				CCA4C50C17B5BDED00D203A9 /* PhotoPickerViewController.m in Sources */,
 				CC72FBCB17B6142B00E3981B /* GCAccountAlbum.m in Sources */,
 				CC72FBCC17B6142B00E3981B /* GCAccountAssets.m in Sources */,
@@ -674,6 +733,7 @@
 				E4A3C22A189A5AEA00276EF7 /* UIImage+VideoImage.m in Sources */,
 				CC1430DF17CADC2D0089A020 /* GCPopoverBackgroundView.m in Sources */,
 				E4A3753A17D0C3940075B3FF /* NSDictionary+GCAccountAsset.m in Sources */,
+				5990EA471A8B9F030001C5E0 /* GCLegacyAssetsTableViewController.m in Sources */,
 				E4AA8E281896AB69000D75B6 /* CustomImageView.m in Sources */,
 				E488013E18D365D700EAD26C /* GCAssetsTableViewController.m in Sources */,
 			);
@@ -811,7 +871,7 @@
 		};
 		CC7E46BC17A5C0FB00BEF5B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6A44E3EFCB047F48E216318 /* Pods.xcconfig */;
+			baseConfigurationReference = 4E0891CCC2A705F7E0E55E57 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -829,7 +889,7 @@
 		};
 		CC7E46BD17A5C0FB00BEF5B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6A44E3EFCB047F48E216318 /* Pods.xcconfig */;
+			baseConfigurationReference = 4535380FB2D2395BDCE4B884 /* Pods.release.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

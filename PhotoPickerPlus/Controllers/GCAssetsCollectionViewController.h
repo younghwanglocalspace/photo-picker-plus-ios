@@ -9,15 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "GCPhotoPickerViewController.h"
-
+#import <Photos/Photos.h>
 
 @interface GCAssetsCollectionViewController : UICollectionViewController <UICollectionViewDataSource, UICollectionViewDelegate>
 
 /**
- ALAssetsGroup used to enumerate assets from local-source.
-*/
-@property (nonatomic, strong) ALAssetsGroup *assetGroup;
-
+ Collection (album) that holds the PHAssets
+ */
+@property (nonatomic, strong) PHCollection *collection;
 
 /**
  Array of assets that need to be shown in collectionView.

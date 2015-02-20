@@ -7,8 +7,8 @@ PODS:
     - Lockbox (~> 1.4.3)
     - MBProgressHUD (~> 0.7)
   - CocoaLumberjack (1.6.5.1):
-    - CocoaLumberjack/Core
-    - CocoaLumberjack/Extensions
+    - CocoaLumberjack/Core (= 1.6.5.1)
+    - CocoaLumberjack/Extensions (= 1.6.5.1)
   - CocoaLumberjack/Core (1.6.5.1)
   - CocoaLumberjack/Extensions (1.6.5.1):
     - CocoaLumberjack/Core
@@ -20,11 +20,11 @@ DEPENDENCIES:
   - Chute-SDK (= 2.0.6)
 
 SPEC CHECKSUMS:
-  AFNetworking: 61fdd49e2ffe6380378df37b3b6e70630bb9dd66
-  Chute-SDK: eaded2af1b5d8deb17ec3b091593ec32de5f272e
-  CocoaLumberjack: 17803afbade3126a377d32b8d23367264b44ced6
-  DCKeyValueObjectMapping: 39adaf0a54ff6368a22d9221db60f0696d81ad7b
-  Lockbox: 351802bd73ea63f9cdcb250957e2b41d616aebe6
-  MBProgressHUD: 2bbc6f470111daf7f3eaa4eb12b8cbf01c4c0622
+  AFNetworking: 5f5b2a731d6fc2082b8abc63d40fcaed5482c42f
+  Chute-SDK: 2b53c83f2560eb8930f0cbd04c8873eae5b4fdfe
+  CocoaLumberjack: baf4a09a3bcbdfea3363556a90104e026d3504e2
+  DCKeyValueObjectMapping: c3561709f296ddffba7768a9d7ccf234307fd3c9
+  Lockbox: 084d2fd833c7a271892f70d0db4d4d3da233de18
+  MBProgressHUD: c356980b0cd097f19acec959b49dca5eb8ec31be
 
-COCOAPODS: 0.31.1
+COCOAPODS: 0.35.0

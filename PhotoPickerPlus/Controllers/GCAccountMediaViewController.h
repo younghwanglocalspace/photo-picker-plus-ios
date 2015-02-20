@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class GCAlbumsTableViewController, GCAssetsCollectionViewController, GCAlbumsCollectionViewController, GCAssetsTableViewController;
+@class GCLegacyAlbumsTableViewController, GCLegacyAlbumsCollectionViewController, GCLegacyAssetsTableViewController, GCLegacyAssetsCollectionViewController;
 
 @interface GCAccountMediaViewController : UIViewController
 
@@ -19,18 +20,54 @@
 
 /**
  One of the view controllers that will be initialized if there are albums depending on chosen layout.
- 
- @see GCAlbumViewController
+ @warning use only if target below iOS 8
+ @see GCLegacyAlbumsTableViewController
+ */
+@property (strong, nonatomic) GCLegacyAlbumsTableViewController      *legacyAlbumTableViewController;
+
+/**
+ One of the view controllers that will be initialized if there are albums depending on chosen layout.
+ @warning use only if target below iOS 8
+ @see GCLegacyAlbumsCollectionViewController
+ */
+@property (strong, nonatomic) GCLegacyAlbumsCollectionViewController *legacyAlbumCollectionViewController;
+
+/**
+ One of the view controllers that will be initialized if there are assets depending on chosen layout.
+ @warning use only if target below iOS 8
+ @see GCLegacyAssetTableViewController
+ */
+@property (strong, nonatomic) GCLegacyAssetsTableViewController      *legacyAssetTableViewController;
+
+/**
+ One of the view controllers that will be initialized if there are assets depending on chosen layout.
+ @warning use only if target below iOS 8
+ @see GCLegacyAssetCollectionViewController
+ */
+@property (strong, nonatomic) GCLegacyAssetsCollectionViewController *legacyAssetCollectionViewController;
+
+/**
+ One of the view controllers that will be initialized if there are albums depending on chosen layout.
+ @see GCAlbumTableViewController
  */
 @property (strong, nonatomic) GCAlbumsTableViewController             *albumViewController;
+
+/**
+ One of the view controllers that will be initialized if there are albums depending on chosen layout.
+ @see GCAlbumCollectionViewController
+ */
 @property (strong, nonatomic) GCAlbumsCollectionViewController        *albumCollectionViewController;
 
 /**
  One of the view controllers that will be initialized if there are assets depending on chosen layout.
- 
  @see GCAssetsCollectionViewController  
  */
 @property (strong, nonatomic) GCAssetsCollectionViewController  *assetViewController;
+
+/**
+ One of the view controllers that will be initialized if there are assets depending on chosen layout.
+ @see GCAssetsTableViewController
+ */
 @property (strong, nonatomic) GCAssetsTableViewController       *assetTableViewController;
 
 /**
