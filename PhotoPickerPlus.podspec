@@ -11,6 +11,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'PhotoPickerPlus', 'PhotoPickerPlus/**/*.{h,m,c}'
   s.resources = 'PhotoPickerPlus/Resources/**'
-  s.frameworks = 'AssetsLibrary', 'CoreGraphics', 'QuartzCore'  
+  s.frameworks = 'AssetsLibrary', 'CoreGraphics', 'QuartzCore', 'Photos'  
   s.dependency 'Chute-SDK','~> 2.0.6'
 end
