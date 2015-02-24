@@ -113,7 +113,6 @@
 //        options.synchronous = YES;
         options.resizeMode = PHImageRequestOptionsResizeModeFast;
         [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:cell.imageView.frame.size contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage *result, NSDictionary *info) {
-          NSLog(@"Image Size:%@", NSStringFromCGSize(result.size));
           if (result) {
             cell.imageView.image = result;
           }
@@ -124,7 +123,7 @@
       else
        cell.imageView.image = [UIImage imageNamed:@"album_default.png"];
     }
-    cell.titleLabel.text = [NSString stringWithFormat:@"%@ (%d)",collection.localizedTitle,assetsCount];
+    cell.titleLabel.text = [NSString stringWithFormat:@"%@ (%ld)",collection.localizedTitle,(long)assetsCount];
   } else {
     GCAccountAlbum *albumForCell = [self.albums objectAtIndex:indexPath.row];
     cell.imageView.image = [UIImage imageNamed:@"album_default.png"];

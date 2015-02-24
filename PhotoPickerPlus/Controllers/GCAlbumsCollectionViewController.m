@@ -132,7 +132,7 @@
       else
         cell.imageView.image = [UIImage imageNamed:@"album_default.png"];
     }
-    cell.titleLabel.text = [NSString stringWithFormat:@"%@ (%d)",collection.localizedTitle,assetsCount];
+    cell.titleLabel.text = [NSString stringWithFormat:@"%@ (%ld)",collection.localizedTitle,(long)assetsCount];
   } else {
     GCAccountAlbum *albumForCell = [self.albums objectAtIndex:indexPath.row];
     cell.titleLabel.text = [NSString stringWithFormat:@"%@",albumForCell.name];
