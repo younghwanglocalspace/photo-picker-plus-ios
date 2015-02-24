@@ -9,25 +9,31 @@
 #import "GCPhotoPickerCell.h"
 
 @implementation GCPhotoPickerCell
-@synthesize titleLabel;
+@synthesize titleLabel, imageView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 10, 235, 25)];
-        self.titleLabel.font = [UIFont systemFontOfSize:15];
-        [self.contentView addSubview:titleLabel];
-    }
-    return self;
+  self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+  if (self) {
+    // Initialization code
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 10, 235, 25)];
+    self.titleLabel.font = [UIFont systemFontOfSize:15];
+    [self.contentView addSubview:self.titleLabel];
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 44, 44)];
+    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.imageView.clipsToBounds = YES;
+    [self.contentView addSubview:self.imageView];
+    
+    [self setSeparatorInset:UIEdgeInsetsMake(0, 65, 0, 0)];
+  }
+  return self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+  [super setSelected:selected animated:animated];
+  
+  // Configure the view for the selected state
 }
 
 @end

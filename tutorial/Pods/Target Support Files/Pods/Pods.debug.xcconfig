@@ -1,0 +1,6 @@
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/Chute-SDK" "${PODS_ROOT}/Headers/Public/CocoaLumberjack" "${PODS_ROOT}/Headers/Public/DCKeyValueObjectMapping" "${PODS_ROOT}/Headers/Public/Lockbox" "${PODS_ROOT}/Headers/Public/MBProgressHUD"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/Chute-SDK" -isystem "${PODS_ROOT}/Headers/Public/CocoaLumberjack" -isystem "${PODS_ROOT}/Headers/Public/DCKeyValueObjectMapping" -isystem "${PODS_ROOT}/Headers/Public/Lockbox" -isystem "${PODS_ROOT}/Headers/Public/MBProgressHUD"
+OTHER_LDFLAGS = -ObjC -l"Pods-AFNetworking" -l"Pods-Chute-SDK" -l"Pods-CocoaLumberjack" -l"Pods-DCKeyValueObjectMapping" -l"Pods-Lockbox" -l"Pods-MBProgressHUD" -framework "AssetsLibrary" -framework "CoreGraphics" -framework "MobileCoreServices" -framework "QuartzCore" -framework "Security" -framework "SystemConfiguration"
+OTHER_LIBTOOLFLAGS = $(OTHER_LDFLAGS)
+PODS_ROOT = ${SRCROOT}/Pods

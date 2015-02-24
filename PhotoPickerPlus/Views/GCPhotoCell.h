@@ -12,5 +12,7 @@
 
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) UIImageView *overlayView;
+@property (strong, nonatomic) UIImageView *videoView;
+@property (strong, nonatomic) UILabel     *duration;
 
 @end

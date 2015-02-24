@@ -44,9 +44,25 @@
             self.videoUrl = [info objectForKey:UIImagePickerControllerReferenceURL];
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(performAction:)];
             tap.numberOfTapsRequired = 1;
-            
-            [self setImage:[UIImage makeImageFromBottomImage:[info objectForKey:UIImagePickerControllerOriginalImage] withFrame:frame andTopImage:[UIImage imageNamed:@"video_overlay.png"] withFrame:CGRectMake(0, 0, 40, 40)]];
-            
+          
+          UIImage *bottomImage = [info objectForKey:UIImagePickerControllerOriginalImage]; //background image
+          UIImage *image       = [UIImage imageNamed:@"video_overlay.png"]; //foreground image
+          
+          CGSize newSize = CGSizeMake(bottomImage.size.width, bottomImage.size.height);
+          UIGraphicsBeginImageContext( newSize );
+          
+          // Use existing opacity as is
+          [bottomImage drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+          
+          // Apply supplied opacity if applicable
+          [image drawInRect:CGRectMake(10,10,40,40) blendMode:kCGBlendModeNormal alpha:1];
+          
+          UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+          
+          UIGraphicsEndImageContext();
+          [self setImage:newImage];
+//            [self setImage:[UIImage makeImageFromBottomImage:[info objectForKey:UIImagePickerControllerOriginalImage] withFrame:frame andTopImage:[UIImage imageNamed:@"video_overlay.png"] withFrame:CGRectMake(0, 0, 40, 40)]];
+          
             [self addGestureRecognizer:tap];
         }
         else
