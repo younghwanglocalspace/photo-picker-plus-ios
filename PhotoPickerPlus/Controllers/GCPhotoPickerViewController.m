@@ -19,6 +19,7 @@
 #import "GCPhotoPickerConfiguration.h"
 #import "GCMacros.h"
 
+#import "PHAsset+Utilities.h"
 #import "GCLegacyAlbumsTableViewController.h"
 #import "GCLegacyAlbumsCollectionViewController.h"
 
@@ -372,36 +373,69 @@
 
 - (void)getLatestPhoto:(BOOL)photo andVideo:(BOOL)video
 {
+  if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
     
     // Enumerate all the photos and videos group by using ALAssetsGroupAll.
     [library enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+      
+      // Within the group enumeration block, filter to enumerate just photos.
+      if (photo && video)
+        [group setAssetsFilter:[ALAssetsFilter allAssets]];
+      else if (video)
+        [group setAssetsFilter:[ALAssetsFilter allVideos]];
+      else
+        [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+      
+      if (group != nil && [group numberOfAssets] == 0) {
+        [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have any photos." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+      }
+      
+      // Chooses the photo at the last index
+      [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndex:([group numberOfAssets] - 1)] options:0 usingBlock:^(ALAsset *alAsset, NSUInteger index, BOOL *innerStop) {
         
-        // Within the group enumeration block, filter to enumerate just photos.
-        if (photo && video)
-            [group setAssetsFilter:[ALAssetsFilter allAssets]];
-        else if (video)
-            [group setAssetsFilter:[ALAssetsFilter allVideos]];
-        else
-            [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-            
-        if (group != nil && [group numberOfAssets] == 0) {
-            [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have any photos." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-            return;
-        }
-        
-        // Chooses the photo at the last index
-        [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndex:([group numberOfAssets] - 1)] options:0 usingBlock:^(ALAsset *alAsset, NSUInteger index, BOOL *innerStop) {
-            
-            // The end of the enumeration is signaled by asset == nil.
-            if (alAsset)
-                [self successBlock]([NSDictionary infoFromALAsset:alAsset]);
-        }];
+        // The end of the enumeration is signaled by asset == nil.
+        if (alAsset)
+          [self successBlock]([NSDictionary infoFromALAsset:alAsset]);
+      }];
     } failureBlock: ^(NSError *error) {
-        // Typically you should handle an error more gracefully than this.
-        NSLog(@"No groups to be enumerated.");
+      // Typically you should handle an error more gracefully than this.
+      NSLog(@"No groups to be enumerated.");
     }];
+  } else {
+    PHFetchOptions *fetchOptions = [PHFetchOptions new];
+    
+    if (photo && video)
+      fetchOptions.predicate = [NSPredicate predicateWithFormat:@"mediaType = %d || mediaType = %d", PHAssetMediaTypeVideo, PHAssetMediaTypeImage];
+    else if (video)
+      fetchOptions.predicate = [NSPredicate predicateWithFormat:@"mediaType = %d", PHAssetMediaTypeVideo];
+    else
+      fetchOptions.predicate = [NSPredicate predicateWithFormat:@"mediaType = %d", PHAssetMediaTypeImage];
+    
+    fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
+    
+    PHFetchResult *fetchResult = [PHAsset fetchAssetsWithOptions:fetchOptions];
+    if (fetchResult.count == 0) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have any assets" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+      });
+    }
+    typeof(self) weakSelf = self;
 
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    __block MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:window];
+    [window addSubview:HUD];
+    [HUD show:YES];
+    
+    [[fetchResult objectAtIndex:0] requestMetadataWithBlock:^(NSDictionary *metadata) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [HUD hide:YES];
+        [weakSelf successBlock](metadata);
+      });
+    }];
+  }
 }
 
 - (void)setNavBarItems
