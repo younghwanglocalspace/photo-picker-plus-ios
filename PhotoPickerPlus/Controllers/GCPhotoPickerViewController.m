@@ -415,25 +415,36 @@
     
     fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
     
-    PHFetchResult *fetchResult = [PHAsset fetchAssetsWithOptions:fetchOptions];
-    if (fetchResult.count == 0) {
-      dispatch_async(dispatch_get_main_queue(), ^{
-        [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have any assets" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        return;
-      });
-    }
-    typeof(self) weakSelf = self;
-
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    __block MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:window];
-    [window addSubview:HUD];
-    [HUD show:YES];
-    
-    [[fetchResult objectAtIndex:0] requestMetadataWithBlock:^(NSDictionary *metadata) {
-      dispatch_async(dispatch_get_main_queue(), ^{
-        [HUD hide:YES];
-        [weakSelf successBlock](metadata);
-      });
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+      if (status == PHAuthorizationStatusAuthorized) {
+        PHFetchResult *fetchResult = [PHAsset fetchAssetsWithOptions:fetchOptions];
+        
+        if (fetchResult.count == 0) {
+          dispatch_async(dispatch_get_main_queue(), ^{
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have any assets" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            return;
+          });
+        }
+        typeof(self) weakSelf = self;
+        
+        UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+        __block MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:window];
+        [window addSubview:HUD];
+        [HUD show:YES];
+        
+        [[fetchResult objectAtIndex:0] requestMetadataWithBlock:^(NSDictionary *metadata) {
+          dispatch_async(dispatch_get_main_queue(), ^{
+            [HUD hide:YES];
+            [weakSelf successBlock](metadata);
+          });
+        }];
+      }
+      else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have authorization!\nGive this app permission to access your photo library in your settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+          return;
+        });
+      }
     }];
   }
 }
@@ -533,6 +544,7 @@
 
 -(void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo
 {
+  NSLog(@"PATH:%@", videoPath);
     [self getLatestPhoto:NO andVideo:YES];
 }
 
