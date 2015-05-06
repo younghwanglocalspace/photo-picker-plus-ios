@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage     = "http://www.getchute.com"
   s.license      = {:type => 'MIT'}
   s.author       = { "Oliver Dimitrov" => "dimitrov.oli@gmail.com" }
-  s.source       = { :git => "https://github.com/chute/photo-picker-plus-ios.git", :tag => "2.3.0" } 
+  s.source       = { :git => "https://github.com/chute/photo-picker-plus-ios.git", :tag => "2.3.1" } 
   s.platform     = :ios, '6.0'
   s.requires_arc = true
 
