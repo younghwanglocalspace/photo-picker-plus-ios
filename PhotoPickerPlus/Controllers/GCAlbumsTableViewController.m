@@ -188,19 +188,32 @@
   NSMutableArray *topLevelAlbums = [NSMutableArray new];
   self.elementCount = [NSMutableArray new];
   
-  PHFetchResult *smartAlbumsResults = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:nil];
-  [smartAlbumsResults enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
-    if (collection.assetCollectionSubtype != PHAssetCollectionSubtypeSmartAlbumSlomoVideos)
-      [smartAlbums addObject:collection];
+  [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+    if (status == PHAuthorizationStatusAuthorized) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        PHFetchResult *smartAlbumsResults = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:nil];
+        [smartAlbumsResults enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
+          if (collection.assetCollectionSubtype != PHAssetCollectionSubtypeSmartAlbumSlomoVideos)
+            [smartAlbums addObject:collection];
+        }];
+        
+        PHFetchResult *topLevelUserCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
+        [topLevelUserCollections enumerateObjectsUsingBlock:^(PHCollectionList *collection, NSUInteger idx, BOOL *stop) {
+          [topLevelAlbums addObject:collection];
+        }];
+        self.albums = @[smartAlbums, topLevelAlbums];
+        
+        [self.tableView reloadData];
+      });
+    }
+    else {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [[[UIAlertView alloc] initWithTitle:@"Error" message:@"You don't have authorization!\nGive this app permission to access your photo library in your settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+      });
+    }
   }];
-  
-  PHFetchResult *topLevelUserCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
-  [topLevelUserCollections enumerateObjectsUsingBlock:^(PHCollectionList *collection, NSUInteger idx, BOOL *stop) {
-    [topLevelAlbums addObject:collection];
-  }];
-  self.albums = @[smartAlbums, topLevelAlbums];
-  
-  [self.tableView reloadData];
+
 }
 
 - (UIBarButtonItem *)setCancelButton
