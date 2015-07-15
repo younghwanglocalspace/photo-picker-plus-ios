@@ -201,9 +201,11 @@
         [topLevelUserCollections enumerateObjectsUsingBlock:^(PHCollectionList *collection, NSUInteger idx, BOOL *stop) {
           [topLevelAlbums addObject:collection];
         }];
-        self.albums = @[smartAlbums, topLevelAlbums];
-        
-        [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          self.albums = @[smartAlbums, topLevelAlbums];
+          
+          [self.tableView reloadData];
+        });
       });
     }
     else {

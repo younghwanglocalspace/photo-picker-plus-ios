@@ -32,6 +32,7 @@
 - (void)requestMetadataWithBlock:(void (^)(NSDictionary *))block
 {
   NSMutableDictionary *metadata = [NSMutableDictionary new];
+  [metadata setObject:self forKey:@"OriginalAsset"];
   
   if(self.mediaType == PHAssetMediaTypeImage) {
     [metadata setObject:(NSString *)kUTTypeImage forKey:UIImagePickerControllerMediaType];
