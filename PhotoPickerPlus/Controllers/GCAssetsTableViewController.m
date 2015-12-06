@@ -201,7 +201,7 @@
   if (self.successBlock) {
     __block id info;
     
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UIWindow *window = [UIApplication sharedApplication].windows.lastObject;
     __block MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:window];
     [window addSubview:HUD];
     [HUD show:YES];

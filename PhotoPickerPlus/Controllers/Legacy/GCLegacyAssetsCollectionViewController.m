@@ -196,7 +196,7 @@ static NSString * const reuseIdentifier = @"Cell";
     
     __block id info;
     
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UIWindow *window = [UIApplication sharedApplication].windows.lastObject;
     MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:window];
     [window addSubview:HUD];
     [HUD show:YES];

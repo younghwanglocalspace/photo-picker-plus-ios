@@ -36,7 +36,7 @@
 
 + (void)showLoginType:(GCLoginType)_loginType success:(void (^)(void))_success failure:(void (^)(NSError *))_failure
 {
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UIWindow *window = [UIApplication sharedApplication].windows.lastObject;
     [self showInView:window withLoginType:_loginType success:_success failure:_failure];
 }
 

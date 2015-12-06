@@ -427,7 +427,7 @@
         }
         typeof(self) weakSelf = self;
         
-        UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+        UIWindow *window = [UIApplication sharedApplication].windows.lastObject;
         __block MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:window];
         [window addSubview:HUD];
         [HUD show:YES];
